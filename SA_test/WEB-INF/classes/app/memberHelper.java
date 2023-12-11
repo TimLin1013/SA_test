@@ -27,7 +27,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `test`.`member`(`name`, `password`, `phone`, `group`, `create_time`, `identity`, `account`)"
+            String sql = "INSERT INTO `sa`.`tbl_member`(`member_name`, `member_password`, `member_phone`, `member_group`, `created_time`, `identity`, `member_account`)"
                     + " VALUES(?, ?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
@@ -88,7 +88,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT count(*) FROM `test`.`member` WHERE `account` = ?";
+            String sql = "SELECT count(*) FROM `sa`.`tbl_member` WHERE `member_account` = ?";
             
             /** 取得所需之參數 */
             String account = m.getAccount();
@@ -129,7 +129,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT count(*) FROM `test`.`member` WHERE `account` = ? AND `password` = ?";
+            String sql = "SELECT count(*) FROM `sa`.`tbl_member` WHERE `member_account` = ? AND `member_password` = ?";
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1, account);
@@ -163,7 +163,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-             String sql ="SELECT identity FROM `test`.`member` WHERE `account` = ? LIMIT 1";
+             String sql ="SELECT identity FROM `sa`.`tbl_member` WHERE `member_account` = ? LIMIT 1";
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1, account);
@@ -402,7 +402,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `test`.`member` SET `name` = ? ,`password` = ? , `phone` = ? , `group` = ?, `identity` = ? WHERE `id` = ?";
+            String sql = "Update `sa`.`tbl_member` SET `member_name` = ? ,`member_password` = ? , `member_phone` = ? , `member_group` = ?, `identity` = ? WHERE `member_id` = ?";
             /** 取得所需之參數 */
             String name = m.getName();
             int id = m.getID();
