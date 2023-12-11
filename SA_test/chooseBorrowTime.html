@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Borrow Time</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #00ADEF; /* Example color */
+  padding: 10px;
+  text-align: center;
+  color: white;
+}
+
+.main-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.instrument-selected {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.time-selection {
+  margin: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 18px;
+}
+
+/* Add more styles as needed */
+</style>
+</head>
+<body>
+<header>
+  <h1>Select Borrowing Time</h1>
+</header>
+
+<main class="main-content">
+  <div id="instrument-selected" class="instrument-selected"></div>
+  
+  <div class="time-selection">
+    <label for="borrow-time">Choose a time:</label>
+    <input type="datetime-local" id="borrow-time" name="borrow-time">
+  </div>
+  
+  <button id="confirm-time">Confirm</button>
+</main>
+
+<script>
+// We assume the instrument name will be passed as a query parameter
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const instrumentName = params.get('instrument'); // This should be the query parameter passed on click from the previous page
+  const instrumentDisplay = document.getElementById('instrument-selected');
+  
+  if (instrumentName) {
+    instrumentDisplay.textContent = `You have selected to borrow: ${instrumentName}`;
+  } else {
+    instrumentDisplay.textContent = 'No instrument selected.';
+  }
+
+  // Add event listener for confirm button
+  const confirmButton = document.getElementById('confirm-time');
+  confirmButton.addEventListener('click', function() {
+    const borrowTime = document.getElementById('borrow-time').value;
+    if (borrowTime) {
+      alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
+      // Here you would typically handle the borrowing logic, such as updating a database or navigating to a confirmation page
+    } else {
+      alert('Please select a time.');
+    }
+  });
+});
+</script>
+
+</body>
+</html>
