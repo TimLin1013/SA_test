@@ -21,32 +21,21 @@ public class instrumentHelper {
         long start_time = System.nanoTime();
         int row = 0;
         ResultSet rs = null;
-        
         try {
-            /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
-            /** SQL指令 */
             String sql = "SELECT * FROM `sa`.`tbl_instrument`";
-            
-            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
-            /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
-
-            /** 紀錄真實執行的SQL指令，並印出 **/
             exexcute_sql = pres.toString();
             System.out.println(exexcute_sql);
-            
             /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
             while(rs.next()) {
                 /** 每執行一次迴圈表示有一筆資料 */
                 row += 1;
-                
-                /** 將 ResultSet 之資料取出 */
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int quantity = rs.getInt("quantity");
-                i = new instrument(id,name, quantity);
+                int id = rs.getInt("instrument_id");
+                String name = rs.getString("instrument_name");
+                int quantity = rs.getInt("instrument_quantity");
+                i = new instrument(id,name,quantity);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(i.getData());
             }

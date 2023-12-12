@@ -16,7 +16,7 @@ public class instrument {
         JSONObject jso = new JSONObject();
         jso.put("id", getId());
         jso.put("name", getName());
-        jso.put("Quantity", getQuantity());
+        jso.put("quantity", getQuantity());
         
         return jso;
     }

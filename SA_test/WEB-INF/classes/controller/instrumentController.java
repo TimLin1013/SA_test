@@ -12,7 +12,7 @@ import tools.JsonReader;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/api/instrument.do")
-public class instrumentController {
+public class instrumentController extends HttpServlet {
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
