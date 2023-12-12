@@ -261,6 +261,6 @@ CREATE TABLE IF NOT EXISTS `SA`.`TBL_announcement` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
+ALTER TABLE `tbl_borrow_record` CHANGE `return_time` `return_time` DATETIME NULL;
 
 
