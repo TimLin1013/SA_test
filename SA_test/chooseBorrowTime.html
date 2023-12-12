@@ -47,8 +47,9 @@ button {
 </header>
 
 <main class="main-content">
+	
   <div id="instrument-selected" class="instrument-selected"></div>
-  
+  	<div id ="instrument_name"></div>
   <div class="time-selection">
     <label for="borrow-time">Choose a time:</label>
     <!-- 加上 min 和 max 屬性限制可選的範圍 -->
@@ -59,78 +60,73 @@ button {
 </main>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const params = new URLSearchParams(window.location.search);
-  const instrumentName = params.get('instrument');
-  const instrumentDisplay = document.getElementById('instrument-selected');
-  
-  if (instrumentName) {
-    instrumentDisplay.textContent = `You have selected to borrow: ${instrumentName}`;
-  } else {
-    instrumentDisplay.textContent = 'No instrument selected.';
-  }
-
-  // 設定 min 為當下時間
-  const now = new Date();
-  const minDate = now.toISOString().slice(0,16); // 格式為 "YYYY-MM-DDTHH:mm"
-  document.getElementById('borrow-time').setAttribute('min', minDate);
-
-  // 設定 max 為當下一天後的時間
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const maxDate = tomorrow.toISOString().slice(0,16);
-  document.getElementById('borrow-time').setAttribute('max', maxDate);
-
-  const confirmButton = document.getElementById('confirm-time');
-  confirmButton.addEventListener('click', function() {
-    var borrowTime = document.getElementById('borrow-time').value;
-    var borrowTimeStr=borrowTime;
-    if (borrowTime) {
-	  var borrowTime = new Date(borrowTimeStr);
-	  borrowTime.setHours(borrowTime.getHours() + 3);
-      alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
-      // 在這裡處理借用邏輯，例如更新資料庫或導向確認頁面
-    } else {
-      alert('Please select a time.');
-    }
-  });
-});
-$(document).ready(function() {
-    var $form = $('#confirm');
-    $form.click(function() {
-        confirm();
-    });
-    function confirm() {
     var url = new URL(window.location.href);
-    var borrowtime = $('#borrow-time').val();
-    var instrument_id=url.searchParams.get("instrument_id");
-    var member_id=url.searchParams.get("id");
-    var data_object = {
-		"borrow-time": borrowtime,
-        "instrument_id":instrument_id,
-        "id":id,
-	};
-	var data_string = "borrow-time=" + encodeURIComponent(borrowtime);
-        $.ajax({
-            type: "PUT",
-            url: "api/borrowrecord.do?" + data_string,
-            data: data_string,
-            crossDomain: true,
-            cache: false,
-            ataType: 'json',
-            timeout: 5000,
-            success: function (response) {						
-            },
-            error: function () {
-				alert("無法連線到伺服器！");
-            }
+    var instrumentName = url.searchParams.get("instrument_name");
+    var instrumentNameDiv = document.getElementById('instrument_name');
+	instrumentNameDiv.innerHTML =instrument_name;
+    // 設定 min 為當下時間
+    const now = new Date();
+    const minDate = now.toISOString().slice(0, 16); // 格式為 "YYYY-MM-DDTHH:mm"
+    document.getElementById('borrow-time').setAttribute('min', minDate);
+
+    // 設定 max 為當下一天後的時間
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const maxDate = tomorrow.toISOString().slice(0, 16);
+    document.getElementById('borrow-time').setAttribute('max', maxDate);
+
+    const confirmButton = document.getElementById('confirm-time');
+    confirmButton.addEventListener('click', function () {
+        var borrowTime = document.getElementById('borrow-time').value;
+        var borrowTimeStr = borrowTime;
+        if (borrowTime) {
+            var borrowTime = new Date(borrowTimeStr);
+            borrowTime.setHours(borrowTime.getHours() + 3);
+            alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
+            // 在這裡處理借用邏輯，例如更新資料庫或導向確認頁面
+        } else {
+            alert('Please select a time.');
+        }
+    });
+
+    $(document).ready(function () {
+        var $form = $('#confirm');
+        $form.click(function () {
+            confirm();
         });
-                        
-                            
-                        
-    }
-});
+
+        function confirm() {
+            var url = new URL(window.location.href);
+            var borrowtime = $('#borrow-time').val();
+            var instrument_id = url.searchParams.get("instrument_id");
+            var id = url.searchParams.get("id");
+            var data_object = {
+                "borrow-time": borrowtime,
+                "instrument_id": instrument_id,
+                "id": id,
+            };
+
+            var data_string = "borrow-time=" + encodeURIComponent(borrowtime);
+
+            $.ajax({
+                type: "PUT",
+                url: "api/borrowrecord.do?" + data_string,
+                data: data_object,  // 使用 data_object 代替 data_string
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',  // 正確的拼寫
+                timeout: 5000,
+                success: function (response) {
+                    // 在這裡處理成功的邏輯
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            });
+        }
+    });
 </script>
+
 
 </body>
 </html>
