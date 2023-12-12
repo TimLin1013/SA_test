@@ -295,8 +295,6 @@
         });
     }
     function updateInstrument(data) {
-    	//$(".product-info p").empty();
-
 	    $.each(data, function(index, value) {
 	     	 var selector = "#" + value['name'] + "Quantity";
 	        $(selector).text("Quantity: " + value['quantity']);
@@ -305,6 +303,18 @@
 	$(document).ready(function() {
 	    getAllInstrument();
 	});
+	$(document).ready(function() {
+    	getAllInstrument();
+    	$('.product a').on('click', function(event) {
+
+        	var quantityText = $(this).siblings('.product-info').find('p').text();
+
+        	if (quantityText.includes('Quantity: 0')) {
+            	event.preventDefault();
+           	 alert("Sorry, this instrument is out of stock."); 
+        	}
+    });
+});
                 
 </script>
 
