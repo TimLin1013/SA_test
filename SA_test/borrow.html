@@ -1,97 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borrow Instrument</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #00ADEF; /* Example color */
-            padding: 10px;
-            text-align: center;
-            color: white;
-        }
-
-        .main-content {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .instrument-selected {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .time-selection {
-            margin: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 18px;
-        }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Instrument Catalog</title>
+    <!-- Styles omitted for brevity -->
 </head>
+
 <body>
     <header>
-        <h1>Select Borrowing Time</h1>
+        <input type="search" placeholder="Search...">
     </header>
 
-    <main class="main-content">
-        <div id="instrument-selected" class="instrument-selected">
-            <!-- Instrument selection will be shown here -->
-        </div>
-        
-        <div class="time-selection">
-            <label for="borrow-time">Choose a time:</label>
-            <input type="datetime-local" id="borrow-time" name="borrow-time" min="" max="" />
-        </div>
-        
-        <button id="confirm-time">Confirm</button>
-    </main>
+    <main>
+        <!-- Category and product structure omitted for brevity -->
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const instrumentName = params.get('instrument');
-            const instrumentDisplay = document.getElementById('instrument-selected');
-            
-            if (instrumentName) {
-                instrumentDisplay.textContent = `You have selected to borrow: ${instrumentName}`;
-            } else {
-                instrumentDisplay.textContent = 'No instrument selected.';
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Existing search functionality code omitted for brevity
+            });
+
+            function getAllInstrument() {
+                // Existing AJAX request code omitted for brevity
             }
 
-            // Set the min as the current time
-            const now = new Date();
-            const minDate = now.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:mm"
-            document.getElementById('borrow-time').setAttribute('min', minDate);
+            function updateInstrument(data) {
+                // Existing update instrument code omitted for brevity
+            }
 
-            // Set the max as one day from now
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const maxDate = tomorrow.toISOString().slice(0,16);
-            document.getElementById('borrow-time').setAttribute('max', maxDate);
+            $(document).ready(function() {
+                getAllInstrument();
+                $('.product img').on('click', function(event) {
+                    var instrumentName = $(this).closest('.product').find('h3').text();
+                    var quantityText = $(this).closest('.product').find('p').text();
 
-            const confirmButton = document.getElementById('confirm-time');
-            confirmButton.addEventListener('click', function() {
-                var borrowTime = document.getElementById('borrow-time').value;
-                if (borrowTime) {
-                    alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
-                    // Process borrowing logic here, like updating database or redirecting to a confirmation page
-                } else {
-                    alert('Please select a time.');
-                }
+                    if (quantityText.includes('Quantity: 0')) {
+                        alert("Sorry, this instrument is out of stock.");
+                    } else {
+                        window.location.href = 'chooseBorrowTime.html?instrument=' + encodeURIComponent(instrumentName);
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+    </main>
+
+    <footer>
+        <button>Previous</button>
+        <button>Next</button>
+    </footer>
 </body>
+
 </html>
