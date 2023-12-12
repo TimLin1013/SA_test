@@ -250,31 +250,7 @@
     </footer>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.querySelector('input[type="search"]');
 
-        searchInput.addEventListener('input', function () {
-            const query = searchInput.value.toLowerCase();
-            const categories = document.querySelectorAll('.category');
-
-            categories.forEach(category => {
-                const products = category.querySelectorAll('.product');
-                let categoryHasVisibleProducts = false;
-
-                products.forEach(product => {
-                    const productName = product.querySelector('h3').textContent.toLowerCase();
-                    if (productName.includes(query)) {
-                        product.style.display = 'block';
-                        categoryHasVisibleProducts = true;
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-
-                category.style.display = categoryHasVisibleProducts ? 'block' : 'none';
-            });
-        });
-    });
      function getAllInstrument() {
         $.ajax({
                 type: "GET",
@@ -306,17 +282,17 @@
 	$(document).ready(function() {
     	var url = new URL(window.location.href);
     	var user_id = url.searchParams.get("id");
-    	$('#fluteloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Flute');
-    	 $('#piccoloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piccolo');
-    	 $('#clarinetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Clarinet');
-    	 $('#oboeLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Oboe');
-    	$('#bassoonLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Bassoon');
-    	 $('#saxophoneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Saxophone');
-    	 $('#trumpetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trumpet');
-    	 $('#tromboneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trombone');
-    	 $('#hornLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Horn');
-    	 $('#pianoLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piano');
-    	 $('#double_bassLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Double_Bass');
+    	$('#fluteloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Flute&instrument_id=1');
+    	 $('#piccoloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piccolo&instrument_id=2');
+    	 $('#clarinetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Clarinet&instrument_id=3');
+    	 $('#oboeLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Oboe&instrument_id=4');
+    	$('#bassoonLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Bassoon&instrument_id=5');
+    	 $('#saxophoneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Saxophone&instrument_id=6');
+    	 $('#trumpetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trumpet&instrument_id=7');
+    	 $('#tromboneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trombone&instrument_id=8');
+    	 $('#hornLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Horn&instrument_id=9');
+    	 $('#pianoLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piano&instrument_id=10');
+    	 $('#double_bassLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Double_Bass&instrument_id=11');
     	
     	getAllInstrument();
     	$('.product a').on('click', function(event) {
