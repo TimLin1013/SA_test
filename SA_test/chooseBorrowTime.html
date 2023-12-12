@@ -39,7 +39,6 @@ button {
   font-size: 18px;
 }
 
-/* Add more styles as needed */
 </style>
 </head>
 <body>
@@ -52,17 +51,17 @@ button {
   
   <div class="time-selection">
     <label for="borrow-time">Choose a time:</label>
-    <input type="datetime-local" id="borrow-time" name="borrow-time">
+    <!-- 加上 min 和 max 屬性限制可選的範圍 -->
+    <input type="datetime-local" id="borrow-time" name="borrow-time" min="" max="" />
   </div>
   
   <button id="confirm-time">Confirm</button>
 </main>
 
 <script>
-// We assume the instrument name will be passed as a query parameter
 document.addEventListener('DOMContentLoaded', function() {
   const params = new URLSearchParams(window.location.search);
-  const instrumentName = params.get('instrument'); // This should be the query parameter passed on click from the previous page
+  const instrumentName = params.get('instrument');
   const instrumentDisplay = document.getElementById('instrument-selected');
   
   if (instrumentName) {
@@ -71,13 +70,23 @@ document.addEventListener('DOMContentLoaded', function() {
     instrumentDisplay.textContent = 'No instrument selected.';
   }
 
-  // Add event listener for confirm button
+  // 設定 min 為當下時間
+  const now = new Date();
+  const minDate = now.toISOString().slice(0,16); // 格式為 "YYYY-MM-DDTHH:mm"
+  document.getElementById('borrow-time').setAttribute('min', minDate);
+
+  // 設定 max 為當下一天後的時間
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const maxDate = tomorrow.toISOString().slice(0,16);
+  document.getElementById('borrow-time').setAttribute('max', maxDate);
+
   const confirmButton = document.getElementById('confirm-time');
   confirmButton.addEventListener('click', function() {
     const borrowTime = document.getElementById('borrow-time').value;
     if (borrowTime) {
       alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
-      // Here you would typically handle the borrowing logic, such as updating a database or navigating to a confirmation page
+      // 在這裡處理借用邏輯，例如更新資料庫或導向確認頁面
     } else {
       alert('Please select a time.');
     }
