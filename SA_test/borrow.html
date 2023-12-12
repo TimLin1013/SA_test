@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <title>Instrument Catalog</title>
+    <title>Borrow Instrument</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,311 +12,86 @@
         }
 
         header {
-            background-color: #00ADEF;
+            background-color: #00ADEF; /* Example color */
             padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .main-content {
+            padding: 20px;
             text-align: center;
         }
 
-        input[type="search"] {
-            padding: 5px;
-            font-size: 16px;
-        }
-
-        .category {
-            margin: 20px;
-        }
-
-        .category-title {
+        .instrument-selected {
             font-size: 24px;
             color: #333;
-            padding-left: 10px;
-        }
-
-        .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .product {
-            width: 30%;
-            padding: 10px;
-            box-sizing: border-box;
-            text-align: center;
             margin-bottom: 20px;
         }
 
-        .product img {
-            width: 30%;
-            height: auto;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .product-info {
-            font-size: 18px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f1f1f1;
+        .time-selection {
+            margin: 20px;
         }
 
         button {
-            padding: 5px 15px;
-            margin: 5px;
-            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 18px;
         }
     </style>
 </head>
-
 <body>
     <header>
-        <input type="search" placeholder="Search...">
+        <h1>Select Borrowing Time</h1>
     </header>
 
-    <main>
-        <div class="category">
-            <h2 class="category-title">Woodwind Instruments</h2>
-            <section class="product-grid">
-                <!-- Flute -->
-                <div class="product">
-                    <a href="url-to-woodwind-instrument-detail-page">
-                        <img src="flute.jpg" alt="Flute">
-                    </a>
-                    <div class="product-info">
-                        <h3>Flute</h3>
-                        <p id="FluteQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Flute and Piccolo -->
-                <div style="width: 2%;"></div>
-
-                <!-- Piccolo -->
-                <div class="product">
-                    <a href="url-to-piccolo-instrument-detail-page">
-                        <img src="piccolo.jpg" alt="Piccolo">
-                    </a>
-                    <div class="product-info">
-                        <h3>Piccolo</h3>
-                        <p id="PiccoloQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Piccolo and Clarinet -->
-                <div style="width: 2%;"></div>
-
-                <!-- Clarinet -->
-                <div class="product">
-                    <a href="url-to-clarinet-instrument-detail-page">
-                        <img src="clarinet.jpg" alt="Clarinet">
-                    </a>
-                    <div class="product-info">
-                        <h3>Clarinet</h3>
-                        <p id="ClarinetQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Clarinet and Oboe -->
-                <div style="width: 2%;"></div>
-
-                <!-- Oboe -->
-                <div class="product">
-                    <a href="url-to-oboe-instrument-detail-page">
-                        <img src="oboe.jpg" alt="Oboe">
-                    </a>
-                    <div class="product-info">
-                        <h3>Oboe</h3>
-                        <p id="OboeQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Oboe and Bassoon -->
-                <div style="width: 2%;"></div>
-
-                <!-- Bassoon -->
-                <div class="product">
-                    <a href="url-to-bassoon-instrument-detail-page">
-                        <img src="assoon.jpg" alt="Bassoon">
-                    </a>
-                    <div class="product-info">
-                        <h3>Bassoon</h3>
-                        <p id="BassoonQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Bassoon and Saxophone -->
-                <div style="width: 2%;"></div>
-
-                <!-- Saxophone -->
-                <div class="product">
-                    <a href="url-to-saxophone-instrument-detail-page">
-                        <img src="saxophone.jpg" alt="Saxophone">
-                    </a>
-                    <div class="product-info">
-                        <h3>Saxophone</h3>
-                        <p id="SaxophoneQuantity"></p>
-                    </div>
-                </div>
-                <!-- Repeat for other woodwind products -->
-            </section>
+    <main class="main-content">
+        <div id="instrument-selected" class="instrument-selected">
+            <!-- Instrument selection will be shown here -->
         </div>
-
-        <div class="category">
-            <h2 class="category-title">Brass Instruments</h2>
-            <section class="product-grid">
-                <!-- Trumpet -->
-                <div class="product">
-                    <a href="url-to-trumpet-instrument-detail-page">
-                        <img src="trumpet.jpg" alt="Trumpet">
-                    </a>
-                    <div class="product-info">
-                        <h3>Trumpet</h3>
-                        <p id="TrumpetQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between trumpet and Trombone -->
-                <div style="width: 2%;"></div>
-
-                <!-- Trombone -->
-                <div class="product">
-                    <a href="url-to-trombone-instrument-detail-page">
-                        <img src="trombone.jpg" alt="Trombone">
-                    </a>
-                    <div class="product-info">
-                        <h3>Trombone</h3>
-                        <p id="TromboneQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Horn and Trombone -->
-                <div style="width: 2%;"></div>
-
-                <!-- Horn -->
-                <div class="product">
-                    <a href="url-to-horn-instrument-detail-page">
-                        <img src="horn.jpg" alt="Horn">
-                    </a>
-                    <div class="product-info">
-                        <h3>Horn</h3>
-                        <p id="HornQuantity"></p>
-                    </div>
-                </div>
-                <!-- Repeat for other brass products -->
-            </section>
+        
+        <div class="time-selection">
+            <label for="borrow-time">Choose a time:</label>
+            <input type="datetime-local" id="borrow-time" name="borrow-time" min="" max="" />
         </div>
-
-        <div class="category">
-            <h2 class="category-title">Others</h2>
-            <section class="product-grid">
-                <!-- Piano -->
-                <div class="product">
-                    <a href="url-to-other-instrument-detail-page">
-                        <img src="piano.jpg" alt="Piano">
-                    </a>
-                    <div class="product-info">
-                        <h3>Piano</h3>
-                        <p id="PianoQuantity"></p>
-                    </div>
-                </div>
-
-                <!-- Space between Piano and Double Bass -->
-                <div style="width: 2%;"></div>
-
-                <!-- Double Bass -->
-                <div class="product">
-                    <a href="url-to-Double Bass-instrument-detail-page">
-                        <img src="Double_Bass.jpg" alt="Horn">
-                    </a>
-                    <div class="product-info">
-                        <h3>Double Bass</h3>
-                        <p id="Double_BassQuantity"></p>
-                    </div>
-                </div>
-                <!-- Repeat for other products in 'Others' category -->
-            </section>
-        </div>
+        
+        <button id="confirm-time">Confirm</button>
     </main>
 
-    <footer>
-        <button>Previous</button>
-        <button>Next</button>
-    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const instrumentName = params.get('instrument');
+            const instrumentDisplay = document.getElementById('instrument-selected');
+            
+            if (instrumentName) {
+                instrumentDisplay.textContent = `You have selected to borrow: ${instrumentName}`;
+            } else {
+                instrumentDisplay.textContent = 'No instrument selected.';
+            }
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.querySelector('input[type="search"]');
+            // Set the min as the current time
+            const now = new Date();
+            const minDate = now.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:mm"
+            document.getElementById('borrow-time').setAttribute('min', minDate);
 
-        searchInput.addEventListener('input', function () {
-            const query = searchInput.value.toLowerCase();
-            const categories = document.querySelectorAll('.category');
+            // Set the max as one day from now
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const maxDate = tomorrow.toISOString().slice(0,16);
+            document.getElementById('borrow-time').setAttribute('max', maxDate);
 
-            categories.forEach(category => {
-                const products = category.querySelectorAll('.product');
-                let categoryHasVisibleProducts = false;
-
-                products.forEach(product => {
-                    const productName = product.querySelector('h3').textContent.toLowerCase();
-                    if (productName.includes(query)) {
-                        product.style.display = 'block';
-                        categoryHasVisibleProducts = true;
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-
-                category.style.display = categoryHasVisibleProducts ? 'block' : 'none';
+            const confirmButton = document.getElementById('confirm-time');
+            confirmButton.addEventListener('click', function() {
+                var borrowTime = document.getElementById('borrow-time').value;
+                if (borrowTime) {
+                    alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
+                    // Process borrowing logic here, like updating database or redirecting to a confirmation page
+                } else {
+                    alert('Please select a time.');
+                }
             });
         });
-    });
-     function getAllInstrument() {
-        $.ajax({
-                type: "GET",
-                url: "api/instrument.do",
-                crossDomain: true,
-                cache: false,
-                dataType: 'json',
-                timeout: 5000,
-                success: function (response) {
-                    if(response.status == 200){
-                        updateInstrument(response.response.data);
-                    }
-                    console.log(response);
-                },
-                error: function () {
-                    alert("無法連線到伺服器！");
-                }
-        });
-    }
-    function updateInstrument(data) {
-	    $.each(data, function(index, value) {
-	     	 var selector = "#" + value['name'] + "Quantity";
-	        $(selector).text("Quantity: " + value['quantity']);
-	    });
-	}
-	$(document).ready(function() {
-	    getAllInstrument();
-	});
-	$(document).ready(function() {
-    	getAllInstrument();
-    	$('.product a').on('click', function(event) {
-
-        	var quantityText = $(this).siblings('.product-info').find('p').text();
-
-        	if (quantityText.includes('Quantity: 0')) {
-            	event.preventDefault();
-           	 alert("Sorry, this instrument is out of stock."); 
-        	}
-    });
-});
-                
-</script>
-
-
+    </script>
 </body>
-
 </html>
