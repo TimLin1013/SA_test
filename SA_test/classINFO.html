@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社課資訊</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #class-info-header {
+            background-color: rgba(8, 119, 143, 0.75);
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .class-info {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #FADDA5;
+            border: none;
+            color: #333;
+        }
+
+        .not-graded {
+            color: red; /* or any other color you prefer for "not graded" */
+        }
+
+        #add-class-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #past-signups-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="class-info-header">
+    <h1>社課資訊</h1>
+</div>
+
+<div id="class-info-container"></div>
+
+<button id="add-class-btn" onclick="toggleAddClassForm()">新增社課</button>
+
+<form id="add-class-form">
+    <label for="date">日期:</label>
+    <input type="text" id="date" name="date" placeholder="例如：9/12">
+
+    <label for="location">地點:</label>
+    <input type="text" id="location" name="location" placeholder="例如：教室C">
+
+    <label for="teacher">授課教師:</label>
+    <input type="text" id="teacher" name="teacher" placeholder="例如：王老師">
+
+    <label for="fee">費用:</label>
+    <input type="text" id="fee" name="fee" placeholder="例如：1000">
+
+    <button type="button" onclick="addNewClass()">確定新增</button>
+</form>
+
+<div id="past-signups-container"></div>
+
+<script>
+    const classes = [
+        { time: "9/5 星期一 14:00-16:00", location: "教室A", teacher: "張老師" },
+        { time: "10/8 星期三 10:00-12:00", location: "教室B", teacher: "李老師" },
+        { time: "11/15 星期四 15:00-18:00", location: "教室B", teacher: "方老師" },
+        { time: "12/8 星期三 10:00-12:00", location: "教室A", teacher: "李老師" },
+        // 添加更多社課資訊...
+    ];
+
+    const signedUpClasses = [];
+
+    function displayClassInfo() {
+        const container = document.getElementById("class-info-container");
+
+        container.innerHTML = ""; // Clear existing content
+
+        classes.forEach((classInfo, index) => {
+            const classDiv = document.createElement("div");
+            classDiv.classList.add("class-info");
+
+            const signUpButton = document.createElement("button");
+            signUpButton.textContent = "報名";
+            signUpButton.addEventListener("click", () => handleSignUp(index));
+            classDiv.appendChild(signUpButton);
+
+            const infoText = document.createTextNode(`時間: ${classInfo.time}, 地點: ${classInfo.location}, 老師: ${classInfo.teacher}`);
+            classDiv.appendChild(infoText);
+
+            container.appendChild(classDiv);
+        });
+    }
+
+    function handleSignUp(index) {
+        const signedUpClass = classes[index];
+        signedUpClasses.push(signedUpClass);
+
+        // Display past sign-ups
+        displayPastSignUps();
+
+        // Remove the signed-up class from the available classes
+        classes.splice(index, 1);
+
+        // Update the displayed classes
+        displayClassInfo();
+    }
+
+    function displayPastSignUps() {
+        const pastSignUpsContainer = document.getElementById("past-signups-container");
+
+        pastSignUpsContainer.innerHTML = ""; // Clear existing content
+
+        if (signedUpClasses.length > 0) {
+            const heading = document.createElement("h2");
+            heading.textContent = "已報名社課列表";
+            pastSignUpsContainer.appendChild(heading);
+
+            signedUpClasses.forEach((classInfo) => {
+                const classDiv = document.createElement("div");
+                classDiv.classList.add("class-info");
+
+                const infoText = document.createTextNode(`時間: ${classInfo.time}, 地點: ${classInfo.location}, 老師: ${classInfo.teacher}`);
+                classDiv.appendChild(infoText);
+
+                // Add Rating, Submit Assignment, and Correction buttons
+                const ratingButton = document.createElement("button");
+                ratingButton.textContent = "評分";
+               ratingButton.addEventListener("click", () => {
+
+				    window.location.href = "classRating.html";
+				});
+                classDiv.appendChild(ratingButton);
+
+                const submitAssignmentButton = document.createElement("button");
+                submitAssignmentButton.textContent = "繳交作業";
+                submitAssignmentButton.addEventListener("click", () => handleSubmitAssignment(classInfo));
+                classDiv.appendChild(submitAssignmentButton);
+
+                const correctionButton = document.createElement("button");
+                correctionButton.textContent = "批改";
+                correctionButton.addEventListener("click", () => handleCorrection(classInfo));
+                classDiv.appendChild(correctionButton);
+
+                // Add "尚未批改" field
+                const notGradedText = document.createElement("span");
+                notGradedText.textContent = "尚未批改";
+                notGradedText
+                notGradedText.classList.add("not-graded");
+                classDiv.appendChild(notGradedText);
+
+                pastSignUpsContainer.appendChild(classDiv);
+            });
+        }
+    }
+
+    function handleRating(classInfo) {
+        // Implement rating logic here
+        console.log(`評分: ${classInfo.time}`);
+    }
+
+    function handleSubmitAssignment(classInfo) {
+        // Implement submit assignment logic here
+        console.log(`繳交作業: ${classInfo.time}`);
+    }
+
+    function handleCorrection(classInfo) {
+        // Implement correction logic here
+        console.log(`批改: ${classInfo.time}`);
+    }
+
+    function toggleAddClassForm() {
+        const form = document.getElementById("add-class-form");
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+
+    function addNewClass() {
+        const date = document.getElementById("date").value;
+        const location = document.getElementById("location").value;
+        const teacher = document.getElementById("teacher").value;
+        const fee = document.getElementById("fee").value;
+
+        if (date && location && teacher && fee) {
+            const newClass = { time: date, location, teacher, fee };
+            classes.push(newClass);
+
+            document.getElementById("date").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("teacher").value = "";
+            document.getElementById("fee").value = "";
+
+            displayClassInfo();
+        } else {
+            alert("請填寫所有欄位！");
+        }
+    }
+
+    displayClassInfo();
+</script>
+
+</body>
+</html>
