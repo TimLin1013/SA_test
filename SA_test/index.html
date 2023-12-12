@@ -48,35 +48,32 @@
 						};
 						var data_string = "account=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password)+ "&login=" + encodeURIComponent("yes");
                         $.ajax({
-                                type: "Get",
-                             	url: "api/member.do?" + data_string,
-                                data: data_string,
-                                crossDomain: true,
-                                cache: false,
-                                dataType: 'json',
-                                timeout: 5000,
-                                success: function (response) {
-									
-                                   	
-							        var Rsp=response.status;
-							        if(Rsp==0){
-										$('#flashMessage').html(response.message);
-                                    	$('#flashMessage').show();
-										}
-                                    else if(Rsp==1&&response.identity==2){
-										alert("系統管理員登入成功");
-										window.location.href = 'admin_home_page.html';
-									}else if(Rsp==1&&response.identity==1){
-										alert("社員登入成功");
-										window.location.href = 'borrow.html';
-									}
-									
-                                },
-                                error: function () {
-								
-                                    alert("無法連線到伺服器！");
-                                }
-                        });
+						    type: "GET",
+						    url: "api/member.do?" + data_string,
+						    data: data_string,
+						    crossDomain: true,
+						    cache: false,
+						    dataType: 'json',
+						    timeout: 5000,
+						    success: function (response) {
+						        var Rsp = response.status;
+						        if (Rsp == 0) {
+						            $('#flashMessage').html(response.message);
+						            $('#flashMessage').show();
+						        } else if (Rsp == 1 && response.identity == 2) {
+						            alert("系統管理員登入成功");
+						            window.location.href = 'admin_home_page.html';
+						        } else if (Rsp == 1 && response.identity == 1) {
+						            alert("社員登入成功");
+						
+						            // 直接使用 id 屬性
+						            window.location.href = 'borrow.html?id=' + response.id;
+						        }
+						    },
+						    error: function () {
+						        alert("無法連線到伺服器！");
+						    }
+						});
                         
                             
                         

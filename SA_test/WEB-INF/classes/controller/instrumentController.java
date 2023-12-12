@@ -29,7 +29,8 @@ public class instrumentController extends HttpServlet {
 	           JSONObject resp = new JSONObject();
 	           resp.put("status", "200");
 	           resp.put("message", "所有資料取得成功");
-	           resp.put("response", query);        
+	           resp.put("response", query);  
+	           resp.put("id", id);
 		       response.setContentType("application/json");
 		       response.setCharacterEncoding("UTF-8");
 		       response.getWriter().write(resp.toString());

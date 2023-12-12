@@ -44,7 +44,7 @@
     <header>
         <h1>Select Borrowing Time</h1>
     </header>
-
+	<div id ="instrument_name"></div>
     <main class="main-content">
         <div id="instrument-selected" class="instrument-selected"></div>
         
@@ -57,39 +57,34 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const instrumentName = params.get('instrument');
-            const instrumentDisplay = document.getElementById('instrument-selected');
-            
-            if (instrumentName) {
-                instrumentDisplay.textContent = `You have selected to borrow: ${instrumentName}`;
+        var url = new URL(window.location.href);
+		var instrument_name=url.searchParams.get("instrument_name");
+		var instrumentNameDiv = document.getElementById('instrument_name');
+
+		instrumentNameDiv.innerHTML =instrument_name;
+		$(document)
+        // Set the min as the current time
+        const now = new Date();
+        const minDate = now.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:mm"
+        document.getElementById('borrow-time').setAttribute('min', minDate);
+
+        // Set the max as one day from now
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const maxDate = tomorrow.toISOString().slice(0,16);
+        document.getElementById('borrow-time').setAttribute('max', maxDate);
+
+        const confirmButton = document.getElementById('confirm-time');
+        confirmButton.addEventListener('click', function() {
+            var borrowTime = document.getElementById('borrow-time').value;
+            if (borrowTime) {
+                alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
+                // Process borrowing logic here, like updating database or redirecting to a confirmation page
             } else {
-                instrumentDisplay.textContent = 'No instrument selected.';
+                alert('Please select a time.');
             }
-
-            // Set the min as the current time
-            const now = new Date();
-            const minDate = now.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:mm"
-            document.getElementById('borrow-time').setAttribute('min', minDate);
-
-            // Set the max as one day from now
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const maxDate = tomorrow.toISOString().slice(0,16);
-            document.getElementById('borrow-time').setAttribute('max', maxDate);
-
-            const confirmButton = document.getElementById('confirm-time');
-            confirmButton.addEventListener('click', function() {
-                var borrowTime = document.getElementById('borrow-time').value;
-                if (borrowTime) {
-                    alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
-                    // Process borrowing logic here, like updating database or redirecting to a confirmation page
-                } else {
-                    alert('Please select a time.');
-                }
-            });
         });
+    ;
     </script>
 </body>
 </html>

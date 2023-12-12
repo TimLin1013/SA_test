@@ -80,13 +80,12 @@
     </header>
 
     <main>
-        <main>
         <div class="category">
             <h2 class="category-title">Woodwind Instruments</h2>
             <section class="product-grid">
                 <!-- Flute -->
                 <div class="product">
-                    <a href="url-to-woodwind-instrument-detail-page">
+                    <a href="" id="fulteLink">
                         <img src="flute.jpg" alt="Flute">
                     </a>
                     <div class="product-info">
@@ -100,7 +99,7 @@
 
                 <!-- Piccolo -->
                 <div class="product">
-                    <a href="url-to-piccolo-instrument-detail-page">
+                     <a href="" id="piccoloLink">
                         <img src="piccolo.jpg" alt="Piccolo">
                     </a>
                     <div class="product-info">
@@ -114,7 +113,7 @@
 
                 <!-- Clarinet -->
                 <div class="product">
-                    <a href="url-to-clarinet-instrument-detail-page">
+                    <a href="" id="clarinetLink">
                         <img src="clarinet.jpg" alt="Clarinet">
                     </a>
                     <div class="product-info">
@@ -128,7 +127,7 @@
 
                 <!-- Oboe -->
                 <div class="product">
-                    <a href="url-to-oboe-instrument-detail-page">
+                    <a href=""id="oboeLink">
                         <img src="oboe.jpg" alt="Oboe">
                     </a>
                     <div class="product-info">
@@ -142,7 +141,7 @@
 
                 <!-- Bassoon -->
                 <div class="product">
-                    <a href="url-to-bassoon-instrument-detail-page">
+                    <a href=""id="bassoonLink">
                         <img src="assoon.jpg" alt="Bassoon">
                     </a>
                     <div class="product-info">
@@ -156,7 +155,7 @@
 
                 <!-- Saxophone -->
                 <div class="product">
-                    <a href="url-to-saxophone-instrument-detail-page">
+                    <a href="" id="saxophoneLink">
                         <img src="saxophone.jpg" alt="Saxophone">
                     </a>
                     <div class="product-info">
@@ -173,7 +172,7 @@
             <section class="product-grid">
                 <!-- Trumpet -->
                 <div class="product">
-                    <a href="url-to-trumpet-instrument-detail-page">
+                    <a href="" id="trumpetLink">
                         <img src="trumpet.jpg" alt="Trumpet">
                     </a>
                     <div class="product-info">
@@ -187,7 +186,7 @@
 
                 <!-- Trombone -->
                 <div class="product">
-                    <a href="url-to-trombone-instrument-detail-page">
+                    <a href="" id="tromboneLink">
                         <img src="trombone.jpg" alt="Trombone">
                     </a>
                     <div class="product-info">
@@ -201,7 +200,7 @@
 
                 <!-- Horn -->
                 <div class="product">
-                    <a href="url-to-horn-instrument-detail-page">
+                    <a href="" id="hornLink">
                         <img src="horn.jpg" alt="Horn">
                     </a>
                     <div class="product-info">
@@ -218,7 +217,7 @@
             <section class="product-grid">
                 <!-- Piano -->
                 <div class="product">
-                    <a href="url-to-other-instrument-detail-page">
+                    <a href="" id="pianoLink">
                         <img src="piano.jpg" alt="Piano">
                     </a>
                     <div class="product-info">
@@ -232,7 +231,7 @@
 
                 <!-- Double Bass -->
                 <div class="product">
-                    <a href="url-to-Double Bass-instrument-detail-page">
+                    <a href="" id="double_bassLink">
                         <img src="Double_Bass.jpg" alt="Horn">
                     </a>
                     <div class="product-info">
@@ -243,40 +242,97 @@
                 <!-- Repeat for other products in 'Others' category -->
             </section>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Existing search functionality code omitted for brevity
-            });
-
-            function getAllInstrument() {
-                // Existing AJAX request code omitted for brevity
-            }
-
-            function updateInstrument(data) {
-                // Existing update instrument code omitted for brevity
-            }
-
-            $(document).ready(function() {
-                getAllInstrument();
-                $('.product img').on('click', function(event) {
-                    var instrumentName = $(this).closest('.product').find('h3').text();
-                    var quantityText = $(this).closest('.product').find('p').text();
-
-                    if (quantityText.includes('Quantity: 0')) {
-                        alert("Sorry, this instrument is out of stock.");
-                    } else {
-                        window.location.href = 'chooseBorrowTime.html?instrument=' + encodeURIComponent(instrumentName);
-                    }
-                });
-            });
-        </script>
     </main>
 
     <footer>
         <button>Previous</button>
         <button>Next</button>
     </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.querySelector('input[type="search"]');
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.toLowerCase();
+            const categories = document.querySelectorAll('.category');
+
+            categories.forEach(category => {
+                const products = category.querySelectorAll('.product');
+                let categoryHasVisibleProducts = false;
+
+                products.forEach(product => {
+                    const productName = product.querySelector('h3').textContent.toLowerCase();
+                    if (productName.includes(query)) {
+                        product.style.display = 'block';
+                        categoryHasVisibleProducts = true;
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+
+                category.style.display = categoryHasVisibleProducts ? 'block' : 'none';
+            });
+        });
+    });
+     function getAllInstrument() {
+        $.ajax({
+                type: "GET",
+                url: "api/instrument.do",
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if(response.status == 200){
+                        updateInstrument(response.response.data);
+                    }
+                    console.log(response);
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+        });
+    }
+    function updateInstrument(data) {
+	    $.each(data, function(index, value) {
+	     	 var selector = "#" + value['name'] + "Quantity";
+	        $(selector).text("Quantity: " + value['quantity']);
+	    });
+	}
+	$(document).ready(function() {
+	    getAllInstrument();
+	});
+	$(document).ready(function() {
+    	var url = new URL(window.location.href);
+    	var user_id = url.searchParams.get("id");
+    	$('#fluteloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Flute');
+    	 $('#piccoloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piccolo');
+    	 $('#clarinetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Clarinet');
+    	 $('#oboeLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Oboe');
+    	$('#bassoonLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Bassoon');
+    	 $('#saxophoneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Saxophone');
+    	 $('#trumpetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trumpet');
+    	 $('#tromboneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trombone');
+    	 $('#hornLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Horn');
+    	 $('#pianoLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piano');
+    	 $('#double_bassLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Double_Bass');
+    	
+    	getAllInstrument();
+    	$('.product a').on('click', function(event) {
+
+        	var quantityText = $(this).siblings('.product-info').find('p').text();
+
+        	if (quantityText.includes('Quantity: 0')) {
+            	event.preventDefault();
+           	 alert("Sorry, this instrument is out of stock."); 
+        	}
+    });
+});
+                
+</script>
+
+
 </body>
 
 </html>

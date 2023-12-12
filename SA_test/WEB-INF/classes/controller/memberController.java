@@ -66,6 +66,7 @@ public class memberController extends HttpServlet {
 		        resp.put("status", "1");
 		        resp.put("identity", mh.getIdentity(account));
 		        resp.put("message", "登入成功");
+		        resp.put("id",mh.getId(account) );
 		        
 		        response.setContentType("application/json");
 		        response.setCharacterEncoding("UTF-8");

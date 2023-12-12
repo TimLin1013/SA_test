@@ -450,4 +450,35 @@ public class memberHelper {
 
         return response;
     }
+    public String getId(String account) {
+    	String id = null; // 初始化為空值
+    	try {
+            /** 取得資料庫之連線 */
+            conn = DBMgr.getConnection();
+            /** SQL指令 */
+             String sql ="SELECT member_id FROM `sa`.`tbl_member` WHERE `member_account` = ? LIMIT 1";
+            /** 將參數回填至SQL指令當中 */
+            pres = conn.prepareStatement(sql);
+            pres.setString(1, account);
+            /** 執行查詢 */
+            ResultSet rs = pres.executeQuery();
+
+            /** 檢查是否有查詢結果 */
+            if (rs.next()) {
+                id = rs.getString("member_id");
+            }
+           
+        } catch (SQLException e) {
+            /** 印出JDBC SQL指令錯誤 **/
+            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            /** 若錯誤則印出錯誤訊息 */
+            e.printStackTrace();
+        } finally {
+            /** 關閉連線並釋放所有資料庫相關之資源 **/
+            DBMgr.close( pres, conn);
+        }
+    	return id;
+    }
 }
+
