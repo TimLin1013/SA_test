@@ -262,5 +262,17 @@ CREATE TABLE IF NOT EXISTS `SA`.`TBL_announcement` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 ALTER TABLE `tbl_borrow_record` CHANGE `return_time` `return_time` DATETIME NULL;
+INSERT INTO `tbl_instrument` (`instrument_id`, `instrument_name`, `instrument_quantity`) VALUES
+(1, 'Flute', 0),
+(2, 'Piccolo', 5),
+(3, 'Clarinet', 8),
+(4, 'Oboe', 3),
+(5, 'Bassoon', 7),
+(6, 'Saxophone', 2),
+(7, 'Trumpet', 5),
+(8, 'Trombone', 12),
+(9, 'Horn', 3),
+(10, 'Piano', 1),
+(11, 'Double_Bass', 2);
 
 
