@@ -45,11 +45,10 @@ button {
 <header>
   <h1>Select Borrowing Time</h1>
 </header>
-
+<div id ="instrument_name"></div>
 <main class="main-content">
 	
   <div id="instrument-selected" class="instrument-selected"></div>
-  	<div id ="instrument_name"></div>
   <div class="time-selection">
     <label for="borrow-time">Choose a time:</label>
     <!-- 加上 min 和 max 屬性限制可選的範圍 -->
@@ -63,7 +62,7 @@ button {
     var url = new URL(window.location.href);
     var instrumentName = url.searchParams.get("instrument_name");
     var instrumentNameDiv = document.getElementById('instrument_name');
-	instrumentNameDiv.innerHTML =instrument_name;
+	instrumentNameDiv.innerHTML =instrumentName;
     // 設定 min 為當下時間
     const now = new Date();
     const minDate = now.toISOString().slice(0, 16); // 格式為 "YYYY-MM-DDTHH:mm"
