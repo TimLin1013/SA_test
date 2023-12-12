@@ -274,5 +274,6 @@ INSERT INTO `tbl_instrument` (`instrument_id`, `instrument_name`, `instrument_qu
 (9, 'Horn', 3),
 (10, 'Piano', 1),
 (11, 'Double_Bass', 2);
-
+INSERT INTO `tbl_member` (`member_id`, `member_name`, `member_account`, `member_password`, `member_phone`, `member_group`, `created_time`, `identity`) VALUES
+(1, '管理者', '1@gmail.com', '1', '1', '無', '2023-12-12 12:45:55', '2');
 
