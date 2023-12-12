@@ -28,7 +28,7 @@ public class instrumentController {
 	           /** 新建一個JSONObject用於將回傳之資料進行封裝 */
 	           JSONObject resp = new JSONObject();
 	           resp.put("status", "200");
-	           resp.put("message", "所有會員資料取得成功");
+	           resp.put("message", "所有資料取得成功");
 	           resp.put("response", query);        
 		       response.setContentType("application/json");
 		       response.setCharacterEncoding("UTF-8");

@@ -205,7 +205,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `test`.`member` WHERE `identity`= 1";
+            String sql = "SELECT * FROM `sa`.`tbl_member` WHERE `identity`= 1";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -222,14 +222,14 @@ public class memberHelper {
                 row += 1;
                 
                 /** 將 ResultSet 之資料取出 */
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String  account= rs.getString("account");
-                String password = rs.getString("password");
-                Timestamp create_time= rs.getTimestamp("create_time");
+                int id = rs.getInt("member_id");
+                String name = rs.getString("member_name");
+                String  account= rs.getString("member_account");
+                String password = rs.getString("member_password");
+                Timestamp create_time= rs.getTimestamp("created_time");
                 String identity = rs.getString("identity");
-                String phone = rs.getString("phone");
-                String group = rs.getString("group");
+                String phone = rs.getString("member_phone");
+                String group = rs.getString("member_group");
                 /** 將每一筆會員資料產生一名新Member物件 */
                 m = new member(id,name, password,phone,group,create_time,identity,account);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
@@ -276,7 +276,7 @@ public class memberHelper {
             conn = DBMgr.getConnection();
             
             /** SQL指令 */
-            String sql = "DELETE FROM `test`.`member` WHERE `id` = ? LIMIT 1";
+            String sql = "DELETE FROM `sa`.`tbl_member` WHERE `member_id` = ? LIMIT 1";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -329,7 +329,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `test`.`member` WHERE `id` = ? LIMIT 1";
+            String sql = "SELECT * FROM `sa`.`tbl_member` WHERE `member_id` = ? LIMIT 1";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -348,14 +348,14 @@ public class memberHelper {
                 row += 1;
                 
                 /** 將 ResultSet 之資料取出 */
-                int Id = rs.getInt("id");
-                String name = rs.getString("name");
-                String account = rs.getString("account");
-                String password = rs.getString("password");
-                Timestamp create_time = rs.getTimestamp("create_time");
+                int Id = rs.getInt("member_id");
+                String name = rs.getString("member_name");
+                String account = rs.getString("member_account");
+                String password = rs.getString("member_password");
+                Timestamp create_time = rs.getTimestamp("created_time");
                 String identity = rs.getString("identity");
-                String phone = rs.getString("phone");
-                String group = rs.getString("group");
+                String phone = rs.getString("member_phone");
+                String group = rs.getString("member_group");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
                 m = new member(Id,name,password,phone,group,create_time,identity,account);
