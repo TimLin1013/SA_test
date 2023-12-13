@@ -22,20 +22,21 @@ public class borrowrecordController extends HttpServlet{
 	   String instrument_id = request.getParameter("instrument_id");
 	   String id = request.getParameter("id");
 	   JSONObject resp = new JSONObject();
+	   JsonReader jsr=new JsonReader(request);
 	  //2023-12-13T18:27 時間格式
 	   try {
            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
            java.util.Date parsedDate = dateFormat.parse(borrowtime);
            Timestamp borrow_time = new Timestamp(parsedDate.getTime());
-           resp.put("borrowTime", borrow_time);
+      
+           int instrumentID=Integer.valueOf(instrument_id);
+           int memberID=Integer.valueOf(id);
+           borrowrecord b=new borrowrecord(borrow_time,instrumentID,memberID);
+           JSONObject data=br.createrecord(b);
        } catch (ParseException e) {
            e.printStackTrace();
        }
-      
-      //resp.put("response",data);
-      //resp.put("borrowTime", borrow_time);
-      //resp.put("borrow_time", borrow_time);
-      resp.put("id", id);
+	   resp.put("id", id);
       resp.put("status", "0");
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");
