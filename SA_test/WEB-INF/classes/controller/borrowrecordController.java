@@ -23,20 +23,10 @@ public class borrowrecordController extends HttpServlet{
       Timestamp borrowTime = Timestamp.valueOf(borrow_time);
       borrowrecord b = new borrowrecord(borrowTime,instrument_id,member_id);
       
-     /* else if (!mh.checkDuplicate(m)) {
-          JSONObject data = mh.create(m);
-
-          JSONObject resp = new JSONObject();
-          
-          resp.put("status", "200");
-          resp.put("message", "成功! 註冊會員資料...");
-          resp.put("response", data);
-          jsr.response(resp, response);
-      }
-      else {
-          String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
-          jsr.response(resp, response);
-      }*/
+      JSONObject data=br.createrecord(b);
+      JSONObject resp = new JSONObject();
+      resp.put("response",data);
+      jsr.response(resp, response);
       
   }
 }

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 <title>Choose Borrow Time</title>
 <style>
 body {
@@ -89,28 +90,27 @@ button {
     });
 
     $(document).ready(function () {
-        var $form = $('#confirm');
+        var $form = $('#confirm-time');
         $form.click(function () {
             confirm();
         });
 
         function confirm() {
-            var url = new URL(window.location.href);
             var borrowtime = $('#borrow-time').val();
-            var instrument_id = url.searchParams.get("instrument_id");
-            var id = url.searchParams.get("id");
+            var instrument_id = $('#instrument_id').val();
+            var id = $('#id').val();
             var data_object = {
                 "borrow-time": borrowtime,
                 "instrument_id": instrument_id,
                 "id": id,
             };
 
-            var data_string = "borrow-time=" + encodeURIComponent(borrowtime);
+            var data_string = "borrow-time=" + encodeURIComponent(borrowtime)+ "&instrument_id=" + encodeURIComponent(instrument_id)+"&id="+encodeURIComponent(id);
 
             $.ajax({
                 type: "PUT",
                 url: "api/borrowrecord.do?" + data_string,
-                data: data_object,  // 使用 data_object 代替 data_string
+                data: data_string,  
                 crossDomain: true,
                 cache: false,
                 dataType: 'json',  // 正確的拼寫
