@@ -24,7 +24,6 @@ public class borrowrecordController extends HttpServlet{
 	   String instrument_id = request.getParameter("instrument_id");
 	   String id = request.getParameter("id");
 	   JSONObject resp = new JSONObject();
-	   JsonReader jsr=new JsonReader(request);
 	  //2023-12-13T18:27 時間格式
 	   try {
            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -34,16 +33,20 @@ public class borrowrecordController extends HttpServlet{
            int instrumentID=Integer.valueOf(instrument_id);
            int memberID=Integer.valueOf(id);
            borrowrecord b=new borrowrecord(borrow_time,instrumentID,memberID);
-           br.createrecord(b);
-           ih.deleteone(instrumentID);
+           JSONObject data =br.createrecord(b);
+           JSONObject deletedata =ih.deleteone(instrumentID);
+           
+           resp.put("delete_response", deletedata);
+           resp.put("response", data);
+           resp.put("id", id);
+           resp.put("status", "0");
+           response.setContentType("application/json");
+           response.setCharacterEncoding("UTF-8");
+           response.getWriter().write(resp.toString());
        } catch (ParseException e) {
            e.printStackTrace();
        }
-	  resp.put("id", id);
-      resp.put("status", "0");
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.getWriter().write(resp.toString());
+	  
       
   }
 }
