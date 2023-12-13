@@ -9,6 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import org.json.*;
 import app.borrowrecordHelper;
+import app.instrumentHelper;
 import app.borrowrecord;
 import tools.JsonReader;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 public class borrowrecordController extends HttpServlet{
   private static final long serialVersionUID = 1L;
   private borrowrecordHelper br =  borrowrecordHelper.getHelper();
+  private instrumentHelper ih=instrumentHelper.getHelper();
   public void doPut(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 	   String borrowtime = request.getParameter("borrow-time");
@@ -32,11 +34,12 @@ public class borrowrecordController extends HttpServlet{
            int instrumentID=Integer.valueOf(instrument_id);
            int memberID=Integer.valueOf(id);
            borrowrecord b=new borrowrecord(borrow_time,instrumentID,memberID);
-           JSONObject data=br.createrecord(b);
+           br.createrecord(b);
+           ih.deleteone(instrumentID);
        } catch (ParseException e) {
            e.printStackTrace();
        }
-	   resp.put("id", id);
+	  resp.put("id", id);
       resp.put("status", "0");
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");
