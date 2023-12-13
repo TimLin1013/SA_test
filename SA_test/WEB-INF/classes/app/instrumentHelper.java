@@ -1,7 +1,6 @@
 package app;
 import java.sql.*;
 import org.json.*;
-
 import util.DBMgr;
 public class instrumentHelper {
 	private instrumentHelper() {
@@ -10,6 +9,7 @@ public class instrumentHelper {
     private static instrumentHelper ih;
     private Connection conn = null;
     private PreparedStatement pres = null;
+    private instrument i;
     public static instrumentHelper getHelper() {
         if(ih == null) ih = new instrumentHelper();
         return ih;
@@ -65,54 +65,60 @@ public class instrumentHelper {
 
         return response;
     }
-    public JSONObject borrowByID(int id) {
-        /** 記錄實際執行之SQL指令 */
-        String exexcute_sql = "";
-        /** 紀錄程式開始執行時間 */
-        long start_time = System.nanoTime();
-        /** 紀錄SQL總行數 */
-        int row = 0;
-        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
-        ResultSet rs = null;
+    public JSONObject deleteone(int id) {
+        String executeSql = "";
+        long startTime = System.nanoTime();
+        int affectedRows = 0;
         
         try {
-            /** 取得資料庫之連線 */
+            // Get the database connection
             conn = DBMgr.getConnection();
-            
-            /** SQL指令 */
-            String sql = "DELETE FROM `sa`.`tbl_member` WHERE `member_id` = ? LIMIT 1";
-            
-            /** 將參數回填至SQL指令當中 */
-            pres = conn.prepareStatement(sql);
-            pres.setInt(1, id);
-            /** 執行刪除之SQL指令並記錄影響之行數 */
-            row = pres.executeUpdate();
 
-            /** 紀錄真實執行的SQL指令，並印出 **/
-            exexcute_sql = pres.toString();
-            System.out.println(exexcute_sql);
-            
+            // SQL query to get the current quantity
+            String sqlQuantity = "SELECT `instrument_quantity` FROM `sa`.`tbl_instrument` WHERE `instrument_id` = ? LIMIT 1";
+
+            // Prepare and execute the query
+            pres = conn.prepareStatement(sqlQuantity);
+            pres.setInt(1, id);
+            ResultSet rsQuantity = pres.executeQuery();
+
+            int currentQuantity = 0;
+            if (rsQuantity.next()) {
+                currentQuantity = rsQuantity.getInt("instrument_quantity");
+            }
+
+            // Check if there are available items to delete
+            if (currentQuantity > 0) {
+                // SQL update to decrement the quantity by 1
+                String sqlUpdate = "UPDATE `sa`.`tbl_instrument` SET `instrument_quantity` = ? WHERE `instrument_id` = ?";
+                pres = conn.prepareStatement(sqlUpdate);
+                pres.setInt(1, currentQuantity - 1);
+                pres.setInt(2, id);
+
+                // Execute the update
+                affectedRows = pres.executeUpdate();
+                executeSql = pres.toString();
+            }
         } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
             System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
         } catch (Exception e) {
-            /** 若錯誤則印出錯誤訊息 */
             e.printStackTrace();
         } finally {
-            /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close(rs, pres, conn);
+            // Close the connection and release resources
+            DBMgr.close(null, pres, conn);
         }
 
-        /** 紀錄程式結束執行時間 */
-        long end_time = System.nanoTime();
-        /** 紀錄程式執行時間 */
-        long duration = (end_time - start_time);
-        
-        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+        // Record end time and calculate duration
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+
+        // Create and return the response JSONObject
         JSONObject response = new JSONObject();
-        response.put("sql", exexcute_sql);
-        response.put("row", row);
         response.put("time", duration);
+        response.put("sql", executeSql);
+        response.put("row", affectedRows);
         return response;
     }
+
+    
 }
