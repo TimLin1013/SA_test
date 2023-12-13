@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>社課資訊</title>
     <style>
         body {
@@ -48,7 +49,7 @@
 <body>
 
 <div id="class-info-header">
-    <h1>社課資訊</h1>
+    <h1>社課報名</h1>
 </div>
 
 <div id="class-info-container"></div>
@@ -74,13 +75,44 @@
 <div id="past-signups-container"></div>
 
 <script>
-    const classes = [
-        { time: "9/5 星期一 14:00-16:00", location: "教室A", teacher: "張老師" },
-        { time: "10/8 星期三 10:00-12:00", location: "教室B", teacher: "李老師" },
-        { time: "11/15 星期四 15:00-18:00", location: "教室B", teacher: "方老師" },
-        { time: "12/8 星期三 10:00-12:00", location: "教室A", teacher: "李老師" },
-        // 添加更多社課資訊...
-    ];
+	function getAllCourse(){
+		$.ajax({
+                type: "GET",
+                url: "api/course.do",
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                     var firstObject = response.response.data[0];
+        	             updateCourse(response.response.data);
+	                     console.log(response);
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+        });
+	}
+	var classes=[];
+	function updateCourse(data){
+		classes = [];
+		for (const course of data) {
+        	const courseInfo = {
+	            course_name: course.course_name,
+	            course_start_time: course.course_start_time,
+	            teacher_id: course.member_id,
+	            course_time: course.course_time,
+	            course_location: course.course_location
+	        };
+	        console.log(course);
+	        classes.push(courseInfo);
+		}
+	    displayClassInfo();
+	}
+	$(document).ready(function() {
+	    getAllCourse();
+	});
+    
 
     const signedUpClasses = [];
 
@@ -98,7 +130,7 @@
             signUpButton.addEventListener("click", () => handleSignUp(index));
             classDiv.appendChild(signUpButton);
 
-            const infoText = document.createTextNode(`時間: ${classInfo.time}, 地點: ${classInfo.location}, 老師: ${classInfo.teacher}`);
+            const infoText = document.createTextNode(`課名: ${classInfo.course_name}, 時間: ${classInfo.course_time}, 地點: ${classInfo.course_location}, 老師id: ${classInfo.teacher_id}`);
             classDiv.appendChild(infoText);
 
             container.appendChild(classDiv);
@@ -133,16 +165,13 @@
                 const classDiv = document.createElement("div");
                 classDiv.classList.add("class-info");
 
-                const infoText = document.createTextNode(`時間: ${classInfo.time}, 地點: ${classInfo.location}, 老師: ${classInfo.teacher}`);
+                const infoText = document.createTextNode(`課名: ${classInfo.course_name}, 時間: ${classInfo.course_time}, 地點: ${classInfo.course_location}, 老師id: ${classInfo.teacher_id}`);
                 classDiv.appendChild(infoText);
 
                 // Add Rating, Submit Assignment, and Correction buttons
                 const ratingButton = document.createElement("button");
                 ratingButton.textContent = "評分";
-               ratingButton.addEventListener("click", () => {
-
-				    window.location.href = "classRating.html";
-				});
+                ratingButton.addEventListener("click", () => handleRating(classInfo));
                 classDiv.appendChild(ratingButton);
 
                 const submitAssignmentButton = document.createElement("button");
