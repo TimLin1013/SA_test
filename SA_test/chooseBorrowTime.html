@@ -97,11 +97,8 @@ button {
 
         function confirm() {
             var borrowtime = $('#borrow-time').val();
-            alert(borrowtime);
             var instrument_id = url.searchParams.get("instrument_id");
-            alert(instrument_id);
             var id = url.searchParams.get("id");
-            alert(id);
             var data_object = {
                 "borrow-time": borrowtime,
                 "instrument_id": instrument_id,
@@ -121,7 +118,6 @@ button {
                 success: function (response) {
                     // 在這裡處理成功的邏輯
                     if(response.status==0){
-						alert(response.borrowTime);
 					}
                 },
                 error: function () {
