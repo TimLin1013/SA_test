@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社課作業繳交</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            background-color: #F6EDFF; /* 底色為淡紫色 */
+            padding: 10px; /* 可以根據需要調整內邊距 */
+        }
+
+        #inputBox {
+            width: 100%;
+            height: 200px;
+            resize: none;
+            margin-bottom: 10px; /* 新增這一行，增加輸入框和按鈕之間的間距 */
+        }
+
+        #submitButton {
+            background-color: #4CAF50; /* 綠色按鈕背景色 */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>作業繳交</h1>
+    <p>請輸入文字:</p>
+    <textarea id="inputBox" placeholder="在這裡輸入文字..."></textarea>
+    
+    <!-- 新增繳交按鈕 -->
+    <button id="submitButton" onclick="submitAssignment()">繳交</button>
+
+    <script>
+        function submitAssignment() {
+            // 在這裡可以加入處理繳交邏輯的 JavaScript 代碼
+            var userInput = document.getElementById("inputBox").value;
+            alert("繳交成功");
+        }
+    </script>
+</body>
+</html>
