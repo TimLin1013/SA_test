@@ -54,24 +54,6 @@
 
 <div id="class-info-container"></div>
 
-<button id="add-class-btn" onclick="toggleAddClassForm()">新增社課</button>
-
-<form id="add-class-form">
-    <label for="date">日期:</label>
-    <input type="text" id="date" name="date" placeholder="例如：9/12">
-
-    <label for="location">地點:</label>
-    <input type="text" id="location" name="location" placeholder="例如：教室C">
-
-    <label for="teacher">授課教師:</label>
-    <input type="text" id="teacher" name="teacher" placeholder="例如：王老師">
-
-    <label for="fee">費用:</label>
-    <input type="text" id="fee" name="fee" placeholder="例如：1000">
-
-    <button type="button" onclick="addNewClass()">確定新增</button>
-</form>
-
 <div id="past-signups-container"></div>
 
 <script>
@@ -171,20 +153,19 @@
                 // Add Rating, Submit Assignment, and Correction buttons
                 const ratingButton = document.createElement("button");
                 ratingButton.textContent = "評分";
-                ratingButton.addEventListener("click", () => handleRating(classInfo));
+              	 ratingButton.addEventListener("click", () => handleRating());
                 classDiv.appendChild(ratingButton);
 
                 const submitAssignmentButton = document.createElement("button");
                 submitAssignmentButton.textContent = "繳交作業";
-                submitAssignmentButton.addEventListener("click", () => handleSubmitAssignment(classInfo));
+                submitAssignmentButton.addEventListener("click", () => handleSubmitAssignment());
                 classDiv.appendChild(submitAssignmentButton);
 
-                const correctionButton = document.createElement("button");
-                correctionButton.textContent = "批改";
-                correctionButton.addEventListener("click", () => handleCorrection(classInfo));
-                classDiv.appendChild(correctionButton);
+				const cancelRegistrationButton = document.createElement("button");
+                submitAssignmentButton.textContent = "取消報名";
+                submitAssignmentButton.addEventListener("click", () => handlecancelRegistration());
+                classDiv.appendChild(submitAssignmentButton);
 
-                // Add "尚未批改" field
                 const notGradedText = document.createElement("span");
                 notGradedText.textContent = "尚未批改";
                 notGradedText
@@ -196,47 +177,16 @@
         }
     }
 
-    function handleRating(classInfo) {
-        // Implement rating logic here
-        console.log(`評分: ${classInfo.time}`);
+    function handleRating() {
+        window.location.href = "classRating.html";
     }
 
-    function handleSubmitAssignment(classInfo) {
-        // Implement submit assignment logic here
-        console.log(`繳交作業: ${classInfo.time}`);
+    function handleSubmitAssignment() {
+		 window.location.href = "submitHomework.html";
     }
-
-    function handleCorrection(classInfo) {
-        // Implement correction logic here
-        console.log(`批改: ${classInfo.time}`);
+	function handlecancelRegistration() {
+		
     }
-
-    function toggleAddClassForm() {
-        const form = document.getElementById("add-class-form");
-        form.style.display = form.style.display === "none" ? "block" : "none";
-    }
-
-    function addNewClass() {
-        const date = document.getElementById("date").value;
-        const location = document.getElementById("location").value;
-        const teacher = document.getElementById("teacher").value;
-        const fee = document.getElementById("fee").value;
-
-        if (date && location && teacher && fee) {
-            const newClass = { time: date, location, teacher, fee };
-            classes.push(newClass);
-
-            document.getElementById("date").value = "";
-            document.getElementById("location").value = "";
-            document.getElementById("teacher").value = "";
-            document.getElementById("fee").value = "";
-
-            displayClassInfo();
-        } else {
-            alert("請填寫所有欄位！");
-        }
-    }
-
     displayClassInfo();
 </script>
 
