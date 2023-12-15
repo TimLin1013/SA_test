@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E1EDFC; 
+        }
+        .comment {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #FCFCFC;
+        }
+        .reply-form {
+            margin-top: 10px;
+            margin-left: 30px;
+        }
+        #new-discussion-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .replies {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Forum</h1>
+    <button id="new-discussion-button">新增討論</button>
+
+    <div id="comments">
+        <!-- 現有評論的結構 -->
+    </div>
+
+    <script>
+        let replyFormIdCounter = 0;
+
+        // 函數用於顯示/隱藏回覆表單
+        function toggleReplyForm(commentId) {
+            const replyForm = document.getElementById(`reply-form-${commentId}`);
+            if (replyForm) {
+                replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // 為回覆按鈕添加點擊事件監聽器
+        function addReplyButtonListener(button) {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                toggleReplyForm(commentId);
+            });
+        }
+
+        // 函數用於處理回覆表單的提交
+        function handleReplyFormSubmit(event) {
+            event.preventDefault(); // 阻止表單的默認提交行為
+
+            const form = event.target;
+            const username = form.querySelector('input[name="reply-username"]').value;
+            const comment = form.querySelector('textarea[name="reply-comment"]').value;
+
+            if (username.trim() === '' || comment.trim() === '') {
+                alert('用戶名稱和回覆內容不能為空！');
+                return;
+            }
+
+            const repliesContainer = form.closest('.comment').querySelector('.replies') || createRepliesContainer(form.closest('.comment'));
+            const newReplyDiv = document.createElement('div');
+            newReplyDiv.classList.add('comment');
+            newReplyDiv.innerHTML = `<p>${username}的回覆：${comment}</p>`;
+
+            repliesContainer.appendChild(newReplyDiv);
+
+            form.reset();
+        }
+
+        function createRepliesContainer(commentDiv) {
+            const repliesDiv = document.createElement('div');
+            repliesDiv.classList.add('replies');
+            commentDiv.appendChild(repliesDiv);
+            return repliesDiv;
+        }
+
+        // 新增討論按鈕的點擊事件
+        document.getElementById('new-discussion-button').addEventListener('click', function() {
+            const title = prompt('Please insert title：');
+            if (title !== null && title.trim() !== '') {
+                const content = prompt('Please insert content：');
+                if (content !== null && content.trim() !== '') {
+                    addNewDiscussion(title, content);
+                }
+            }
+        });
+
+        function addNewDiscussion(title, content) {
+            const commentsSection = document.getElementById('comments');
+            const newDiscussionDiv = document.createElement('div');
+            newDiscussionDiv.classList.add('comment');
+            const commentId = `comment-${++replyFormIdCounter}`;
+            newDiscussionDiv.innerHTML = `
+                <h3>${title}</h3>
+                <p>${content}</p>
+                <button class="reply-button" data-comment-id="${commentId}">回覆</button>
+                <div class="reply-form" id="reply-form-${commentId}" style="display: none;">
+                    <form>
+                        <div>
+                            <label for="reply-username-${commentId}">用戶名稱：</label>
+                            <input type="text" id="reply-username-${commentId}" name="reply-username" required>
+                        </div>
+                        <div>
+                            <label for="reply-comment-${commentId}">回覆內容：</label>
+                            <textarea id="reply-comment-${commentId}" name="reply-comment" rows="3" cols="40" required></textarea>
+                        </div>
+                        <div>
+                            <input type="submit" value="提交回覆">
+                        </div>
+                    </form>
+                </div>`;
+            commentsSection.appendChild(newDiscussionDiv);
+
+            // 為新增的回覆按鈕添加事件監聽器
+            const newReplyButton = newDiscussionDiv.querySelector('.reply-button');
+            addReplyButtonListener(newReplyButton);
+
+            // 為新增的回覆表單添加提交事件監聽器
+            const newForm = newDiscussionDiv.querySelector('.reply-form form');
+            newForm.addEventListener('submit', handleReplyFormSubmit);
+        }
+
+        // 為所有現有的回覆按鈕添加事件監聽器
+        const replyButtons = document.querySelectorAll('.reply-button');
+        replyButtons.forEach(addReplyButtonListener);
+
+        // 為所有現有的回覆表單添加提交事件監聽器
+        const replyForms = document.querySelectorAll('.reply-form form');
+        replyForms.forEach(form => {
+            form.addEventListener('submit', handleReplyFormSubmit);
+        });
+    </script>
+</body>
+</html>
+
