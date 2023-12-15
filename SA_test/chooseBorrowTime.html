@@ -74,19 +74,9 @@ button {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const maxDate = tomorrow.toISOString().slice(0, 16);
     document.getElementById('borrow-time').setAttribute('max', maxDate);
-
-    const confirmButton = document.getElementById('confirm-time');
+	
+	const confirmButton = document.getElementById('confirm-time');
     confirmButton.addEventListener('click', function () {
-        var borrowTime = document.getElementById('borrow-time').value;
-        var borrowTimeStr = borrowTime;
-        if (borrowTime) {
-            var borrowTime = new Date(borrowTimeStr);
-            borrowTime.setHours(borrowTime.getHours() + 3);
-            alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
-            // 在這裡處理借用邏輯，例如更新資料庫或導向確認頁面
-        } else {
-            alert('Please select a time.');
-        }
     });
 
     $(document).ready(function () {
@@ -104,10 +94,12 @@ button {
                 "instrument_id": instrument_id,
                 "id": id,
             };
-
-            var data_string = "borrow-time=" + encodeURIComponent(borrowtime)+ "&instrument_id=" + encodeURIComponent(instrument_id)+"&id="+encodeURIComponent(id);
-
-            $.ajax({
+			var borrowTime = document.getElementById('borrow-time').value;
+    		var borrowTimeStr = borrowTime;
+   
+        	var data_string = "borrow-time=" + encodeURIComponent(borrowtime)+ "&instrument_id=" + encodeURIComponent(instrument_id)+"&id="+encodeURIComponent(id);
+    		if (borrowTime) {
+                $.ajax({
                 type: "PUT",
                 url: "api/borrowrecord.do?" + data_string,
                 data: data_string,  
@@ -116,17 +108,28 @@ button {
                 dataType: 'json',  // 正確的拼寫
                 timeout: 5000,
                 success: function (response) {
-                    console.log(response);
-                    if(response.status==0){
-						
+                	console.log(response.response.check);
+                	if(response.status==0){
+						alert("bye!");
 					}
+					else{
+						var borrowTime = new Date(borrowTimeStr);
+        				borrowTime.setHours(borrowTime.getHours() + 3);
+       					alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
+					}
+			
                 },
-                error: function () {
-                    alert("無法連線到伺服器！");
-                }
+              
             });
-        }
-    });
+        // 在這裡處理借用邏輯，例如更新資料庫或導向確認頁面
+    		} else {
+            alert('Please select a time.');
+        	}	
+      
+
+
+        	}
+    	});
 </script>
 
 

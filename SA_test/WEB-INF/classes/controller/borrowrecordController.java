@@ -33,10 +33,8 @@ public class borrowrecordController extends HttpServlet{
            int instrumentID=Integer.valueOf(instrument_id);
            int memberID=Integer.valueOf(id);
            borrowrecord b=new borrowrecord(borrow_time,instrumentID,memberID);
-           JSONObject data =br.createrecord(b);
-           JSONObject deletedata =ih.deleteone(instrumentID);
-           
-           resp.put("delete_response", deletedata);
+           JSONObject data =br.createrecord(b,instrumentID,memberID);
+    
            resp.put("response", data);
            resp.put("id", id);
            resp.put("status", "0");

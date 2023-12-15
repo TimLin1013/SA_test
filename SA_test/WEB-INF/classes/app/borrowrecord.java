@@ -8,12 +8,6 @@ public class borrowrecord {
 	private Timestamp borrow_time;
 	private int instrument_id;
 	private int member_id;
-	public borrowrecord (int borrow_record_id, Timestamp borrow_time,int instrument_id,int member_id) {
-		this.borrow_record_id=borrow_record_id;
-		this.borrow_time=borrow_time;
-		this.instrument_id=instrument_id;
-		this.member_id=member_id;
-	}
 	public borrowrecord (Timestamp borrow_time,int instrument_id,int member_id) {
 		this.borrow_time=borrow_time;
 		this.instrument_id=instrument_id;
