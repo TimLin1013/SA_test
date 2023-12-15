@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社費繳納</title>
+    <style>
+        body {
+            background-color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #E1EDFC;
+            text-align: center;
+            padding: 10px;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center; /* Center-align text */
+        }
+
+        p {
+            margin-bottom: 10px; /* Add some spacing between paragraphs */
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #paymentMethodButtons button {
+            margin-right: 10px;
+            background-color: #FADDA5;
+            color: #000000;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #paymentMethodButtons button:hover {
+            background-color: #D9C87E;
+        }
+
+        #confirmPaymentButton {
+            background-color: #764792;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            opacity: 0.6;
+        }
+
+        #confirmPaymentButton:hover {
+            background-color: #5C3F66;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>社費繳納</h1>
+    </header>
+    <section>
+        <form id="paymentForm">
+            <p>姓名：</p>
+
+            <p>繳費序列：</p>
+
+            <label>請選擇付款方式：</label>
+            <div id="paymentMethodButtons">
+                <button type="button" onclick="selectPaymentMethod('creditCard')">信用卡</button>
+                <button type="button" onclick="selectPaymentMethod('ATM')">ATM</button>
+            </div>
+
+            <button id="confirmPaymentButton" type="button" onclick="confirmPayment()">確認繳費</button>
+        </form>
+    </section>
+
+    <script>
+        let selectedPaymentMethod = '';
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            // You can add additional logic or UI updates based on the selected method if needed
+        }
+
+        function confirmPayment() {
+            // You can add additional logic for payment confirmation
+            alert(`請選擇付款方式: ${selectedPaymentMethod}`);
+        }
+    </script>
+</body>
+</html>

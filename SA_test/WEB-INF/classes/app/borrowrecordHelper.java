@@ -24,17 +24,7 @@ public class borrowrecordHelper {
 		try {
 			/** 取得資料庫之連線 */
 			conn = DBMgr.getConnection();
-			//找出該社員是不是完全沒有用過該借用系統
-			String sqlcheck = "SELECT count(*) FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ?";
-			/** 將參數回填至SQL指令當中 */
-			pres = conn.prepareStatement(sqlcheck);
-			pres.setInt(1, memid);
-			/** 執行查詢之SQL指令並記錄其回傳之資料 */
-			ResultSet rs = pres.executeQuery();
-			if(rs.next()) {
-				row = rs.getInt("count(*)");
-				inspect=true;
-            }
+			
 			//如果有人還沒歸還又借的判斷
 			String sqlcheck2 = "SELECT `return_time` FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ? ";
 			pres = conn.prepareStatement(sqlcheck2);
@@ -42,15 +32,14 @@ public class borrowrecordHelper {
 			ResultSet rscheck = pres.executeQuery();
 			while(rscheck.next()) {
 				check = rscheck.getTimestamp("return_time");
-				change=toString().valueOf(check);
-				//如果改社員的資料裡面找到null就跳出，代表他不能借用
-				if(change.equals(null)) {
+				change=String.valueOf(check);
+				//如果改社員的資料裡面找到null就跳出，代表他不能借用然後inspect設成true
+				if(change=="null") {
 					inspect=true;
-					response.put("check","can'tborrow");
 					break;
 				}
 			}
-			if(inspect==false || row==0) {
+			if(inspect==false) {
 				//新增借用紀錄
 				/** SQL指令 */
 				String sql = "INSERT INTO `sa`.`tbl_borrow_record`(`borrow_time`, `instrument_id`, `member_id`)"
