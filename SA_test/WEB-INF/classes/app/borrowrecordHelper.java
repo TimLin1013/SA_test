@@ -15,13 +15,40 @@ public class borrowrecordHelper {
       if(br == null) br = new borrowrecordHelper();
       return br;
   }
-  public JSONObject createrecord(borrowrecord b){
+  public JSONObject createrecord(borrowrecord b,int instid,int memid){
       String exexcute_sql = "";
       long start_time = System.nanoTime();
       int row = 0;
+      boolean inspect=false;
+      Timestamp check;
+      String change="";
       try {
           /** 取得資料庫之連線 */
           conn = DBMgr.getConnection();
+          String sqlcheck = "SELECT count(*) FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ?";
+          /** 將參數回填至SQL指令當中 */
+          pres = conn.prepareStatement(sqlcheck);
+          pres.setInt(1, memid);
+          /** 執行查詢之SQL指令並記錄其回傳之資料 */
+          ResultSet rs = pres.executeQuery();
+          if(rs.next()) {
+              row = rs.getInt("count(*)");
+            }
+          
+          String sqlcheck2 = "SELECT `return_time` FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ? ";
+          pres = conn.prepareStatement(sqlcheck2);
+          pres.setInt(1, memid);
+          ResultSet rscheck = pres.executeQuery();
+          while(rscheck.next()) {
+              check = rscheck.getTimestamp("return_time");
+              change=toString().valueOf(check);
+              if(change.equals(null)) {
+            	  inspect=true;
+            	  break;
+              }
+          }
+          if(inspect==false || row==0) {
+          //新增借用紀錄
           /** SQL指令 */
           String sql = "INSERT INTO `sa`.`tbl_borrow_record`(`borrow_time`, `instrument_id`, `member_id`)"
                   + " VALUES(?, ?, ?)";
@@ -36,10 +63,27 @@ public class borrowrecordHelper {
           pres.setTimestamp(1, borrow_time);
           pres.setInt(2, instrument_id);
           pres.setInt(3, member_id);
-          
-          /** 執行新增之SQL指令並記錄影響之行數 */
-          row = pres.executeUpdate();
-          
+          pres.executeUpdate();
+        //資料庫器材數量-1
+          String sqlQuantity = "SELECT `instrument_quantity` FROM `sa`.`tbl_instrument` WHERE `instrument_id` = ? LIMIT 1";
+
+          // Prepare and execute the query
+          pres = conn.prepareStatement(sqlQuantity);
+          pres.setInt(1, instid);
+          ResultSet rsQuantity = pres.executeQuery();
+
+          int currentQuantity = 0;
+          if (rsQuantity.next()) {
+              currentQuantity = rsQuantity.getInt("instrument_quantity");
+          }
+          if (currentQuantity > 0) {
+              String sqlUpdate = "UPDATE `sa`.`tbl_instrument` SET `instrument_quantity` = ? WHERE `instrument_id` = ?";
+              pres = conn.prepareStatement(sqlUpdate);
+              pres.setInt(1, currentQuantity - 1);
+              pres.setInt(2, instid);
+              pres.executeUpdate();
+          }
+      }
       } catch (SQLException e) {
           /** 印出JDBC SQL指令錯誤 **/
           System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
@@ -53,17 +97,9 @@ public class borrowrecordHelper {
       exexcute_sql = pres.toString();
       System.out.println(exexcute_sql);
 
-    
-      /** 紀錄程式結束執行時間 */
-      long end_time = System.nanoTime();
-      /** 紀錄程式執行時間 */
-      long duration = (end_time - start_time);
-
       /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
       JSONObject response = new JSONObject();
       response.put("sql", exexcute_sql);
-      response.put("time", duration);
-      response.put("row", row);
 
       return response;
   }
