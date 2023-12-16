@@ -252,6 +252,7 @@
     </footer>
 
 <script>
+
 	 		document.addEventListener('DOMContentLoaded', function() {
 		  const searchInput = document.querySelector('input[type="search"]');
 
@@ -262,6 +263,7 @@
 		    categories.forEach(category => {
 		      const products = category.querySelectorAll('.product');
 		      let categoryHasVisibleProducts = false;
+
 
 		      products.forEach(product => {
 		        const productName = product.querySelector('h3').textContent.toLowerCase();
@@ -277,6 +279,7 @@
 		    });
 		  });
 		});
+
      function getAllInstrument() {
         $.ajax({
                 type: "GET",
