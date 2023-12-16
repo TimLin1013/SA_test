@@ -167,6 +167,27 @@
                             }
                     });
                     }
+            function postArticle(title, content) {
+			    $.ajax({
+			        type: "POST",
+			        url: "api/article.do",
+			        crossDomain: true,
+                    cache: false,
+                    dataType: 'json',
+                    timeout: 5000,
+			        data: {title: title, article_content: content},
+			        success: function(response) {
+			            if(response.status == 200){
+                                    updateTable_user(response.response.data);
+                                }
+                                console.log(response);
+                          },
+			        error: function() {
+			            alert("Error posting article");
+			        }
+			    });
+			}
+
     </script>
 </body>
 </html>
