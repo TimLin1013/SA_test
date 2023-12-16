@@ -147,7 +147,26 @@
         replyForms.forEach(form => {
             form.addEventListener('submit', handleReplyFormSubmit);
         });
+        function getArticle() {
+            // 發出POST的GET請求取得所有文章列表
+              $.ajax({
+                            type: "GET",
+                            url: "api/article.do",
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    updateTable_user(response.response.data);
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+                    }
     </script>
 </body>
 </html>
-

@@ -19,8 +19,6 @@ public class articleController extends HttpServlet{
 		   String article_id = request.getParameter("article_id");
 		   String article_content = request.getParameter("article_content");
 		   JSONObject resp = new JSONObject();
-		   try {
-		   
-		   }
+	}
 }
 
