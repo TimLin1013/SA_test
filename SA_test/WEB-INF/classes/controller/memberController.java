@@ -28,6 +28,7 @@ public class memberController extends HttpServlet {
         String name = jso.getString("name");
         String phone= jso.getString("phone");
         String group = jso.getString("group");
+        String id = request.getParameter("id");
         member m = new member(account,name,password,phone,group);
         if(account.isEmpty() || password.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
             String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
@@ -42,6 +43,7 @@ public class memberController extends HttpServlet {
             resp.put("status", "200");
             resp.put("message", "成功! 註冊會員資料...");
             resp.put("response", data);
+            resp.put("id",mh.getId(account) );
             jsr.response(resp, response);
         }
         else {

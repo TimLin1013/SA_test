@@ -77,6 +77,8 @@
 <body>
     <header>
         <input type="search" placeholder="Search...">
+        <button id="cancelRegistrationBtn">Cancel Registration</button>
+        <button id="viewHistoryBtn">View History</button>
     </header>
 
     <main>
@@ -114,7 +116,7 @@
                 <!-- Clarinet -->
                 <div class="product">
                     <a href="" id="clarinetLink">
-                        <img src="clarinet.jpg" alt="Clarinet">
+                        <img src="clarinet.png" alt="Clarinet">
                     </a>
                     <div class="product-info">
                         <h3>Clarinet</h3>
@@ -142,7 +144,7 @@
                 <!-- Bassoon -->
                 <div class="product">
                     <a href=""id="bassoonLink">
-                        <img src="assoon.jpg" alt="Bassoon">
+                        <img src="bassoon.png"Bassoon">
                     </a>
                     <div class="product-info">
                         <h3>Bassoon</h3>
@@ -156,7 +158,7 @@
                 <!-- Saxophone -->
                 <div class="product">
                     <a href="" id="saxophoneLink">
-                        <img src="saxophone.jpg" alt="Saxophone">
+                        <img src="saxophone.jpeg" alt="Saxophone">
                     </a>
                     <div class="product-info">
                         <h3>Saxophone</h3>
@@ -187,7 +189,7 @@
                 <!-- Trombone -->
                 <div class="product">
                     <a href="" id="tromboneLink">
-                        <img src="trombone.jpg" alt="Trombone">
+                        <img src="trombone.jpeg" alt="Trombone">
                     </a>
                     <div class="product-info">
                         <h3>Trombone</h3>
@@ -231,12 +233,12 @@
 
                 <!-- Double Bass -->
                 <div class="product">
-                    <a href="" id="double_bassLink">
-                        <img src="Double_Bass.jpg" alt="Horn">
+                    <a href="" id="timpaniLink">
+                        <img src="timpani.jpg" alt="timpani">
                     </a>
                     <div class="product-info">
                         <h3>Double Bass</h3>
-                        <p id="Double_BassQuantity"></p>
+                        <p id="timpaniQuantity"></p>
                     </div>
                 </div>
                 <!-- Repeat for other products in 'Others' category -->
@@ -251,17 +253,18 @@
 
 <script>
 
-		document.addEventListener('DOMContentLoaded', function() {
+	 		document.addEventListener('DOMContentLoaded', function() {
 		  const searchInput = document.querySelector('input[type="search"]');
-		
+
 		  searchInput.addEventListener('input', function() {
 		    const query = searchInput.value.toLowerCase();
 		    const categories = document.querySelectorAll('.category');
-		
+
 		    categories.forEach(category => {
 		      const products = category.querySelectorAll('.product');
 		      let categoryHasVisibleProducts = false;
-		
+
+
 		      products.forEach(product => {
 		        const productName = product.querySelector('h3').textContent.toLowerCase();
 		        if (productName.includes(query)) {
@@ -271,7 +274,7 @@
 		          product.style.display = 'none';
 		        }
 		      });
-		
+
 		      category.style.display = categoryHasVisibleProducts ? 'block' : 'none';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 		    });
 		  });
@@ -318,7 +321,7 @@
     	 $('#tromboneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trombone&instrument_id=8');
     	 $('#hornLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Horn&instrument_id=9');
     	 $('#pianoLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piano&instrument_id=10');
-    	 $('#double_bassLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Double_Bass&instrument_id=11');
+    	 $('#timpaniLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=timpani&instrument_id=11');
     	
     	getAllInstrument();
     	$('.product a').on('click', function(event) {

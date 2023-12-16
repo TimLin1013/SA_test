@@ -89,13 +89,13 @@ button {
             var borrowtime = $('#borrow-time').val();
             var instrument_id = url.searchParams.get("instrument_id");
             var id = url.searchParams.get("id");
-            var data_object = {
+			var borrowTime = document.getElementById('borrow-time').value;
+    		var borrowTimeStr = borrowTime;
+    	    var data_object = {
                 "borrow-time": borrowtime,
                 "instrument_id": instrument_id,
                 "id": id,
             };
-			var borrowTime = document.getElementById('borrow-time').value;
-    		var borrowTimeStr = borrowTime;
    
         	var data_string = "borrow-time=" + encodeURIComponent(borrowtime)+ "&instrument_id=" + encodeURIComponent(instrument_id)+"&id="+encodeURIComponent(id);
     		if (borrowTime) {
@@ -109,7 +109,7 @@ button {
                 timeout: 5000,
                 success: function (response) {
                 	console.log(response.response.check);
-                	if(response.status==0){
+                	if(response.response.check=="can'tborrow"){
 						alert("bye!");
 					}
 					else{
