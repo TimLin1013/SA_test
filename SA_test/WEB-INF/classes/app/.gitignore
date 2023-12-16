@@ -6,3 +6,6 @@
 /borrowrecordHelper.class
 /course.class
 /courseHelper.class
+/paid.class
+/paidrecord.class
+/paidrecordHelper.class

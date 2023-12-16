@@ -39,7 +39,7 @@
             <div id="flashMessage" class="message" style="display: none;"></div>
 
             <button type="button" class="register-button" id="submit">Register</button>
-			<a href="index.html">登入</a>        
+			<a href="Paid.html"></a>        
         </form>
     </div>
 
@@ -87,7 +87,8 @@
                                     timeout: 5000,
                                     success: function (response) {
                                        	$('#flashMessage').html(response.message);
-                                        $('#flashMessage').show();          
+                                        $('#flashMessage').show();  
+                                          window.location.href = 'Paid.html?id=' + response.id;        
                                     },
                                     error: function () {
                                         alert("無法連線到伺服器！");

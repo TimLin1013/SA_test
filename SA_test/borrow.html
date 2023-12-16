@@ -252,7 +252,31 @@
     </footer>
 
 <script>
+	 		document.addEventListener('DOMContentLoaded', function() {
+		  const searchInput = document.querySelector('input[type="search"]');
 
+		  searchInput.addEventListener('input', function() {
+		    const query = searchInput.value.toLowerCase();
+		    const categories = document.querySelectorAll('.category');
+
+		    categories.forEach(category => {
+		      const products = category.querySelectorAll('.product');
+		      let categoryHasVisibleProducts = false;
+
+		      products.forEach(product => {
+		        const productName = product.querySelector('h3').textContent.toLowerCase();
+		        if (productName.includes(query)) {
+		          product.style.display = 'block';
+		          categoryHasVisibleProducts = true;
+		        } else {
+		          product.style.display = 'none';
+		        }
+		      });
+
+		      category.style.display = categoryHasVisibleProducts ? 'block' : 'none';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+		    });
+		  });
+		});
      function getAllInstrument() {
         $.ajax({
                 type: "GET",

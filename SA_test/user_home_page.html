@@ -12,15 +12,33 @@
 
     <header>
         <h1>音樂社團</h1>
+        	<script>
+    		// 定義一個函式，用於取得當前 URLSearchParams 中的參數
+    		function getCurrentURLParams() {
+       		 var currentURL = new URL(window.location.href);
+        	var params = new URLSearchParams(currentURL.search);
+        	return params;
+    		}
+
+    		// 這個函式用於點擊按鈕時將 URLSearchParams 中的參數附加到新的 URL 中
+   		    function navigateToPage(page) {
+        	var currentParams = getCurrentURLParams();
+        	window.location.href = page + '?' + currentParams.toString();
+    		}
+			</script>
     </header>
 
     <nav>
-        <a href="#announcements">公告</a>
-        <a href="#equipment">預約器材</a>
-        <a href="#profile">更改個人資料</a>
-        <a href="#courses">報名社課</a>
-        <a href="#discussion">討論區</a>
-    </nav>
+		
+    <!-- 這是一個示例，你需要根據實際情況修改每個按鈕的 href -->
+    <a href="javascript:void(0);" onclick="navigateToPage('announcements.html')">公告</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('borrow.html')">預約器材</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('profile.html')">更改個人資料</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('classINFO.html')">報名社課</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('discussion.html')">討論區</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('PaidRecord.html')">顯示繳費記錄</a>
+	</nav>
+
 
     <section>
         <main>
@@ -35,6 +53,7 @@
     <footer>
         <p>&copy; 2023 音樂社團. 版權所有。</p>
     </footer>
+
 
 </body>
 
