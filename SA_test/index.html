@@ -46,6 +46,7 @@
 						    "password": password,
 						    "login":"yes"
 						};
+						//email和password丟入ajax
 						var data_string = "account=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password)+ "&login=" + encodeURIComponent("yes");
                         $.ajax({
 						    type: "GET",
