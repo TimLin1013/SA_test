@@ -36,7 +36,7 @@ public class memberController extends HttpServlet {
         }
         
         else if (!mh.checkDuplicate(m)) {
-            JSONObject data = mh.create(m);
+            JSONObject data = mh.create(m);//member_helper中有一個create
 
             JSONObject resp = new JSONObject();
             

@@ -1,6 +1,7 @@
 package app;
 import java.sql.Timestamp;
 import org.json.JSONObject;
+import java.sql.*;
 
 public class article {
 	private int article_id;
@@ -9,6 +10,12 @@ public class article {
 	private Timestamp article_time;
 	private int member_id;
 	public article (String article_content,String title,Timestamp article_time,int member_id) {
+		this.article_content=article_content;
+		this.title=title;
+		this.article_time=article_time;
+		this.member_id=member_id;
+	}
+	public article (int member_id,String title,String article_content,Timestamp article_time,String identity) {
 		this.article_content=article_content;
 		this.title=title;
 		this.article_time=article_time;

@@ -168,9 +168,13 @@
                     });
                     }
             function postArticle(title, content) {
+				//將title、content丟入ajax
+				var id = url.searchParams.get("id");
+				var data_string = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content)+"&member_id="+encodeURIComponent(id);
+			    
 			    $.ajax({
-			        type: "POST",
-			        url: "api/article.do",
+			        type: "Put",
+			        url: "api/article.do"+ data_string,
 			        crossDomain: true,
                     cache: false,
                     dataType: 'json',
