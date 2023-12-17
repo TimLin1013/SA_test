@@ -40,7 +40,7 @@
     <button id="new-discussion-button">新增討論</button>
 
     <div id="comments">
-        <!-- 現有評論的結構 -->
+		
     </div>
 
     <script>
@@ -99,6 +99,8 @@
                 const content = prompt('Please insert content：');
                 if (content !== null && content.trim() !== '') {
                     addNewDiscussion(title, content);
+                    alert("postArticle");
+                    postArticle(title,content);
                 }
             }
         });
@@ -169,6 +171,7 @@
                     }
             function postArticle(title, content) {
 				//將title、content丟入ajax
+				alert(title);
 				var id = url.searchParams.get("id");
 				var data_string = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content)+"&member_id="+encodeURIComponent(id);
 			    

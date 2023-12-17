@@ -1,5 +1,7 @@
 package controller;
 import app.article;
+import app.articleHelper;
+import app.member;
 import tools.JsonReader;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 @WebServlet("/api/article.do")
 public class articleController extends HttpServlet{
-	//private articleHelper ah = articleHelper.getHelper();
+	private articleHelper ah = articleHelper.getHelper();
 	public void doPut(HttpServletRequest request,HttpServletResponse response)
 		throws ServletException, IOException {
 			JsonReader jsr = new JsonReader(request);
@@ -26,7 +28,15 @@ public class articleController extends HttpServlet{
 			String article_content = request.getParameter("article_content");
 			//String article_time = request.getParameter("article_time");資料庫直接給
 			String member_id = request.getParameter("member_id");
-			JSONObject resp = new JSONObject();
+			int id = Integer.valueOf(member_id);
+			article a = new article(title,article_content,id);
+            JSONObject data = ah.create(a);//article_helper中有一個create
+
+            JSONObject resp = new JSONObject();
+            
+            resp.put("status", "200");
+            resp.put("response", data);
+            jsr.response(resp, response);
 	}
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	     throws ServletException, IOException {
