@@ -77,10 +77,10 @@ public class articleHelper {
 
         return response;
     }
-    public JSONObject getArticle() {
-        /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
-        article a = null;
-        /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
+    public JSONObject getArticle(article a) {
+        /** 新建一個 Article物件之 a 變數，用於紀錄每一位查詢回之article資料 */
+        //article a = null;
+        /** 用於儲存所有檢索回之article，以JSONArray方式儲存 */
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
@@ -95,7 +95,7 @@ public class articleHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa`.`tbl_article` WHERE `identity`= 1 || 2";
+            String sql = "SELECT * FROM `sa`.`tbl_article` WHERE `identity = 1 OR identity = 2`";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -118,9 +118,9 @@ public class articleHelper {
                 Timestamp article_time= rs.getTimestamp("article_time");
                 String identity = rs.getString("identity");
                 
-                /** 將每一筆會員資料產生一名新Member物件 */
+                /** 將每一筆article資料產生一名新article物件 */
                 a = new article(id,title, article_content,article_time,identity);
-                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
+                /** 取出該article之資料並封裝至 JSONsonArray 內 */
                 jsa.put(a.getData());
             }
 

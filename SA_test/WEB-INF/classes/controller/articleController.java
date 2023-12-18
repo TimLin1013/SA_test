@@ -40,10 +40,20 @@ public class articleController extends HttpServlet{
 	}
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	     throws ServletException, IOException {
+			JsonReader jsr = new JsonReader(request);
+			JSONObject jso = jsr.getObject();
 	    	String title = request.getParameter("title");
-	    	String article_content = request.getParameter("article_content");
 	    	String article_id = request.getParameter("article_id");
-	    	String Identity = request.getParameter("identity");
+	    	String member_id = request.getParameter("member_id");
+			int id = Integer.valueOf(member_id);
+	    	//String Identity = request.getParameter("identity");
+	    	article a = new article(title,id);
+	    	JSONObject data = ah.getArticle(a);//article_helper中有一個getArticle
+	    	JSONObject resp = new JSONObject();
+            
+            resp.get("status");
+            resp.get("response");
+            jsr.response(resp, response);
     }
 }
 
