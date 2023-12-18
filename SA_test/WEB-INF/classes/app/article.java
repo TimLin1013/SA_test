@@ -21,6 +21,15 @@ public class article {
 		this.article_time=article_time;
 		this.member_id=member_id;
 	}
+	public article (String title,String article_content,int member_id) {
+		this.article_content=article_content;
+		this.title=title;
+		this.member_id=member_id;
+	}
+	public article (String title,int member_id) {
+		this.title=title;
+		this.member_id=member_id;
+	}
 	//回傳給前端
 	public JSONObject getData() {
 		JSONObject jso = new JSONObject();

@@ -37,10 +37,12 @@
 </head>
 <body>
     <h1>Forum</h1>
+    <button id="view-all-articles-button">檢視所有文章</button>
+	<div id="articles-list" style="margin-top: 20px;"></div>
     <button id="new-discussion-button">新增討論</button>
 
     <div id="comments">
-        <!-- 現有評論的結構 -->
+		
     </div>
 
     <script>
@@ -99,6 +101,8 @@
                 const content = prompt('Please insert content：');
                 if (content !== null && content.trim() !== '') {
                     addNewDiscussion(title, content);
+                    alert("postArticle");
+                    postArticle(title,content);
                 }
             }
         });
@@ -148,27 +152,36 @@
             form.addEventListener('submit', handleReplyFormSubmit);
         });
         function getArticle() {
-            // 發出POST的GET請求取得所有文章列表
+            // 發出GET請求取得所有文章列表
+            var id = url.searchParams.get("id");
+            var data_string = "title=" + encodeURIComponent(title) +"&member_id="+encodeURIComponent(id);
               $.ajax({
-                            type: "GET",
-                            url: "api/article.do",
-                            crossDomain: true,
-                            cache: false,
-                            dataType: 'json',
-                            timeout: 5000,
-                            success: function (response) {
-                                if(response.status == 200){
-                                    updateTable_user(response.response.data);
-                                }
-                                console.log(response);
-                            },
-                            error: function () {
-                                alert("無法連線到伺服器！");
-                            }
-                    });
-                    }
+        		type: "GET",
+        		url: "api/articles-list.do"+data_string,  //不確定這裏要不要有這個
+        		crossDomain: true,
+        		cache: false,
+        		dataType: 'json',
+        		timeout: 5000,
+        		success: function(response) {
+		            if (response.status == 200) {
+		                const articlesList = response.response.data;
+		                const articlesListDiv = document.getElementById('articles-list');
+		                articlesListDiv.innerHTML = '';
+		                articlesList.forEach(article => {
+		                    const articleDiv = document.createElement('div');
+		                    articleDiv.innerText = article.title;
+		                    articlesListDiv.appendChild(articleDiv);
+		                });
+		            }
+        		},
+		        error: function() {
+		            alert("無法連線到伺服器！");
+		        }
+		    	});
+           }
             function postArticle(title, content) {
 				//將title、content丟入ajax
+				alert(title);
 				var id = url.searchParams.get("id");
 				var data_string = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content)+"&member_id="+encodeURIComponent(id);
 			    
