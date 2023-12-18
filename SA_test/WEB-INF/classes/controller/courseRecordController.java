@@ -59,5 +59,23 @@ public class courseRecordController extends HttpServlet{
 		       }
 		      
 		  }
+	  public void doGet(HttpServletRequest request, HttpServletResponse response)
+		      throws ServletException, IOException {
+			  int member_id = Integer.parseInt(request.getParameter("id"));
+			   JSONObject resp = new JSONObject();
+			   try {
+				   JSONObject data =crh.getAllRecordById(member_id);
+		    
+		           resp.put("response", data);
+		  		   resp.put("status", "0");
+		  		  
+		           response.setContentType("application/json");
+		           response.setCharacterEncoding("UTF-8");
+		           response.getWriter().write(resp.toString());
+		       } catch (Exception e) {
+		           e.printStackTrace();
+		       }
+		      
+		  }
 }
 

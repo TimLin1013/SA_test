@@ -60,6 +60,27 @@
 	 var url_string = window.location.href;
      var url = new URL(url_string);
     var id = url.searchParams.get("id");
+    var classes = [];
+    var signUpClassId=[];
+     var signedUpClasses = [];
+    function getCourseRecord() {
+         var data_string = "id=" + encodeURIComponent(id);
+        $.ajax({
+            type: "GET",
+            url: "api/courserecord.do?"+data_string,
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                updatesignUpClassId(response.response.data)
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+        });
+    }
     function getAllCourse() {
         $.ajax({
             type: "GET",
@@ -69,7 +90,7 @@
             dataType: 'json',
             timeout: 5000,
             success: function (response) {
-                var firstObject = response.response.data[0];
+                
                 updateCourse(response.response.data);
                 console.log(response);
             },
@@ -79,17 +100,31 @@
         });
     }
 	
-    var classes = []
+    
     function updateCourse(data) {
         classes = [];
         for (const course of data) {
+            for(const signUpId of signUpClassId){
+					if(course.course_id==signUpId){
+						const courseInfo = {
+						course_id:course.course_id,
+		                course_name: course.course_name,
+		                course_start_time: course.course_start_time,
+		                teacher_id: course.member_id,
+		                course_time: course.course_time,
+		                course_location: course.course_location,
+		                course_isSignUp:"YES"
+	           		};
+				}
+			}
             const courseInfo = {
 				course_id:course.course_id,
                 course_name: course.course_name,
                 course_start_time: course.course_start_time,
                 teacher_id: course.member_id,
                 course_time: course.course_time,
-                course_location: course.course_location
+                course_location: course.course_location,
+                course_isSignUp:"NO"
             };
             console.log(course);
             classes.push(courseInfo);
@@ -98,11 +133,20 @@
         // 一開始就顯示已報名社課列表
         displayPastSignUps();
     }
-    const signedUpClasses = [];
+   function updatesignUpClassId(data) {
+        signUpClassId=[];
+        for (const course_id of data) {
+            signUpClassId.push(course_id);
+        }
+        displayClassInfo();
+        displayPastSignUps();
+    }
      
 
     $(document).ready(function () {
+        getCourseRecord();
         getAllCourse();
+        
     });
 
    
