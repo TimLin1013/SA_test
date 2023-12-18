@@ -51,10 +51,10 @@
   <h1>社課評分</h1>
   <div id="container">
     <div id="userData">
-      <p>姓名: Amy</p>
-      <p>上課日期: 5/20</p>
-      <p>上課地點: 107</p>
-      <p>上課教師: Tom</p>
+      <p>課名: <span id="courseName"></span></p>
+      <p>時間: <span id="courseTime"></span></p>
+      <p>地點: <span id="courseLocation"></span></p>
+      <p>老師id: <span id="teacherId"></span></p>
       <label for="rating">評分 (1-5):</label>
       <input type="number" id="rating" min="1" max="5">
     </div>
@@ -62,6 +62,21 @@
   </div>
 
   <script>
+    // 從 URL 中取得參數
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // 從參數中取得相應的值
+    const courseName = urlParams.get("course_name");
+    const courseTime = urlParams.get("course_time");
+    const courseLocation = urlParams.get("course_location");
+    const teacherId = urlParams.get("teacher_id");
+
+    // 將值放入 HTML 中
+    document.getElementById("courseName").textContent = courseName;
+    document.getElementById("courseTime").textContent = courseTime;
+    document.getElementById("courseLocation").textContent = courseLocation;
+    document.getElementById("teacherId").textContent = teacherId;
+
     function submitRating() {
       const rating = document.getElementById("rating").value;
 

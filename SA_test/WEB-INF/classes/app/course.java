@@ -17,6 +17,12 @@ public class course {
 		this.course_time=course_time;
 		this.course_location=course_location;
 	}
+	public course(String course_name,String course_time,String course_location,int member_id) {
+		this.member_id=member_id;
+		this.course_name=course_name;
+		this.course_time=course_time;
+		this.course_location=course_location;
+	}
 	public int getCourse_id(){
 		return this.course_id;
 	}
@@ -37,7 +43,7 @@ public class course {
 	}
 	public JSONObject getData() {
         JSONObject jso = new JSONObject();
-        jso.put("course_id ", getCourse_id());
+        jso.put("course_id", getCourse_id());
         jso.put("course_name", getCourse_name());
         jso.put("course_start_time", getCourse_start_time());
         jso.put("member_id", getMember_id());
