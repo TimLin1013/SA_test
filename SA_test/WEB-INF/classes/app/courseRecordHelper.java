@@ -1,4 +1,4 @@
-package app;
+ package app;
 
 import java.sql.*;
 import org.json.*;
@@ -104,9 +104,14 @@ public class courseRecordHelper {
 	        long start_time = System.nanoTime();
 	        int row = 0;
 	        ResultSet rs = null;
+	        course c = null;
 	        try {
 	            conn = DBMgr.getConnection();
-	            String sql = "SELECT `course_id` FROM `sa`.`tbl_course_registration_record` WHERE `member_id` = ?";
+	            String sql = "SELECT cr.course_registration_record_id,c.course_start_time, c.member_id, cr.course_id, c.course_name, c.course_time, c.course_location " +
+	                    "FROM `sa`.`tbl_course_registration_record` cr " +
+	                    "JOIN `sa`.`tbl_course` c ON cr.course_id = c.course_id " +
+	                    "WHERE cr.member_id = ?";
+
 	            pres = conn.prepareStatement(sql);
 	            pres.setInt(1,id);
 	            rs = pres.executeQuery();
@@ -116,9 +121,14 @@ public class courseRecordHelper {
 	            while(rs.next()) {
 	                /** 每執行一次迴圈表示有一筆資料 */
 	                row += 1;
-	                int course_id = rs.getInt("course_id");
-	        	    /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
-	                jsa.put(course_id);
+	                String course_name = rs.getString("c.course_name");
+	                String course_time = rs.getString("c.course_time");
+	                String course_location = rs.getString("c.course_location");
+	                int teacher_id = rs.getInt("c.member_id");
+	                int cid = rs.getInt("cr.course_id");
+	                Timestamp course_start_time=rs.getTimestamp("c.course_start_time");
+	                c = new course(cid,course_name,course_start_time,teacher_id,course_time,course_location);
+	                jsa.put(c.getData());
 	            }
 
 	        } catch (SQLException e) {
