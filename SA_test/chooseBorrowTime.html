@@ -110,7 +110,7 @@ button {
                 success: function (response) {
                 	console.log(response.response.check);
                 	if(response.response.check=="can'tborrow"){
-						alert("bye!");
+						alert("你有還沒歸還的器材!");
 					}
 					else{
 						var borrowTime = new Date(borrowTimeStr);

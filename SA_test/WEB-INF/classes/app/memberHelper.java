@@ -75,7 +75,6 @@ public class memberHelper {
         response.put("sql", exexcute_sql);
         response.put("time", duration);
         response.put("row", row);
-
         return response;
     }
     public boolean checkDuplicate(member m){
