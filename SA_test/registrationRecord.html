@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <title>報名紀錄檢視</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>報名紀錄檢視</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>課名</th>
+                <th>時間</th>
+                <th>地點</th>
+                <th>老師id</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+	<script>
+		 var url_string = window.location.href;
+   		 var url = new URL(url_string);
+   		 var id = url.searchParams.get("id");
+   		 var recordCourseId=[];
+		function updateTable(data) {
+	         $.ajax({
+            type: "GET",
+            url: "api/course.do",
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+       	 });
+	        
+	        
+	        
+	        
+	        
+	        $("#table > tbody").empty();
+	        var table_html = '';
+	        $.each(data, function(index, value) {
+	            
+	        })
+	
+	        $("#table > tbody").append(table_html);
+        }
+        $(document).ready(function() {
+            getAllrecordCourseId();
+        });
+        function getAllrecordCourseId() {
+        var data_string = "id=" + encodeURIComponent(id);
+        $.ajax({
+            type: "GET",
+            url: "api/courserecord.do?" + data_string,
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                recordCourseId = response.response.data;
+           		updateTable(recordCourseId);
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+        });
+    }
+	</script>
+</body>
+
+</html>
