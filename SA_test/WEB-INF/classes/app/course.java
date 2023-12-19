@@ -23,6 +23,13 @@ public class course {
 		this.course_time=course_time;
 		this.course_location=course_location;
 	}
+	public course(String course_name,String course_time,String course_location,int member_id,int course_id) {
+		this.member_id=member_id;
+		this.course_name=course_name;
+		this.course_time=course_time;
+		this.course_location=course_location;
+		this.course_id=course_id;
+	}
 	public int getCourse_id(){
 		return this.course_id;
 	}
