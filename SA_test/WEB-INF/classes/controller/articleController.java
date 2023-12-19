@@ -19,7 +19,24 @@ import org.json.JSONObject;
 @WebServlet("/api/article.do")
 public class articleController extends HttpServlet{
 	private articleHelper ah = articleHelper.getHelper();
-	public void doPut(HttpServletRequest request,HttpServletResponse response)
+	
+	 public void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	        JsonReader jsr = new JsonReader(request);
+	        JSONObject jso = jsr.getObject();
+	        String title = jso.getString("title");
+	        String article_content = jso.getString("content");
+	        int member_id = jso.getInt("member_id");
+	        article a = new article(title, article_content, member_id);
+	        JSONObject data = ah.create(a); // article_helper中有一個create
+
+	        JSONObject resp = new JSONObject();
+
+	        resp.put("status", "200");
+	        resp.put("response", data);
+	        jsr.response(resp, response);
+	    }
+	/*public void doPost(HttpServletRequest request,HttpServletResponse response)
 		throws ServletException, IOException {
 			JsonReader jsr = new JsonReader(request);
 			JSONObject jso = jsr.getObject();
@@ -37,9 +54,10 @@ public class articleController extends HttpServlet{
             resp.put("status", "200");
             resp.put("response", data);
             jsr.response(resp, response);
-	}
+	}*/
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	     throws ServletException, IOException {
+			
 			JsonReader jsr = new JsonReader(request);
 			JSONObject jso = jsr.getObject();
 	    	String title = request.getParameter("title");
@@ -54,6 +72,7 @@ public class articleController extends HttpServlet{
             resp.get("status");
             resp.get("response");
             jsr.response(resp, response);
+            
     }
 }
 

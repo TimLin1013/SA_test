@@ -34,6 +34,7 @@
             margin-left: 20px;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <h1>Forum</h1>
@@ -151,13 +152,33 @@
         replyForms.forEach(form => {
             form.addEventListener('submit', handleReplyFormSubmit);
         });
+        
+        
+        function init() {
+            // 為所有現有的回覆按鈕添加事件監聽器
+            const replyButtons = document.querySelectorAll('.reply-button');
+            replyButtons.forEach(addReplyButtonListener);
+
+            // 為所有現有的回覆表單添加提交事件監聽器
+            const replyForms = document.querySelectorAll('.reply-form form');
+            replyForms.forEach(form => {
+                form.addEventListener('submit', handleReplyFormSubmit);
+            });
+
+            // 為檢視所有文章按鈕添加事件監聽器
+            document.getElementById('view-all-articles-button').addEventListener('click', getArticle);
+        }
+
+        // 呼叫初始化函數
+        init();
+        
         function getArticle() {
             // 發出GET請求取得所有文章列表
-            var id = url.searchParams.get("id");
-            var data_string = "title=" + encodeURIComponent(title) +"&member_id="+encodeURIComponent(id);
+            var url = new URL(window.location.href);
+    		var id = url.searchParams.get("id");
               $.ajax({
         		type: "GET",
-        		url: "api/articles-list.do"+data_string,  //不確定這裏要不要有這個
+        		url: "api/article.do",  //不確定這裏要不要有這個
         		crossDomain: true,
         		cache: false,
         		dataType: 'json',
@@ -179,7 +200,34 @@
 		        }
 		    	});
            }
-            function postArticle(title, content) {
+           
+         function postArticle(title, content) {
+            var url = new URL(window.location.href);
+            var id = url.searchParams.get("id");
+            var data = {
+                title: title,
+                content: content,
+                member_id: id
+            };
+			console.log("ID:", id);
+            $.ajax({
+                type: "POST",
+                url: "api/article.do",
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if(response.status == 200){
+                        // 處理成功的情況
+                    }
+                    console.log(response);
+                },
+                error: function() {
+                    alert("Error posting article");
+                }
+            });
+        }
+
+            /*function postArticle(title, content) {
 				//將title、content丟入ajax
 				alert(title);
 				var id = url.searchParams.get("id");
@@ -203,7 +251,7 @@
 			            alert("Error posting article");
 			        }
 			    });
-			}
+			}*/
 
     </script>
 </body>
