@@ -172,19 +172,20 @@
         // 呼叫初始化函數
         init();
         
-        function getArticle() {
+        /*function getArticle() {
             // 發出GET請求取得所有文章列表
             var url = new URL(window.location.href);
     		var id = url.searchParams.get("id");
               $.ajax({
         		type: "GET",
-        		url: "api/article.do",  //不確定這裏要不要有這個
+        		url: "api/article.do",  
         		crossDomain: true,
         		cache: false,
         		dataType: 'json',
         		timeout: 5000,
         		success: function(response) {
-		            if (response.status == 200) {
+					console.log(response);
+		            /*if (response.status == 200) {
 		                const articlesList = response.response.data;
 		                const articlesListDiv = document.getElementById('articles-list');
 		                articlesListDiv.innerHTML = '';
@@ -193,14 +194,59 @@
 		                    articleDiv.innerText = article.title;
 		                    articlesListDiv.appendChild(articleDiv);
 		                });
+		            }*/
+		            /*if (response.status == 200) {
+		                // Assuming 'data' is the key that contains the articles list
+		                const articlesList = response.data; // Changed from response.response.data to response.data
+		                const articlesListDiv = document.getElementById('articles-list');
+		                articlesListDiv.innerHTML = '';
+		                articlesList.forEach(article => {
+		                    const articleDiv = document.createElement('div');
+		                    articleDiv.innerText = article.title;
+		                    articlesListDiv.appendChild(articleDiv);
+		                });
+		            } else {
+		                // Handle cases where the status is not 200
+		                console.log("Status not 200, status: ", response.status);
 		            }
         		},
 		        error: function() {
 		            alert("無法連線到伺服器！");
 		        }
 		    	});
-           }
-           
+           }*/
+         function getArticle() {
+		    $.ajax({
+		        type: "GET",
+		        url: "api/article.do",
+		        dataType: 'json',
+		        success: function(response) {
+		            // Log the entire response for debugging purposes
+		            console.log("Response from server:", response);
+		
+		            // Check if 'data' exists and is indeed an array
+		            if (response && Array.isArray(response.data)) {
+		                // 'data' is an array, proceed as expected
+		                const articlesListDiv = document.getElementById('articles-list');
+		                articlesListDiv.innerHTML = '';
+		                response.data.forEach(function(article) {
+		                    const articleDiv = document.createElement('div');
+		                    articleDiv.innerText = article.title;
+		                    articlesListDiv.appendChild(articleDiv);
+		                });
+		            } else {
+		                // 'data' is not an array, log the issue and handle as error
+		                console.error("Error: 'data' is not an array", response.data);
+		            }
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.error("AJAX error:", textStatus, errorThrown);
+		            alert("無法連線到伺服器！");
+		        }
+		    });
+		}
+
+ 
          function postArticle(title, content) {
             var url = new URL(window.location.href);
             var id = url.searchParams.get("id");
@@ -227,31 +273,6 @@
             });
         }
 
-            /*function postArticle(title, content) {
-				//將title、content丟入ajax
-				alert(title);
-				var id = url.searchParams.get("id");
-				var data_string = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content)+"&member_id="+encodeURIComponent(id);
-			    
-			    $.ajax({
-			        type: "Put",
-			        url: "api/article.do"+ data_string,
-			        crossDomain: true,
-                    cache: false,
-                    dataType: 'json',
-                    timeout: 5000,
-			        data: {title: title, article_content: content},
-			        success: function(response) {
-			            if(response.status == 200){
-                                    updateTable_user(response.response.data);
-                                }
-                                console.log(response);
-                          },
-			        error: function() {
-			            alert("Error posting article");
-			        }
-			    });
-			}*/
 
     </script>
 </body>
