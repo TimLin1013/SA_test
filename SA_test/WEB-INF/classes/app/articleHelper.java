@@ -146,7 +146,10 @@ public class articleHelper {
         response.put("row", row);
         response.put("time", duration);
         response.put("data", jsa);
-        response.put("data", jsa);
+        
+        
+        System.out.println(response.toString());
+
         return response;
     }
     public String getIdentity(String account) {

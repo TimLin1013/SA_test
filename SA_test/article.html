@@ -152,7 +152,7 @@
         replyForms.forEach(form => {
             form.addEventListener('submit', handleReplyFormSubmit);
         });
-        
+
         
         function init() {
             // 為所有現有的回覆按鈕添加事件監聽器
@@ -172,81 +172,42 @@
         // 呼叫初始化函數
         init();
         
-        /*function getArticle() {
-            // 發出GET請求取得所有文章列表
-            var url = new URL(window.location.href);
-    		var id = url.searchParams.get("id");
-              $.ajax({
-        		type: "GET",
-        		url: "api/article.do",  
-        		crossDomain: true,
-        		cache: false,
-        		dataType: 'json',
-        		timeout: 5000,
-        		success: function(response) {
-					console.log(response);
-		            /*if (response.status == 200) {
-		                const articlesList = response.response.data;
-		                const articlesListDiv = document.getElementById('articles-list');
-		                articlesListDiv.innerHTML = '';
-		                articlesList.forEach(article => {
-		                    const articleDiv = document.createElement('div');
-		                    articleDiv.innerText = article.title;
-		                    articlesListDiv.appendChild(articleDiv);
-		                });
-		            }*/
-		            /*if (response.status == 200) {
-		                // Assuming 'data' is the key that contains the articles list
-		                const articlesList = response.data; // Changed from response.response.data to response.data
-		                const articlesListDiv = document.getElementById('articles-list');
-		                articlesListDiv.innerHTML = '';
-		                articlesList.forEach(article => {
-		                    const articleDiv = document.createElement('div');
-		                    articleDiv.innerText = article.title;
-		                    articlesListDiv.appendChild(articleDiv);
-		                });
-		            } else {
-		                // Handle cases where the status is not 200
-		                console.log("Status not 200, status: ", response.status);
-		            }
-        		},
-		        error: function() {
-		            alert("無法連線到伺服器！");
-		        }
-		    	});
-           }*/
-         function getArticle() {
+		function getArticle() {
+		    console.log("Attempting to get articles..."); // Debugging line
+		
 		    $.ajax({
 		        type: "GET",
-		        url: "api/article.do",
+		        url: "/SA_test/api/article.do",
 		        dataType: 'json',
 		        success: function(response) {
-		            // Log the entire response for debugging purposes
-		            console.log("Response from server:", response);
-		
-		            // Check if 'data' exists and is indeed an array
-		            if (response && Array.isArray(response.data)) {
-		                // 'data' is an array, proceed as expected
-		                const articlesListDiv = document.getElementById('articles-list');
-		                articlesListDiv.innerHTML = '';
-		                response.data.forEach(function(article) {
-		                    const articleDiv = document.createElement('div');
-		                    articleDiv.innerText = article.title;
-		                    articlesListDiv.appendChild(articleDiv);
-		                });
-		            } else {
-		                // 'data' is not an array, log the issue and handle as error
-		                console.error("Error: 'data' is not an array", response.data);
-		            }
-		        },
+			    console.log("Response from server:", response); // Debugging line
+			
+			    const articlesListDiv = document.getElementById('articles-list');
+			    if (response && response.response && Array.isArray(response.response.data)) {
+			        console.log("Displaying articles..."); // Debugging line
+			        articlesListDiv.innerHTML = ''; // Clear existing articles
+			
+			        // Use the correct data property that was validated to be an array
+			        response.response.data.forEach(function(article) {
+			            const articleDiv = document.createElement('div');
+			            articleDiv.classList.add('comment'); // Add class for styling
+			            articleDiv.innerHTML = `
+			                <h3>${article.title}</h3>
+			                <p>${article.article_content}</p>
+			                <span>Posted on: ${new Date(article.article_time).toLocaleString()}</span>
+			            `;
+			            articlesListDiv.appendChild(articleDiv);
+			        });
+			    } else {
+			        console.error("Error: 'data' is not an array", response.response && response.response.data); // Debugging line
+			    }
+			},
 		        error: function(jqXHR, textStatus, errorThrown) {
-		            console.error("AJAX error:", textStatus, errorThrown);
+		            console.error("AJAX error:", textStatus, errorThrown); // Debugging line
 		            alert("無法連線到伺服器！");
 		        }
 		    });
 		}
-
- 
          function postArticle(title, content) {
             var url = new URL(window.location.href);
             var id = url.searchParams.get("id");
