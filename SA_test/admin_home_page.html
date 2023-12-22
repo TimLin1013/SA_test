@@ -1,120 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="statics/css/user_home_pageStyle.css">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="statics/css/admin_home_pageStyle.css">
+    <title>系統管理者首頁</title>
+   
 </head>
-
 <body>
-    <div id="container">
-        
-        <div id="content">
-            
 
-            <div id="flashMessage" class="message" style="display: none;"></div>
+    <header>
+        <h1>音樂社團</h1>
+        	<script>
+    		// 定義一個函式，用於取得當前 URLSearchParams 中的參數
+    		function getCurrentURLParams() {
+       		 var currentURL = new URL(window.location.href);
+        	var params = new URLSearchParams(currentURL.search);
+        	return params;
+    		}
 
-            <table id="table">
-                <thead>
-                    <tr>
-                        <th>編號</th>
-                        <th>姓名</th>
-                        <th>帳號</th>
-                        <th>密碼</th>
-                        <th>組別</th>
-                        <th>建立時間</th>
-                        <th>身分</th>
-                        <th>功能</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            
-            <script type="text/javascript">
-                // 全域變數紀錄SQL指令下的次數
-                var sql_num = 0;
-                function deleteMember(id) {
-                    var check = window.confirm("確認刪除會員？");
-                    if (check == true) {
-                        console.log("You pressed OK!");
-                        var request = {'id': id};
-                        var data_string = JSON.stringify(request);
-                        $.ajax({
-                            type: "DELETE",
-                            url: "api/member.do",
-                            crossDomain: true,
-                            data: data_string,
-                            cache: false,
-                            dataType: 'json',
-                            timeout: 5000,
-                            success: function (response) {
-                                if(response.status == 200){
-                                    $("#flashMessage").html("成功! 已經成功刪除會員...");
-                                    $("#flashMessage").show();
-                                    getAllMember();
-                                }
-                                console.log(response);
-                            },
-                            error: function () {
-                                alert("無法連線到伺服器！");
-                            }
-                        });
-                    }
-                    else {
-                        console.log("You pressed Cancel!");
-                    }
-                }
+    		// 這個函式用於點擊按鈕時將 URLSearchParams 中的參數附加到新的 URL 中
+   		    function navigateToPage(page) {
+        	var currentParams = getCurrentURLParams();
+        	window.location.href = page + '?' + currentParams.toString();
+    		}
+			</script>
+    </header>
 
-                function getAllMember() {
-                    // 發出POST的GET請求取得所有會員列表
-                    $.ajax({
-                            type: "GET",
-                            url: "api/member.do",
-                            crossDomain: true,
-                            cache: false,
-                            dataType: 'json',
-                            timeout: 5000,
-                            success: function (response) {
-                                if(response.status == 200){
-                                    updateTable_user(response.response.data);
-                                }
-                                console.log(response);
-                            },
-                            error: function () {
-                                alert("無法連線到伺服器！");
-                            }
-                    });
-                }
-                
-                // 更新會員列表表格
-                function updateTable_user(data) {
-                    $("#table > tbody").empty();
-                    var table_html = '';
-                    $.each(data, function(index, value) {
-                        table_html += '<tr><td scope="row">' + value['id'] + '</td>';
-                        table_html += '<td>' + value['name'] + '</td>';
-                        table_html += '<td>' + value['account'] + '</td>';
-                        table_html += '<td>' + value['password'] + '</td>';
-                        table_html += '<td>' + value['group'] + '</td>';
-                        table_html += '<td>' + value['create_time'] + '</td>';
-                        table_html += '<td>' + value['identity'] + '</td>';
-                        table_html += '<td>' + '<a href="edit_INFO.html?id=' + value['id'] + '">編輯</a> | ';
-                        table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
-                    })
+    <nav>
+		
+    <!-- 這是一個示例，你需要根據實際情況修改每個按鈕的 href -->
+    <a href="javascript:void(0);" onclick="navigateToPage('AdminAritcle.html')">內容審核</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('admin.html')">管理者系統</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('admin_return.html')">歸還器材</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('announcement.html')">公告系統</a>
+    <a href="javascript:void(0);" onclick="navigateToPage('member_list.html')">檢視使用者</a>
+	</nav>
 
-                    $("#table > tbody").append(table_html);
-                }
-                $(document).ready(function() {
-                    getAllMember();
-                });
-                
-            </script>
-        </div>
-        
-    </div>
-    
+
+    <section>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2023 音樂社團. 版權所有。</p>
+    </footer>
+
+
 </body>
 
 </html>
