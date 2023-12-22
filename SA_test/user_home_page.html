@@ -44,8 +44,9 @@
 
     <section>
         <main>
-            <section id="announcements">
-                <h2>公告</h2>
+            <section >
+                <h2 id=announcement></h2>
+						
                 
             </section>
         </main>
@@ -56,6 +57,9 @@
         <p>&copy; 2023 音樂社團. 版權所有。</p>
     </footer>
 <script>
+$(document).ready(function() {
+ 	getAllAnnouncement();
+  });
 function getAllAnnouncement() {
     $.ajax({
         type: "GET",
@@ -77,17 +81,19 @@ function getAllAnnouncement() {
 }
 
 function updateAnnouncement(data) {
+    $("#announcement").empty();
+    var table_html = 'abc';
     $.each(data, function(index, value) {
-        var selector = "#" + value['id'] + "Announcement";
-        $(selector + "Title").text("Title: " + value['title']);
-        $(selector + "Content").text("Content: " + value['content']);
-    });
+        table_html += '<tr><td scope="row">' + "標題:"+value['title'] + '</td>';
+        table_html += '</tr>';
+        table_html += '<td>' + "內容:"+value['announcement_content'] + '</td>';
+
+			table_html += '</tr>';
+    })
+
+    $("#announcement").append(table_html);
 }
 
-
-$(document).ready(function() {
-    getAllAnnouncement();
-});
 
 </script>
 

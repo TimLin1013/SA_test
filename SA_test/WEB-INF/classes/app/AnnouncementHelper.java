@@ -22,7 +22,7 @@ public class AnnouncementHelper {
     /**
      * 创建公告
      */
-    public JSONObject create(Announcement announcement) {
+    public JSONObject create(Announcement a) {
         String execute_sql = "";
         long start_time = System.nanoTime();
         int row = 0;
@@ -30,10 +30,10 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
-            String sql = "INSERT INTO `sa`.`tbl_announcement`(`title`, `content`, `created_time`) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO `sa`.`tbl_announcement`(`announcement_`content, `announcement_time`, `member_id`,`announcement_title`) VALUES (?, ?, ?,?)";
 
-            String title = announcement.getTitle();
-            String content = announcement.getContent();
+            String title =a.getTitle();
+            String content = a.getContent();
 
             pres = conn.prepareStatement(sql);
             pres.setString(1, title);
@@ -116,7 +116,7 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
-            String sql = "UPDATE `sa`.`tbl_announcement` SET `title` = ?, `content` = ? WHERE `announcement_id` = ?";
+            String sql = "UPDATE `sa`.`tbl_announcement` SET `announcement_title` = ?, `announcement_content` = ? WHERE `announcement_id` = ?";
 
             String title = announcement.getTitle();
             String content = announcement.getContent();
@@ -155,7 +155,7 @@ public class AnnouncementHelper {
     /**
      * 获取所有公告
      */
-    public JSONObject getAllAnnouncements() {
+    public JSONObject getAllAnnouncement() {
         Announcement announcement = null;
         JSONArray jsa = new JSONArray();
         String execute_sql = "";
@@ -178,9 +178,9 @@ public class AnnouncementHelper {
                 row += 1;
 
                 int id = rs.getInt("announcement_id");
-                String title = rs.getString("title");
-                String content = rs.getString("content");
-                Timestamp create_time = rs.getTimestamp("created_time");
+                String title = rs.getString("announcement_title");
+                String content = rs.getString("announcement_content");
+                Timestamp create_time = rs.getTimestamp("announcement_time");
 
                 announcement = new Announcement(id, title, content, create_time);
                 jsa.put(announcement.getData());
@@ -234,9 +234,9 @@ public class AnnouncementHelper {
                 row += 1;
 
                 int announcementId = rs.getInt("announcement_id");
-                String title = rs.getString("title");
-                String content = rs.getString("content");
-                Timestamp create_time = rs.getTimestamp("created_time");
+                String title = rs.getString("announcement_title");
+                String content = rs.getString("announcement_content");
+                Timestamp create_time = rs.getTimestamp("announcement_time");
 
                 announcement = new Announcement(announcementId, title, content, create_time);
                 jsa.put(announcement.getData());

@@ -31,9 +31,8 @@ public class Announcement {
         this.admin_id = admin_id;
     }
 
-    public Announcement(String title, int admin_id) {
-        this.title = title;
-        this.admin_id = admin_id;
+    public Announcement(int member_id) {
+        this.admin_id = member_id;
     }
 
     // Method to return data to the frontend
