@@ -1,9 +1,6 @@
 package app;
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Random;
 import org.json.*;
 import util.DBMgr;
@@ -34,15 +31,14 @@ public class paidrecordHelper {
                     + " VALUES(?, ?, ?, ?)";
             
             int paid_sequence= generateRandomNumber(10, random);
-            LocalDateTime localDateTime = LocalDateTime.now();
-            ZonedDateTime taiwanZonedDateTime = localDateTime.atZone(ZoneId.of("Asia/Taipei"));
-            Timestamp timestamp = Timestamp.valueOf(taiwanZonedDateTime.toLocalDateTime());
-
-            
+            Timestamp tep=Timestamp.valueOf(LocalDateTime.now());
+			long borrowTimeInMillis = tep.getTime();
+			long eightHours = borrowTimeInMillis + (8 * 60 * 60 * 1000);
+			Timestamp eightHoursLater = new Timestamp(eightHours);
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setInt(1, paid_sequence);
-            pres.setTimestamp(2, timestamp);
+            pres.setTimestamp(2, eightHoursLater);
             pres.setInt(3,1000);
             pres.setInt(4,id);
             
@@ -110,9 +106,8 @@ public class paidrecordHelper {
 				int ID = rs.getInt("member_id");
 				int fee=rs.getInt("paid_fee");
 				int sequence=rs.getInt("paid_sequence");
-				Timestamp time=rs.getTimestamp("paid_time");
           
-				p=new paidrecord(ID,sequence,fee,time);
+				p=new paidrecord(ID,sequence,fee);
 				/** 取出該名會員之資料並封裝至 JSONsonArray 內 */
 				jsa.put(p.getData());
 			}

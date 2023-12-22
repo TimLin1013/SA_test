@@ -43,8 +43,38 @@ public class borrowrecordController extends HttpServlet{
            response.getWriter().write(resp.toString());
        } catch (ParseException e) {
            e.printStackTrace();
-       }
-	  
-      
+       }    
   }
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+		    throws ServletException, IOException {
+			   String id = request.getParameter("id");
+		       int memberID=Integer.valueOf(id);
+		       JSONObject query = br.getByID(memberID);
+		           
+		       /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+		       JSONObject resp = new JSONObject();
+		       resp.put("status", "200");
+		       resp.put("response", query);
+		       response.setContentType("application/json");
+			   response.setCharacterEncoding("UTF-8");
+			   response.getWriter().write(resp.toString());
+		      
+		  }
+  public void doDelete(HttpServletRequest request, HttpServletResponse response)
+		    throws ServletException, IOException {
+	  		   JsonReader jsr = new JsonReader(request);
+	  		   JSONObject jso = jsr.getObject();
+	  		   
+		       int borrowrecordID=jso.getInt("id");
+		       JSONObject query = br.deleteByID(borrowrecordID);
+		           
+		       /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+		       JSONObject resp = new JSONObject();
+		       resp.put("status", "200");
+		       resp.put("response", query);
+		       response.setContentType("application/json");
+			   response.setCharacterEncoding("UTF-8");
+			   response.getWriter().write(resp.toString());
+		      
+		  }
 }
