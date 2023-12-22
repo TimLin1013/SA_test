@@ -197,7 +197,7 @@ public class articleHelper {
             conn = DBMgr.getConnection();
             
             /** SQL指令 */
-            String sql = "DELETE FROM `sa`.`tbl_article` WHERE `member_id` = ? LIMIT 2";
+            String sql = "DELETE FROM `sa`.`tbl_article` WHERE `article_id` = ? LIMIT 2";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);

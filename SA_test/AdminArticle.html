@@ -94,6 +94,7 @@
 
         function deleteArticle(article_id) {
             if (!confirm('確定要刪除這篇文章嗎？')) return;
+            alert(article_id);
             $.ajax({
                 type: "DELETE",
                 url: "/SA_test/api/article.do?id=" + article_id,
@@ -101,6 +102,7 @@
                     if (response.status == 200) {
                         getArticles(); // 重新获取文章列表
                     } else {
+						console.log(response.response.data);
                         alert("刪除失敗：" + response.message);
                     }
                 },

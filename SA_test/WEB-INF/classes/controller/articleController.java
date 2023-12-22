@@ -68,6 +68,7 @@ public class articleController extends HttpServlet{
 	    } else {
 	        resp.put("status", "400");
 	        resp.put("message", "Article deletion failed");
+	        resp.put("response",data);
 	    }
 
 	    response.setContentType("application/json");
