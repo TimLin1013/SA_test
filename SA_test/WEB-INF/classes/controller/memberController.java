@@ -30,6 +30,15 @@ public class memberController extends HttpServlet {
         String group = jso.getString("group");
         String id = request.getParameter("id");
         member m = new member(account,name,password,phone,group);
+        
+        //new
+        String adminAction = request.getParameter("adminAction");
+        if (adminAction != null && adminAction.equals("createSystemAdmin")) {
+            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
+            jsr.response(resp, response);
+        }
+        else {
+        
         if(account.isEmpty() || password.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
             String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
             jsr.response(resp, response);
@@ -49,9 +58,10 @@ public class memberController extends HttpServlet {
         else {
             String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
             jsr.response(resp, response);
-        }
+        }}
         
     }
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 		
