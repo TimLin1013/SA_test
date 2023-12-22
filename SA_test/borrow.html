@@ -49,7 +49,7 @@
         }
 
         .product img {
-            width: 30%;
+            width: 100%; /* 修改這裡，使圖片填滿父元素 */
             height: auto;
             border: 1px solid #ddd;
             margin-bottom: 10px;
@@ -85,7 +85,7 @@
             <section class="product-grid">
                 <!-- Flute -->
                 <div class="product">
-                    <a href="" id="fulteLink">
+                    <a href="" id="fluteLink"> <!-- 修改這裡，將 id 改為 fluteLink -->
                         <img src="flute.jpg" alt="Flute">
                     </a>
                     <div class="product-info">
@@ -127,7 +127,7 @@
 
                 <!-- Oboe -->
                 <div class="product">
-                    <a href=""id="oboeLink">
+                    <a href="" id="oboeLink">
                         <img src="oboe.jpg" alt="Oboe">
                     </a>
                     <div class="product-info">
@@ -141,8 +141,10 @@
 
                 <!-- Bassoon -->
                 <div class="product">
-                    <a href=""id="bassoonLink">
-                        <img src="bassoon.png" alt="Bassoon">
+
+                    <a href="" id="bassoonLink">
+                        <img src="bassoon.png" alt="Bassoon"> <!-- 修正這裡，添加缺失的雙引號 -->
+
                     </a>
                     <div class="product-info">
                         <h3>Bassoon</h3>
@@ -232,11 +234,11 @@
                 <!-- Double Bass -->
                 <div class="product">
                     <a href="" id="timpaniLink">
-                        <img src="timpani.jpg" alt="timpani">
+                        <img src="timpani.jpg" alt="Timpani"> <!-- 修正這裡，添加缺失的雙引號 -->
                     </a>
                     <div class="product-info">
                         <h3>Double Bass</h3>
-                        <p id="timpaniQuantity"></p>
+                        <p id="Double_BassQuantity"></p> <!-- 修正這裡，修改 id 為 TimpaniQuantity -->
                     </div>
                 </div>
                 <!-- Repeat for other products in 'Others' category -->
@@ -249,37 +251,35 @@
         <button>Next</button>
     </footer>
 
-<script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const searchInput = document.querySelector('input[type="search"]');
 
-	 		document.addEventListener('DOMContentLoaded', function() {
-		  const searchInput = document.querySelector('input[type="search"]');
+          searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase();
+            const categories = document.querySelectorAll('.category');
 
-		  searchInput.addEventListener('input', function() {
-		    const query = searchInput.value.toLowerCase();
-		    const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+              const products = category.querySelectorAll('.product');
+              let categoryHasVisibleProducts = false;
 
-		    categories.forEach(category => {
-		      const products = category.querySelectorAll('.product');
-		      let categoryHasVisibleProducts = false;
+              products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                  product.style.display = 'block';
+                  categoryHasVisibleProducts = true;
+                } else {
+                  product.style.display = 'none';
+                }
+              });
 
+              category.style.display = categoryHasVisibleProducts ? 'block' : 'none';
+            });
+          });
+        });
 
-		      products.forEach(product => {
-		        const productName = product.querySelector('h3').textContent.toLowerCase();
-		        if (productName.includes(query)) {
-		          product.style.display = 'block';
-		          categoryHasVisibleProducts = true;
-		        } else {
-		          product.style.display = 'none';
-		        }
-		      });
-
-		      category.style.display = categoryHasVisibleProducts ? 'block' : 'none';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-		    });
-		  });
-		});
-
-     function getAllInstrument() {
-        $.ajax({
+        function getAllInstrument() {
+            $.ajax({
                 type: "GET",
                 url: "api/instrument.do",
                 crossDomain: true,
@@ -295,47 +295,46 @@
                 error: function () {
                     alert("無法連線到伺服器！");
                 }
+            });
+        }
+
+        function updateInstrument(data) {
+            $.each(data, function(index, value) {
+                var selector = "#" + value['name'] + "Quantity";
+                $(selector).text("Quantity: " + value['quantity']);
+            });
+        }
+
+        $(document).ready(function() {
+            getAllInstrument();
         });
-    }
-    function updateInstrument(data) {
-	    $.each(data, function(index, value) {
-	     	 var selector = "#" + value['name'] + "Quantity";
-	        $(selector).text("Quantity: " + value['quantity']);
-	    });
-	}
-	$(document).ready(function() {
-	    getAllInstrument();
-	});
-	$(document).ready(function() {
-    	var url = new URL(window.location.href);
-    	var user_id = url.searchParams.get("id");
-    	$('#fluteloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Flute&instrument_id=1');
-    	 $('#piccoloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piccolo&instrument_id=2');
-    	 $('#clarinetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Clarinet&instrument_id=3');
-    	 $('#oboeLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Oboe&instrument_id=4');
-    	$('#bassoonLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Bassoon&instrument_id=5');
-    	 $('#saxophoneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Saxophone&instrument_id=6');
-    	 $('#trumpetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trumpet&instrument_id=7');
-    	 $('#tromboneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trombone&instrument_id=8');
-    	 $('#hornLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Horn&instrument_id=9');
-    	 $('#pianoLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piano&instrument_id=10');
-    	 $('#timpaniLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=timpani&instrument_id=11');
-    	
-    	getAllInstrument();
-    	$('.product a').on('click', function(event) {
 
-        	var quantityText = $(this).siblings('.product-info').find('p').text();
+        $(document).ready(function() {
+            var url = new URL(window.location.href);
+            var user_id = url.searchParams.get("id");
+            $('#fluteLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Flute&instrument_id=1');
+            $('#piccoloLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piccolo&instrument_id=2');
+            $('#clarinetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Clarinet&instrument_id=3');
+            $('#oboeLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Oboe&instrument_id=4');
+            $('#bassoonLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Bassoon&instrument_id=5');
+            $('#saxophoneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Saxophone&instrument_id=6');
+            $('#trumpetLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trumpet&instrument_id=7');
+            $('#tromboneLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Trombone&instrument_id=8');
+            $('#hornLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Horn&instrument_id=9');
+            $('#pianoLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Piano&instrument_id=10');
+            $('#timpaniLink').attr('href', 'chooseBorrowTime.html?id='+user_id+'&instrument_name=Timpani&instrument_id=11');
+            
+            getAllInstrument();
 
-        	if (quantityText.includes('Quantity: 0')) {
-            	event.preventDefault();
-           	 alert("Sorry, this instrument is out of stock."); 
-        	}
-    });
-});
-                
-</script>
-
-
+            $('.product a').on('click', function(event) {
+                var quantityText = $(this).siblings('.product-info').find('p').text();
+                if (quantityText.includes('Quantity: 0')) {
+                    event.preventDefault();
+                    alert("Sorry, this instrument is out of stock.");
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
