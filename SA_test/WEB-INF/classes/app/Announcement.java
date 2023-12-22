@@ -40,7 +40,7 @@ public class Announcement {
     public JSONObject getData() {
         JSONObject jsonAnnouncement = new JSONObject();
         jsonAnnouncement.put("title", getTitle());
-        jsonAnnouncement.put("announcement_content", getAnnouncementContent());
+        jsonAnnouncement.put("announcement_content", getContent());
         jsonAnnouncement.put("announcement_time", getAnnouncementTime());
         jsonAnnouncement.put("admin_id", getAdminId());
         return jsonAnnouncement;
@@ -63,7 +63,5 @@ public class Announcement {
         return this.admin_id;
     }
 
-    public String getAnnouncementContent() {
-        return this.announcement_content;
-    }
+  
 }

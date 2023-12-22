@@ -31,8 +31,9 @@ public class AnnouncementController extends HttpServlet {
         String announcementContent = request.getParameter("announcement_content");
 
         // Create Announcement object
-        int announcementIdInt = Integer.parseInt(announcementId); // Convert String to int
-        Announcement announcement = new Announcement(announcementIdInt, announcementContent, announcementContent, null);
+        int announcementIdInt = Integer.parseInt(announcementId); // 将字符串转换为整数
+        Announcement announcement = new Announcement(announcementIdInt, announcementContent, null,null);
+
 
         // Perform the update operation
         JSONObject data = new JSONObject();
