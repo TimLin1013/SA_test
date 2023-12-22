@@ -11,10 +11,9 @@ public class paidrecord {
 	public paidrecord (int member_id) {
 		this.member_id=member_id;
 	}
-	public paidrecord (int member_id, int paid_sequence,int paid_fee,Timestamp paid_time) {
+	public paidrecord (int member_id, int paid_sequence,int paid_fee) {
 		this.member_id=member_id;
 		this.paid_sequence=paid_sequence;
-		this.paid_time=paid_time;
 		this.paid_fee=paid_fee;
 	}
 	public JSONObject getData() {

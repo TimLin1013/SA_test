@@ -34,6 +34,7 @@
             margin-left: 20px;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <h1>Forum</h1>
@@ -151,59 +152,88 @@
         replyForms.forEach(form => {
             form.addEventListener('submit', handleReplyFormSubmit);
         });
-        function getArticle() {
-            // 發出GET請求取得所有文章列表
-            var id = url.searchParams.get("id");
-            var data_string = "title=" + encodeURIComponent(title) +"&member_id="+encodeURIComponent(id);
-              $.ajax({
-        		type: "GET",
-        		url: "api/articles-list.do"+data_string,  //不確定這裏要不要有這個
-        		crossDomain: true,
-        		cache: false,
-        		dataType: 'json',
-        		timeout: 5000,
-        		success: function(response) {
-		            if (response.status == 200) {
-		                const articlesList = response.response.data;
-		                const articlesListDiv = document.getElementById('articles-list');
-		                articlesListDiv.innerHTML = '';
-		                articlesList.forEach(article => {
-		                    const articleDiv = document.createElement('div');
-		                    articleDiv.innerText = article.title;
-		                    articlesListDiv.appendChild(articleDiv);
-		                });
-		            }
-        		},
-		        error: function() {
+
+        
+        function init() {
+            // 為所有現有的回覆按鈕添加事件監聽器
+            const replyButtons = document.querySelectorAll('.reply-button');
+            replyButtons.forEach(addReplyButtonListener);
+
+            // 為所有現有的回覆表單添加提交事件監聽器
+            const replyForms = document.querySelectorAll('.reply-form form');
+            replyForms.forEach(form => {
+                form.addEventListener('submit', handleReplyFormSubmit);
+            });
+
+            // 為檢視所有文章按鈕添加事件監聽器
+            document.getElementById('view-all-articles-button').addEventListener('click', getArticle);
+        }
+
+        // 呼叫初始化函數
+        init();
+        
+		function getArticle() {
+		    console.log("Attempting to get articles..."); // Debugging line
+		
+		    $.ajax({
+		        type: "GET",
+		        url: "/SA_test/api/article.do",
+		        dataType: 'json',
+		        success: function(response) {
+			    console.log("Response from server:", response); // Debugging line
+			
+			    const articlesListDiv = document.getElementById('articles-list');
+			    if (response && response.response && Array.isArray(response.response.data)) {
+			        console.log("Displaying articles..."); // Debugging line
+			        articlesListDiv.innerHTML = ''; // Clear existing articles
+			
+			        // Use the correct data property that was validated to be an array
+			        response.response.data.forEach(function(article) {
+			            const articleDiv = document.createElement('div');
+			            articleDiv.classList.add('comment'); // Add class for styling
+			            articleDiv.innerHTML = `
+			                <h3>${article.title}</h3>
+			                <p>${article.article_content}</p>
+			                <span>Posted on: ${new Date(article.article_time).toLocaleString()}</span>
+			            `;
+			            articlesListDiv.appendChild(articleDiv);
+			        });
+			    } else {
+			        console.error("Error: 'data' is not an array", response.response && response.response.data); // Debugging line
+			    }
+			},
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.error("AJAX error:", textStatus, errorThrown); // Debugging line
 		            alert("無法連線到伺服器！");
 		        }
-		    	});
-           }
-            function postArticle(title, content) {
-				//將title、content丟入ajax
-				alert(title);
-				var id = url.searchParams.get("id");
-				var data_string = "title=" + encodeURIComponent(title) + "&content=" + encodeURIComponent(content)+"&member_id="+encodeURIComponent(id);
-			    
-			    $.ajax({
-			        type: "Put",
-			        url: "api/article.do"+ data_string,
-			        crossDomain: true,
-                    cache: false,
-                    dataType: 'json',
-                    timeout: 5000,
-			        data: {title: title, article_content: content},
-			        success: function(response) {
-			            if(response.status == 200){
-                                    updateTable_user(response.response.data);
-                                }
-                                console.log(response);
-                          },
-			        error: function() {
-			            alert("Error posting article");
-			        }
-			    });
-			}
+		    });
+		}
+         function postArticle(title, content) {
+            var url = new URL(window.location.href);
+            var id = url.searchParams.get("id");
+            var data = {
+                title: title,
+                content: content,
+                member_id: id
+            };
+			console.log("ID:", id);
+            $.ajax({
+                type: "POST",
+                url: "api/article.do",
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if(response.status == 200){
+                        // 處理成功的情況
+                    }
+                    console.log(response);
+                },
+                error: function() {
+                    alert("Error posting article");
+                }
+            });
+        }
+
 
     </script>
 </body>

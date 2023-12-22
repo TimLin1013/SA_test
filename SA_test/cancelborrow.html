@@ -36,14 +36,15 @@
 	  <div id="container">
         
         <div id="content">
-    	<h1>繳費記錄</h1>
+    	<h1>借用列表</h1>
 
    	 <table id="table">
         <thead>
             <tr>
-                <th>社員編號</th>
-                <th>繳費序列</th>
-                <th>繳費金額</th>
+				<th>借用編號</th>
+                <th>社員姓名</th>
+                <th>借用器材</th>
+                <th>歸還情況</th>
             </tr>
         </thead>
         <tbody>
@@ -60,7 +61,7 @@
 			var data_string ="id="+encodeURIComponent(id);
          	$.ajax({
             	type: "GET",
-                url: "api/paidrecord.do?" + data_string,
+                url: "api/borrowrecord.do?" + data_string,
                 data: data_string,
                 crossDomain: true,
                 cache: false,
@@ -77,13 +78,57 @@
                 }
               });
            }
+           	function deleteByid(borrowRecordID) {
+			var request = {'id': borrowRecordID};
+            var data_string = JSON.stringify(request);
+         	$.ajax({
+            	type: "DELETE",
+                url: "api/borrowrecord.do?",
+                data: data_string,
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+       	        	if(response.status == 200){
+                        getByid();  
+                     }
+                       console.log(response);          
+                },
+                error: function () {
+                	alert("無法連線到伺服器！");
+                }
+              });
+           }
             function updateTable(data) {
                     $("#table > tbody").empty();
                     var table_html = '';
                     $.each(data, function(index, value) {
-                        table_html += '<tr><td scope="row">' + value['id'] + '</td>';
-                        table_html += '<td>' + value['paid_sequence'] + '</td>';
-                        table_html += '<td>' + value['paid_fee'] + '</td>';
+                        table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
+                        table_html += '<td>' + value['member_name'] + '</td>';
+                        table_html += '<td>' + value['instrument_name'] + '</td>';
+                                
+       	 				var borrowTime = new Date(value['borrow_time']).getTime();
+       	 				var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime(); 
+        				var currentTime = new Date().getTime();
+						var returnTime = new Date(value['return_time']).getTime();
+        				if (borrowTime > currentTime && isNaN(returnTime)) {
+            				table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ')">取消登記</button></td>';
+        				} 
+        				else{
+						    if(isNaN(returnTime)){
+								table_html += '<td>未歸還</td>';
+							}
+							else if(returnTime>threeHoursLater){
+								table_html += '<td>逾期歸還</td>';
+							}
+							
+							else{
+            					table_html += '<td>歸還</td>';
+            				}
+       				    }
+
+        					table_html += '</tr>';
                     })
 
                     $("#table > tbody").append(table_html);

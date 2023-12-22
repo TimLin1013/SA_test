@@ -15,7 +15,7 @@ public class article {
 		this.article_time=article_time;
 		this.member_id=member_id;
 	}
-	public article (int member_id,String title,String article_content,Timestamp article_time,String identity) {
+	public article (int member_id,String title,String article_content,Timestamp article_time) {
 		this.article_content=article_content;
 		this.title=title;
 		this.article_time=article_time;
