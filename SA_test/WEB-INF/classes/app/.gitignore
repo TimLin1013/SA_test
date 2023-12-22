@@ -13,3 +13,6 @@
 /articleHelper.class
 /courseRecord.class
 /courseRecordHelper.class
+/announcement.class
+/Announcement.class
+/AnnouncementHelper.class
