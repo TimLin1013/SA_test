@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Announcement</title>
+    <link rel="stylesheet" href="statics/css/registerStyle.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .green-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Modify Announcement</h2>
+        <form class="register-form">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title">
+            </div>
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea id="content" name="content"></textarea>
+            </div>
+            <div id="flashMessage" class="message" style="display: none;"></div>
+
+            <button type="button" class="green-button" id="submit">Confirm Modify</button>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var $form = $('#submit');
+            $form.click(function() {
+                submit();
+            });
+
+            function submit() {
+                var title = $('#title').val();
+                var content = $('#content').val();
+
+                if (!title || !content) {
+                    alert("Please fill in both title and content fields.");
+                } else {
+                    var data_object = {
+                        "title": title,
+                        "content": content
+                    };
+                    var data_string = JSON.stringify(data_object);
+
+                    $.ajax({
+                        type: "POST", // Assuming you want to use POST for modifying an announcement
+                        url: "api/announcement.do",
+                        data: data_string,
+                        crossDomain: true,
+                        cache: false,
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function (response) {
+                            $('#flashMessage').html(response.message);
+                            $('#flashMessage').show();
+                            // Additional logic for success
+                        },
+                        error: function () {
+                            alert("Unable to connect to the server!");
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
