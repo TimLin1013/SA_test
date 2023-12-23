@@ -12,7 +12,7 @@ import app.Announcement;
 
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet("/api/member.do")
+@WebServlet("/api/announcement.do")
 public class AnnouncementController extends HttpServlet {
 
     /** The Constant serialVersionUID. */
