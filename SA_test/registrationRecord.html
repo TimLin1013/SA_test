@@ -56,40 +56,69 @@
    		 var id = url.searchParams.get("id");
    		 var recordCourseId=[];
 		function updateTable(data) {
-	        $("#table > tbody").empty();
-	        var table_html = '';
-	        $.each(data, function(index, value) {
-		         table_html += '<tr><td scope="row">' + value['course_name'] + '</td>';
-               	table_html += '<td>' + value['course_time'] + '</td>';
-                table_html += '<td>' + value['course_location'] + '</td>';
-                table_html += '<td>' + value['member_id'] + '</td>';
-                table_html += '<td>' + '<a href="#" onclick="deleterecord(' + id + ',' + value['course_id'] + ",'" + value['course_start_time'] + "');\">取消報名</a></td></tr>";
+    $("#table > tbody").empty();
+    var table_html = '';
 
-	        })
+    $.each(data, function(index, value) {
+    table_html += '<tr><td scope="row">' + value['course_name'] + '</td>';
+    table_html += '<td>' + value['course_time'] + '</td>';
+    table_html += '<td>' + value['course_location'] + '</td>';
+    table_html += '<td>' + value['member_id'] + '</td>';
+    
+    if (isPastTime(value['course_start_time'])) {
+        // 如果課程已經開始，顯示取消報名、評分和繳交作業連結
+        table_html += '<td>' + '<a href="#" onclick="deleterecord(' + id + ',' + value['course_id'] + ",'" + value['course_start_time'] + "');\">取消報名</a>";
+        table_html += ' | <a href="#" onclick="rateCourse(\'' + value['course_id'] + '\',\'' + value['course_name'] + '\',\'' + value['course_location'] + '\',\'' + value['course_time'] + '\',\'' + value['member_id'] + '\');">評分</a>';
+        table_html += ' | <a href="#" onclick="submitHomework(\'' + value['course_id'] + '\',\'' + value['course_name'] + '\',\'' + value['course_location'] + '\',\'' + value['course_time'] + '\',\'' + value['member_id'] + '\');">繳交作業</a></td></tr>';
+    } else {
+        // 如果課程還未開始，僅顯示取消報名連結
+        table_html += '<td>' + '<a href="#" onclick="deleterecord(' + id + ',' + value['course_id'] + ",'" + value['course_start_time'] + "');\">取消報名</a></td></tr>";
+    }
+});
+
+
+    $("#table > tbody").append(table_html);
+}
+
+// 判斷課程是否已經開始
+function isPastTime(courseStartTime) {
+    var now = new Date();
+    var courseStart = new Date(courseStartTime);
+
+    return courseStart < now;
+}
+
+// 添加評分的函數
+function rateCourse(courseId,courseName,courseLocation,courseTime,TeacherId) {
 	
-	        $("#table > tbody").append(table_html);
-        }
-        $(document).ready(function() {
-            getAllrecordCourse();
-        });
-        function getAllrecordCourse() {
-        var data_string = "id=" + encodeURIComponent(id);
-        $.ajax({
-            type: "GET",
-            url: "api/courserecord.do?" + data_string,
-            crossDomain: true,
-            cache: false,
-            dataType: 'json',
-            timeout: 5000,
-            success: function (response) {
-           		updateTable(response.response.data);
-                console.log(response.response.data);
-            },
-            error: function () {
-                alert("無法連線到伺服器！");
-            }
-        });
-    	}
+	window.location.href = 'classRating.html?id='+id+'&course_id='+courseId+'&course_name='+courseName+'&course_time='+courseTime+'&teacher_id='+TeacherId+'&course_location='+courseLocation;
+}
+function submitHomework(courseId,courseName,courseLocation,courseTime,TeacherId) {
+	
+	window.location.href = 'submitHomework.html?id='+id+'&course_id='+courseId+'&course_name='+courseName+'&course_time='+courseTime+'&teacher_id='+TeacherId+'&course_location='+courseLocation;
+}	
+	$(document).ready(function() {
+	    getAllrecordCourse();
+	});
+	function getAllrecordCourse() {
+		var data_string = "id=" + encodeURIComponent(id);
+		$.ajax({
+		    type: "GET",
+		    url: "api/courserecord.do?" + data_string,
+		    crossDomain: true,
+		    cache: false,
+		    dataType: 'json',
+		    timeout: 5000,
+		    success: function (response) {
+		   		updateTable(response.response.data);
+		        console.log(response.response.data);
+		    },
+		    error: function () {
+		        alert("無法連線到伺服器！");
+		    }
+		});
+	}
+    
     function deleterecord(member_id, course_id, course_start_time) {
     // 將 course_start_time 轉換為 JavaScript Date 對象
     var startTime = new Date(course_start_time);

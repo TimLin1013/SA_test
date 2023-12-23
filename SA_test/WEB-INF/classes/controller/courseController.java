@@ -24,4 +24,23 @@ public class courseController extends HttpServlet{
       response.getWriter().write(resp.toString());
       
   }
+  public void doPut(HttpServletRequest request, HttpServletResponse response)//新增設課評價
+	      throws ServletException, IOException {
+	  	int member_id = Integer.parseInt(request.getParameter("member_id"));
+	  	int course_id = Integer.parseInt(request.getParameter("course_id"));
+	  	int course_value = Integer.parseInt(request.getParameter("rating"));
+	      JSONObject data = ch.createCourseRating(member_id,course_id,course_value);
+	      int Rating =ch.getRating(member_id,course_id);
+	      JSONObject resp = new JSONObject();
+	      resp.put("status", "200");
+	      resp.put("message", "所有資料取得成功");
+	      resp.put("response", data);    
+	      resp.put("Rating", Rating);
+	      response.setContentType("application/json");
+	      response.setCharacterEncoding("UTF-8");
+	      response.getWriter().write(resp.toString());
+	      
+	  }
+	  
+  
 }
