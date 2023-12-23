@@ -16,18 +16,25 @@
             <div id="flashMessage" class="message" style="display: none;"></div>
 
             <table id="table">
-                <thead>
-                    <tr>
-                        <th>編號</th>
-                        <th>標題</th>
-                        <th>內容</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+			    <thead>
+			        <tr>
+			            <th>編號</th>
+			            <th>標題</th>
+			            <th>內容</th>
+			            <th>建立者id</th>
+			            <th>功能</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			    </tbody>
+			</table>
+
             
             <script type="text/javascript">
+                let url_string = window.location.href;
+			    let url = new URL(url_string);
+			    let id = url.searchParams.get("id");
+                
                 // 全域變數紀錄SQL指令下的次數
                 var sql_num = 0;
                 function deleteAnnouncement(id) {
@@ -83,23 +90,28 @@
                     });
                 }
                 
-                // 更新公告列表表格
                 function updateTable_user(data) {
-                    $("#table > tbody").empty();
-                    var table_html = '';
-                    $.each(data, function(index, value) {
-                        table_html += '<tr><td scope="row">' + value['id'] + '</td>';
-                        table_html += '<td>' + value['title'] + '</td>';
-                        table_html += '<td>' + value['content'] + '</td>';
-                        table_html += '<td>' + '<a href="edit_ann.html?id=' + value['id'] + '">修改</a> | ';
-                        table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
-                    })
+				   
+				
+				    $("#table > tbody").empty(); // 清空表格內容
+				    var table_html = '';
+				    $.each(data, function(index, value) {
+				        table_html += '<tr>';
+				        table_html += '<td scope="row">' + value['announcement_id'] + '</td>';
+				        table_html += '<td>' + value['title'] + '</td>';
+				        table_html += '<td>' + value['announcement_content'] + '</td>';
+				        table_html += '<td>' + value['admin_id'] + '</td>'; // 新增建立者欄位
+				        table_html += '<td>' + '<a href="edit_ann.html?id=' + value['announcement_id'] + '">修改</a> | ';
+				        table_html += '<a href="javascript: deleteAnnouncement(' + value['announcement_id'] + ');">刪除</a></td>';
+				        table_html += '</tr>';
+				    });
+				
+				    $("#table > tbody").append(table_html);
+				}
 
-                    $("#table > tbody").append(table_html);
-                }
                 
                 $("#addAnnouncementBtn").on("click", function() {
-                    window.location.href = "add_announcement.html";
+                    window.location.href = "add_announcement.html?id="+id;	
                 });
                 
                 $(document).ready(function() {

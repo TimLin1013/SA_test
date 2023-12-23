@@ -50,20 +50,19 @@ public class AnnouncementController extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 		
-	      JsonReader jsr = new JsonReader(request);
-	        JSONObject jso = jsr.getObject();
-	    String title = request.getParameter("title");
-	    String content = request.getParameter("content");
-	    String id = request.getParameter("id");
+	    
+	   // String title = request.getParameter("title");
+	   // String content = request.getParameter("content");
+	   // String id = request.getParameter("id");
 	    
 
-	    JSONObject query = ah.getAnnouncementByID(Integer.parseInt(id));
-           
+	  //  JSONObject query = ah.getAnnouncementByID(Integer.parseInt(id));
+           JSONObject data = ah.getAllAnnouncement();
            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
            JSONObject resp = new JSONObject();
            resp.put("status", "200");
            resp.put("message", "公告資料取得成功");
-           resp.put("response", query);
+           resp.put("response", data);
            response.setContentType("application/json");
 	       response.setCharacterEncoding("UTF-8");
 	       response.getWriter().write(resp.toString());

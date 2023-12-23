@@ -18,11 +18,12 @@ public class Announcement {
         this.admin_id = admin_id;
     }
 
-    public Announcement(int admin_id, String title, String announcement_content, Timestamp announcement_time) {
+    public Announcement(int announcement_id,int admin_id, String title, String announcement_content, Timestamp announcement_time) {
         this.announcement_content = announcement_content;
         this.title = title;
         this.announcement_time = announcement_time;
         this.admin_id = admin_id;
+        this.announcement_id=announcement_id;
     }
 
     public Announcement(String title, String announcement_content, int admin_id) {
@@ -42,6 +43,7 @@ public class Announcement {
         jsonAnnouncement.put("announcement_content", getContent());
         jsonAnnouncement.put("announcement_time", getAnnouncementTime());
         jsonAnnouncement.put("admin_id", getAdminId());
+        jsonAnnouncement.put("announcement_id", getAnnouncement_id());
         return jsonAnnouncement;
     }
 
@@ -58,9 +60,12 @@ public class Announcement {
         return this.announcement_time;
     }
 
+    public int getAnnouncement_id() {
+        return this.announcement_id;
+    }
+    
     public int getAdminId() {
         return this.admin_id;
     }
-
   
 }
