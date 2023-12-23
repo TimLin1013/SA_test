@@ -7,38 +7,13 @@
     <link rel="stylesheet" href="statics/css/registerStyle.css">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .register-container {
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            background-color: #fff;
-        }
-
-        .green-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        /* Your existing styles here */
     </style>
 </head>
 <body>
     <div class="register-container">
         <h2>Add Announcement</h2>
-        <form class="register-form">
+        <form class="register-form" onsubmit="create(id);">
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title">
@@ -49,51 +24,51 @@
             </div>
             <div id="flashMessage" class="message" style="display: none;"></div>
 
-            <button type="button" class="green-button" id="submit">Confirm Add</button>
+            <button type="submit" class="green-button" id="submit">Confirm Add</button>
         </form>
     </div>
 
-     <script type="text/javascript">
-        $(document).ready(function() {
-            var $form = $('#submit');
-            $form.click(function() {
-                submit();
-            });
+    <script type="text/javascript">
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
 
-            function submit() {
-                var title = $('#title').val();
-                var content = $('#content').val();
+        function create(id) {
+            var title = $('#title').val();
+            var content = $('#content').val();
 
-                if (!title || !content) {
-                    alert("Please fill in both title and content fields.");
-                } else {
-                    var data_object = {
-                        "title": title,
-                        "content": content,
-                        "id": id,
-                    };
-                    var data_string = JSON.stringify(data_object);
+            if (!title || !content) {
+                alert("Please fill in both title and content fields.");
+            } else {
+                var data_object = {
+                    "title": title,
+                    "content": content,
+                    "id": id,
+                };
+                var data_string = JSON.stringify(data_object);
 
-                    $.ajax({
-                        type: "POST", // Assuming you want to use POST for adding an announcement
-                        url: "api/announcement.do",
-                        data: data_string,
-                        crossDomain: true,
-                        cache: false,
-                        dataType: 'json',
-                        timeout: 5000,
-                        success: function (response) {
-                            $('#flashMessage').html(response.message);
-                            $('#flashMessage').show();  
-                            // Additional logic for success
-                        },
-                        error: function () {
-                            alert("Unable to connect to the server!");
+                $.ajax({
+                    type: "Put",
+                    url: "api/announcement.do",
+                    data: data_string,
+                    crossDomain: true,
+                    cache: false,
+                    dataType: 'json',
+                    timeout: 5000,
+                    success: function (response) {
+                        $('#flashMessage').html(response.message);
+                        $('#flashMessage').show();
+                        if (response.status == 200) {
+                            alert("新增成功");
+                            window.location.href = 'admin_home_page.html';
                         }
-                    });
-                }
+                    },
+                    error: function () {
+                        alert("無法連接到伺服器!");
+                    }
+                });
             }
-        });
+        }
     </script>
 </body>
 </html>
