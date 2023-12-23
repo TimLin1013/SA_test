@@ -3,37 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>Forum</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #E1EDFC; 
-        }
-        .comment {
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #FCFCFC;
-        }
-        .reply-form {
-            margin-top: 10px;
-            margin-left: 30px;
-        }
-        #new-discussion-button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .replies {
-            margin-left: 20px;
-        }
-    </style>
+	<style>
+	    body {
+	        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	        margin: 0;
+	        padding: 0;
+	        background-color: #2b2b2b; /* 深灰背景，不是純黑 */
+	        color: #f0f0f0; /* 亮色文字 */
+	    }
+	    .comment {
+	        margin-bottom: 10px;
+	        border: 1px solid #3d3d3d; /* 略深邊框 */
+	        padding: 10px;
+	        background-color: #333; /* 深色背景 */
+	        border-radius: 8px; /* 圓角邊框 */
+	        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 輕微陰影 */
+	    }
+	    .reply-form {
+	        margin-top: 10px;
+	        margin-left: 30px;
+	    }
+	    #new-discussion-button {
+	        display: block;
+	        margin: 20px auto;
+	        padding: 10px 20px;
+	        background-color: #4a4a4a; /* 深灰按鈕 */
+	        color: white;
+	        border: none;
+	        border-radius: 5px;
+	        cursor: pointer;
+	        transition: background-color 0.3s; /* 漸變效果 */
+	    }
+	    #new-discussion-button:hover {
+	        background-color: #5a5a5a; /* 滑鼠懸停時變色 */
+	    }
+	    .replies {
+	        margin-left: 20px;
+	    }
+	
+	    /* 輸入框和按鈕的樣式 */
+	    input[type="text"], textarea {
+	        width: 100%; /* 全寬 */
+	        padding: 8px;
+	        margin: 6px 0;
+	        display: inline-block;
+	        border: 1px solid #ccc;
+	        border-radius: 4px;
+	        box-sizing: border-box;
+	        background-color: #f0f0f0; /* 淺色背景 */
+	        color: #333; /* 深色文字 */
+	    }
+	
+	    input[type="submit"] {
+	        width: 100%;
+	        background-color: #4a4a4a;
+	        color: white;
+	        padding: 14px 20px;
+	        margin: 8px 0;
+	        border: none;
+	        border-radius: 4px;
+	        cursor: pointer;
+	    }
+	
+	    input[type="submit"]:hover {
+	        background-color: #5a5a5a;
+	    }
+	</style>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -142,7 +178,8 @@
             const newForm = newDiscussionDiv.querySelector('.reply-form form');
             newForm.addEventListener('submit', handleReplyFormSubmit);
         }
-
+		
+		
         // 為所有現有的回覆按鈕添加事件監聽器
         const replyButtons = document.querySelectorAll('.reply-button');
         replyButtons.forEach(addReplyButtonListener);
@@ -152,7 +189,7 @@
         replyForms.forEach(form => {
             form.addEventListener('submit', handleReplyFormSubmit);
         });
-
+		
         
         function init() {
             // 為所有現有的回覆按鈕添加事件監聽器
@@ -233,7 +270,46 @@
                 }
             });
         }
+		// 函數用於處理回覆表單的提交
+    function handleReplyFormSubmit(event) {
+        event.preventDefault();
 
+		var data = {
+            message_content: article_content,
+            message_time: message_time,
+            article_id: article_id,
+            member_id: id
+        };
+
+        if (comment.trim() === '') {
+            alert('回覆內容不能為空！');
+            return;
+        }
+
+        // 調用 postMessage 函數來提交回覆
+        postMessage(comment, article_id);
+    }
+
+    // 函數用於提交回覆到服務器
+    function postMessage(comment, article_id) {
+        $.ajax({
+            type: "POST",
+            url: "/SA_test/api/message.do", 
+            contentType: 'application/json',
+            data: JSON.stringify({
+                comment: comment,
+                article_id: article_id
+            }),
+            success: function(response) {
+                // 處理成功的情況，例如：更新前端界面
+                alert('回覆已成功提交！');
+            },
+            error: function() {
+                // 處理錯誤的情況
+                alert('提交回覆時發生錯誤！');
+            }
+        });
+    }
 
     </script>
 </body>
