@@ -177,13 +177,13 @@ public class AnnouncementHelper {
             while (rs.next()) {
                 row += 1;
 
-                int id = rs.getInt("announcement_id");
-                String title = rs.getString("announcement_title");
-                String content = rs.getString("announcement_content");
-                Timestamp create_time = rs.getTimestamp("announcement_time");
-
-                announcement = new Announcement(id, title, content, create_time);
-                jsa.put(announcement.getData());
+               int id = rs.getInt("member_id");
+               String title = rs.getString("announcement_title");
+               String content = rs.getString("announcement_content");
+               Timestamp create_time = rs.getTimestamp("announcement_time");
+               int announcement_id=rs.getInt("announcement_id");
+              announcement = new Announcement(announcement_id,id, title, content, create_time);
+              jsa.put(announcement.getData());
             }
 
         } catch (SQLException e) {
@@ -210,12 +210,10 @@ public class AnnouncementHelper {
      * 根据ID获取公告
      */
     public JSONObject getAnnouncementByID(int id) {
-        Announcement announcement = null;
-        JSONArray jsa = new JSONArray();
+
         String execute_sql = "";
         long start_time = System.nanoTime();
         int row = 0;
-        ResultSet rs = null;
 
         try {
             conn = DBMgr.getConnection();
@@ -224,30 +222,18 @@ public class AnnouncementHelper {
 
             pres = conn.prepareStatement(sql);
             pres.setInt(1, id);
-
-            rs = pres.executeQuery();
+            row = pres.executeUpdate();
 
             execute_sql = pres.toString();
             System.out.println(execute_sql);
 
-            while (rs.next()) {
-                row += 1;
-
-                int announcementId = rs.getInt("announcement_id");
-                String title = rs.getString("announcement_title");
-                String content = rs.getString("announcement_content");
-                Timestamp create_time = rs.getTimestamp("announcement_time");
-
-                announcement = new Announcement(announcementId, title, content, create_time);
-                jsa.put(announcement.getData());
-            }
 
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBMgr.close(rs, pres, conn);
+            DBMgr.close( pres, conn);
         }
 
         long end_time = System.nanoTime();
@@ -257,7 +243,7 @@ public class AnnouncementHelper {
         response.put("sql", execute_sql);
         response.put("row", row);
         response.put("time", duration);
-        response.put("data", jsa);
+
 
         return response;
     }

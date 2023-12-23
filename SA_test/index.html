@@ -63,7 +63,7 @@
 						            $('#flashMessage').show();
 						        } else if (Rsp == 1 && response.identity == 2) {
 						            alert("系統管理員登入成功");
-						            window.location.href = 'admin_home_page.html';
+						            window.location.href = 'admin_home_page.html?id='+ response.id	;
 						        } else if (Rsp == 1 && response.identity == 1) {
 						            alert("社員登入成功");
 						
