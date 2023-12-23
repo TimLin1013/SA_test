@@ -37,14 +37,14 @@
     <p>請輸入文字:</p>
     <textarea id="inputBox" placeholder="在這裡輸入文字..."></textarea>
     
-    <!-- 新增繳交按鈕 -->
+    <!-- 新增繳交按鈕 --> 
     <button id="submitButton" onclick="submitAssignment()">繳交</button>
 
     <script>
         function submitAssignment() {
             // 在這裡可以加入處理繳交邏輯的 JavaScript 代碼
             var userInput = document.getElementById("inputBox").value;
-            alert("繳交成功");
+            alert(userInput);
         }
     </script>
 </body>
