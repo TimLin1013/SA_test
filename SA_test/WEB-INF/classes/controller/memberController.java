@@ -31,13 +31,6 @@ public class memberController extends HttpServlet {
         String id = request.getParameter("id");
         member m = new member(account,name,password,phone,group);
         
-        //new
-        String adminAction = request.getParameter("adminAction");
-        if (adminAction != null && adminAction.equals("createSystemAdmin")) {
-            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
-            jsr.response(resp, response);
-        }
-        else {
         
         if(account.isEmpty() || password.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
             String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
@@ -58,7 +51,7 @@ public class memberController extends HttpServlet {
         else {
             String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
             jsr.response(resp, response);
-        }}
+        }
         
     }
 	
@@ -70,6 +63,7 @@ public class memberController extends HttpServlet {
 	    String password = request.getParameter("password");
 	    String login = request.getParameter("login");
 	    String id = request.getParameter("id");
+	    String admin = request.getParameter("admin");
 	    
 	   if("yes".equals(login)) {
 		   if (mh.checkPassword(account, password)) {
@@ -93,31 +87,43 @@ public class memberController extends HttpServlet {
 		        response.setCharacterEncoding("UTF-8");
 		        response.getWriter().write(resp.toString());
 		    }
-	   }else if (id==null) {
+	   }else if (id == null ) {
+		   if ("yes".equals(admin)) {
            /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
-           JSONObject query = mh.getAllmember();
-           
+			   JSONObject query = mh.getAlladmin();
+			   JSONObject resp = new JSONObject();
+			   resp.put("status", "200");
+			   resp.put("message", "所有會員資料取得成功");
+			   resp.put("response", query);        
+			   response.setContentType("application/json");
+			   response.setCharacterEncoding("UTF-8");
+			   response.getWriter().write(resp.toString());
+		   }
+		   else {
+			   JSONObject query = mh.getAllmember();
+			   JSONObject resp = new JSONObject();
+	           resp.put("status", "200");
+	           resp.put("message", "所有會員資料取得成功");
+	           resp.put("response", query);        
+		       response.setContentType("application/json");
+		       response.setCharacterEncoding("UTF-8");
+		       response.getWriter().write(resp.toString()); 
+		   }
            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-           JSONObject resp = new JSONObject();
-           resp.put("status", "200");
-           resp.put("message", "所有會員資料取得成功");
-           resp.put("response", query);        
-	       response.setContentType("application/json");
-	       response.setCharacterEncoding("UTF-8");
-	       response.getWriter().write(resp.toString());
+           
        }else {
-    	   JSONObject query = mh.getByID(id);
+           	JSONObject query = mh.getByID(id);
+           	JSONObject resp = new JSONObject();
+           	resp.put("status", "200");
+           	resp.put("message", "指定會員資料取得成功");
+           	resp.put("response", query);
            
-           /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-           JSONObject resp = new JSONObject();
-           resp.put("status", "200");
-           resp.put("message", "會員資料取得成功");
-           resp.put("response", query);
-           response.setContentType("application/json");
-	       response.setCharacterEncoding("UTF-8");
-	       response.getWriter().write(resp.toString());
-       }
+           	response.setContentType("application/json");
+           	response.setCharacterEncoding("UTF-8");
+           	response.getWriter().write(resp.toString());
+       		}
     }
+
 	public void doDelete(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 	        /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
@@ -133,7 +139,7 @@ public class memberController extends HttpServlet {
 	        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
 	        JSONObject resp = new JSONObject();
 	        resp.put("status", "200");
-	        resp.put("message", "會員移除成功！");
+	        resp.put("message", "系統管理者移除成功！");
 	        resp.put("response", query);
 
 	        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */

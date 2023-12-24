@@ -244,8 +244,84 @@ public class memberHelper {
         }
     	return identity;
     }
+    
     public JSONObject getAllmember() {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
+        member m = null;
+        /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
+        JSONArray jsa = new JSONArray();
+        /** 記錄實際執行之SQL指令 */
+        String exexcute_sql = "";
+        /** 紀錄程式開始執行時間 */
+        long start_time = System.nanoTime();
+        /** 紀錄SQL總行數 */
+        int row = 0;
+        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
+        ResultSet rs = null;
+       
+        try {
+            /** 取得資料庫之連線 */
+            conn = DBMgr.getConnection();
+            /** SQL指令 */
+            String sql = "SELECT * FROM `sa`.`tbl_member` WHERE identity = 1 ";
+
+            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
+            pres = conn.prepareStatement(sql);
+            /** 執行查詢之SQL指令並記錄其回傳之資料 */
+            rs = pres.executeQuery();
+
+            /** 紀錄真實執行的SQL指令，並印出 **/
+            exexcute_sql = pres.toString();
+            System.out.println(exexcute_sql);
+            
+            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
+            while(rs.next()) {
+                /** 每執行一次迴圈表示有一筆資料 */
+                row += 1;
+                
+                /** 將 ResultSet 之資料取出 */
+                int id = rs.getInt("member_id");
+                String name = rs.getString("member_name");
+                String  account= rs.getString("member_account");
+                String password = rs.getString("member_password");
+                Timestamp create_time= rs.getTimestamp("created_time");
+                String identity = rs.getString("identity");
+                String phone = rs.getString("member_phone");
+                String group = rs.getString("member_group");
+                /** 將每一筆會員資料產生一名新Member物件 */
+                m = new member(id,name, password,phone,group,create_time,identity,account);
+                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
+                jsa.put(m.getData());
+            }
+
+        } catch (SQLException e) {
+            /** 印出JDBC SQL指令錯誤 **/
+            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            /** 若錯誤則印出錯誤訊息 */
+            e.printStackTrace();
+        } finally {
+            /** 關閉連線並釋放所有資料庫相關之資源 **/
+            DBMgr.close(rs, pres, conn);
+        }
+        
+        /** 紀錄程式結束執行時間 */
+        long end_time = System.nanoTime();
+        /** 紀錄程式執行時間 */
+        long duration = (end_time - start_time);
+        
+        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+        JSONObject response = new JSONObject();
+        response.put("sql", exexcute_sql);
+        response.put("row", row);
+        response.put("time", duration);
+        response.put("data", jsa);
+
+        return response;
+    }
+    
+    public JSONObject getAlladmin() {
+        /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之系統管理者之資料 */
         member m = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
         JSONArray jsa = new JSONArray();
@@ -262,7 +338,7 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa`.`tbl_member` WHERE `identity`= 1";
+            String sql = "SELECT * FROM `sa`.`tbl_member` WHERE `identity`= 2";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -318,6 +394,7 @@ public class memberHelper {
 
         return response;
     }
+    
     public JSONObject deleteByID(int id) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
@@ -368,6 +445,8 @@ public class memberHelper {
         response.put("time", duration);
         return response;
     }
+    
+    
     public JSONObject getByID(String id) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
         member m = null;

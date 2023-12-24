@@ -13,97 +13,114 @@
         }
      </style>
 </head>
+
 <body>
-    <h1>System Admin</h1>
-    <table id="adminTable">
-        <!-- 系統管理者列表 -->
-        <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>email</th>
-            <th>password</th>
-            <th>phone</th>
-            <th>group</th>
-        </tr>
-        <!-- 管理者數據將在此處動態填充 -->
-    </table>	
-    <script>	
-    	function getAlladmin() {
-            $.ajax({
-                type: "GET",
-                url: "api/member.do",
-                crossDomain: true,
-                cache: false,
-                dataType: 'json',
-                timeout: 5000,
-                success: function (response) {
-                    if(response.status == 200){
-                        updateadmin(response.response.data);
+    <div id="container">
+        
+        <div id="content">
+            
+
+            <div id="flashMessage" class="message" style="display: none;"></div>
+
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>編號</th>
+                        <th>姓名</th>
+                        <th>帳號</th>
+                        <th>密碼</th>
+                        <th>組別</th>
+                        <th>建立時間</th>
+                        <th>身分</th>
+                        <th>功能</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            
+            <script type="text/javascript">
+                // 全域變數紀錄SQL指令下的次數
+                var sql_num = 0;
+                function deleteMember(id) {
+                    var check = window.confirm("確認刪除系統使用者？");
+                    if (check == true) {
+                        console.log("You pressed OK!");
+                        var request = {'id': id};
+                        var data_string = JSON.stringify(request);
+                        $.ajax({
+                            type: "DELETE",
+                            url: "api/member.do",
+                            crossDomain: true,
+                            data: data_string,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    $("#flashMessage").html("成功! 已經成功刪除系統使用者...");
+                                    $("#flashMessage").show();
+                                    getAllmember();
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                        });
                     }
-                    console.log(response);
-                },
-                error: function () {
-                    alert("無法連線到伺服器！");
+                    else {
+                        console.log("You pressed Cancel!");
+                    }
                 }
-            });
-        }
 
-        // 假設您已經從後端獲取了系統管理者數據，並以 JSON 格式保存在 admins 中
-        const admins = [
-            // 系統管理者數據的範例，您需要根據實際情況填充
-            {
-                "id": 1,
-                "name": "系統管理者1",
-                "email": "admin1@example.com",
-                "password": "password1",
-                "phone": "1234567890",
-                "group": "Group A"
-            },
-            {
-                "id": 2,
-                "name": "系統管理者2",
-                "email": "admin2@example.com",
-                "password": "password2",
-                "phone": "9876543210",
-                "group": "Group B"
-            }
-            // 其他管理者數據...
-        ];
-
-        // 填充表格
-        const adminTable = document.getElementById("adminTable");
-        admins.forEach(admin => {
-            const row = adminTable.insertRow(-1);
-            row.insertCell(0).innerHTML = admin.name;
-            row.insertCell(1).innerHTML = admin.email;
-            row.insertCell(2).innerHTML = admin.password;
-            row.insertCell(3).innerHTML = admin.phone;
-            row.insertCell(4).innerHTML = admin.group;
-
-            const editButton = document.createElement("button");
-            editButton.innerHTML = "edit";
-            editButton.onclick = function() {
-                // 處理修改按鈕的操作，可能打開一個模態框或頁面進行修改
-                // 此處需根據您的後端架構和需求進行相應處理
-                console.log("Edit Admin：" + admin.name);
-            };
-            row.insertCell(5).appendChild(editButton);
-
-            const deleteButton = document.createElement("button");
-            deleteButton.innerHTML = "delete";
-            deleteButton.onclick = function() {
-                // 確認是否要刪除
-                if (confirm("Are you sure to delete this admin？")) {
-                    // 處理刪除按鈕的操作，可能向後端發送刪除請求
-                    // 此處需根據您的後端架構和需求進行相應處理
-                    console.log("Delete Admin：" + admin.name);
-                    // 在此添加向後端發送刪除請求的代碼
-                    // 如需刪除該行，可使用以下代碼
-                    row.remove();
+                function getAlladmin() {
+                    // GET請求取得所有使用者列表
+                    $.ajax({
+                            type: "GET",
+                            url: "api/member.do?admin=yes",
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    updateTable_user(response.response.data);
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
                 }
-            };
-            row.insertCell(6).appendChild(deleteButton);
-        });
-    </script>
+                
+                // 更新會員列表表格
+                function updateTable_user(data) {
+                    $("#table > tbody").empty();
+                    var table_html = '';
+                    $.each(data, function(index, value) {
+                        table_html += '<tr><td scope="row">' + value['id'] + '</td>';
+                        table_html += '<td>' + value['name'] + '</td>';
+                        table_html += '<td>' + value['account'] + '</td>';
+                        table_html += '<td>' + value['password'] + '</td>';
+                        table_html += '<td>' + value['group'] + '</td>';
+                        table_html += '<td>' + value['create_time'] + '</td>';
+                        table_html += '<td>' + value['identity'] + '</td>';
+                        table_html += '<td>' + '<a href="edit_INFO.html?id=' + value['id'] + '">編輯</a> | ';
+                        table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
+                    })
+
+                    $("#table > tbody").append(table_html);
+                }
+                $(document).ready(function() {
+                    getAlladmin();
+                });
+                
+            </script>
+        </div>
+        
+    </div>
+    
 </body>
-</html>
+
