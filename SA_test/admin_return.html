@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-    <title>取消記錄</title>
+    <title>歸還</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,7 +28,7 @@
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color:#b2c8eb;
         }
     </style>
 </head>
@@ -44,7 +44,7 @@
 				<th>借用編號</th>
                 <th>社員姓名</th>
                 <th>借用器材</th>
-                <th>歸還情況</th>
+                <th>登記歸還</th>
             </tr>
         </thead>
         <tbody>
@@ -52,17 +52,13 @@
     </table>
 
     <script type="text/javascript">
-		 var url = new URL(window.location.href);
-		 var id = url.searchParams.get("id");
 		 $(document).ready(function() {
-         	get();
+         	getAllBorrowRecord();
           });
-		 function get() {
-			var data_string ="id="+encodeURIComponent(id);
+		 function getAllBorrowRecord() {
          	$.ajax({
             	type: "GET",
-                url: "api/borrowrecord.do?" + data_string,
-                data: data_string,
+                url: "api/borrowrecord.do?" ,
                 crossDomain: true,
                 cache: false,
                 dataType: 'json',
@@ -78,22 +74,21 @@
                 }
               });
            }
-           	function deleteByid(borrowRecordID) {
-			var request = {'id': borrowRecordID};
-            var data_string = JSON.stringify(request);
+           	function inputreturntime(borrowrecordid,instrumentid) {
+				var data_string = "id=" + encodeURIComponent(borrowrecordid)+"&instrument_id=" + encodeURIComponent(instrumentid)
          	$.ajax({
-            	type: "DELETE",
-                url: "api/borrowrecord.do?",
-                data: data_string,
+            	type: "POST",
+                url: "api/borrowrecord.do?" + data_string,
+ 				data_string: data_string,
                 crossDomain: true,
                 cache: false,
                 dataType: 'json',
                 timeout: 5000,
                 success: function (response) {
        	        	if(response.status == 200){
-                        get();  
+                        getAllBorrowRecord();
                      }
-                       console.log(response);          
+                       console.log(response.response.data);          
                 },
                 error: function () {
                 	alert("無法連線到伺服器！");
@@ -107,26 +102,12 @@
                         table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
                         table_html += '<td>' + value['member_name'] + '</td>';
                         table_html += '<td>' + value['instrument_name'] + '</td>';
-                                
-       	 				var borrowTime = new Date(value['borrow_time']).getTime();
-       	 				var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime(); 
-        				var currentTime = new Date().getTime();
+                        var borrowTime = new Date(value['borrow_time']).getTime();
 						var returnTime = new Date(value['return_time']).getTime();
-        				if (borrowTime > currentTime && isNaN(returnTime)) {
-            				table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ')">取消登記</button></td>';
+        				if (isNaN(returnTime)) {
+            				table_html += '<td><button onclick="inputreturntime(' + value['borrow_record_id'] + ', ' + value['instrument_id'] + ')">登記歸還</button></td>';
+
         				} 
-        				else{
-						    if(returnTime>threeHoursLater && isNaN(returnTime)){
-								table_html += '<td>未歸還</td>';
-							}
-							else if(returnTime>threeHoursLater && !isNaN(returnTime)){
-								table_html += '<td>逾期歸還</td>';
-							}
-							
-							else{
-            					table_html += '<td>歸還</td>';
-            				}
-       				    }
 
         					table_html += '</tr>';
                     })
