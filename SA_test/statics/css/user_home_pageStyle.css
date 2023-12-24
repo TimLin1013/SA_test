@@ -47,3 +47,13 @@ footer {
     padding: 10px;
     text-align: center;
 }
+
+#announcementList li {
+    margin-bottom: 20px; /* 調整條目之間的垂直間距 */
+}
+
+#announcementList strong {
+    display: block; /* 讓標題和內容顯示為區塊元素，這樣它們會在不同行 */
+    margin-bottom: 5px; /* 調整標題和內容之間的垂直間距 */
+}
+

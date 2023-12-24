@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
   <title>社課評分</title>
   <style>
     body {
@@ -70,6 +72,8 @@
     const courseTime = urlParams.get("course_time");
     const courseLocation = urlParams.get("course_location");
     const teacherId = urlParams.get("teacher_id");
+    const courseId =urlParams.get("course_id");
+    const member_id=urlParams.get("id");
 
     // 將值放入 HTML 中
     document.getElementById("courseName").textContent = courseName;
@@ -78,11 +82,36 @@
     document.getElementById("teacherId").textContent = teacherId;
 
     function submitRating() {
-      const rating = document.getElementById("rating").value;
-
-      // 在這裡可以將評分資料送出到後端或進行其他處理
-      console.log("評分:", rating);
-      alert("評分已送出！");
+      const rating = document.getElementById("rating").value;	
+		if(rating==""){
+			alert("請輸入評分");
+		}
+		else{
+			var data_string = "course_id=" + encodeURIComponent(courseId)+ "&member_id=" + encodeURIComponent(member_id)+"&rating="+encodeURIComponent(rating);
+	    	 $.ajax({
+	            type: "PUT",
+	            url: "api/course.do?" + data_string,
+	            data: data_string,  
+	            crossDomain: true,
+	            cache: false,
+	            dataType: 'json', 
+	            timeout: 5000,
+	            success: function (response) {
+				       console.log(response.response);
+				      if(response.response.row==0){
+						  alert("您已評分過\n"+"上次評論的分數："+response.Rating);
+					  }else{
+						  alert("成功評分")
+					  }
+				    },
+				    error: function () {
+				        alert("無法連線到伺服器！");
+				    }
+	          
+	        });
+		}
+		
+		
     }
   </script>
 </body>

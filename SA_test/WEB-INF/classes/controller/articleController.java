@@ -48,9 +48,33 @@ public class articleController extends HttpServlet{
 	           resp.put("response", data);
 	           response.setContentType("application/json");
 		       response.setCharacterEncoding("UTF-8");
-		       response.getWriter().write(resp.toString());
-
-            
+		       response.getWriter().write(resp.toString());     
     }
+	public void doDelete(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+
+	    // Extract article ID from the request
+	    String idStr = request.getParameter("id");
+	    int id = Integer.parseInt(idStr);
+
+	    // Call the delete method from articleHelper
+	    JSONObject data = ah.deleteByID(id);
+
+	    // Prepare the response
+	    JSONObject resp = new JSONObject();
+	    if (data.getInt("row") > 0) {
+	        resp.put("status", "200");
+	        resp.put("message", "Article deleted successfully");
+	    } else {
+	        resp.put("status", "400");
+	        resp.put("message", "Article deletion failed");
+	        resp.put("response",data);
+	    }
+
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write(resp.toString());
+	}
+
 }
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Announcement</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .green-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Modify Announcement</h2>
+        
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title">
+            </div>
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea id="content" name="content"></textarea>
+            </div>
+            <div id="flashMessage" class="message" style="display: none;"></div>
+
+            <button type="button" class="green-button" id="submit">Confirm Modify</button>
+    </div>
+
+ <script type="text/javascript">
+   	var url_string = window.location.href;
+    var url = new URL(url_string);
+    var announcement_id = url.searchParams.get("announcement_id");
+   	var id = url.searchParams.get("id");
+    $(document).ready(function () {
+        var $form = $('#submit');
+        $form.click(function () {
+            submit();
+        });
+
+        function submit() {
+            var title = $('#title').val();
+            var content = $('#content').val();
+
+            if (!title || !content) {
+                alert("Please fill in both title and content fields.");
+            } else {
+                var data_object = {
+                    "title": title,
+                    "content": content,
+                    "announcement_id":announcement_id
+                };
+                var data_string = JSON.stringify(data_object);
+
+                $.ajax({
+                    type: "POST",
+                    url: "api/announcement.do",
+                    data: data_string,
+                    crossDomain: true,
+                    cache: false,
+                    dataType: 'json',
+                    timeout: 5000,
+                    success: function (response) {
+                        if (response.status == 200) {
+                            alert("更新成功");
+                            window.location.href = 'announcement_list.html?id='+id;
+                        }
+                    },
+                    error: function () {
+                        alert("無法連線到伺服器！");
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

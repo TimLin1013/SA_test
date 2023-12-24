@@ -15,11 +15,12 @@ public class article {
 		this.article_time=article_time;
 		this.member_id=member_id;
 	}
-	public article (int member_id,String title,String article_content,Timestamp article_time) {
+	public article (int member_id,String title,String article_content,Timestamp article_time,int article_id) {
 		this.article_content=article_content;
 		this.title=title;
 		this.article_time=article_time;
 		this.member_id=member_id;
+		this.article_id=article_id;
 	}
 	public article (String title,String article_content,int member_id) {
 		this.article_content=article_content;
@@ -38,6 +39,7 @@ public class article {
 		jso.put("article_content",getArticle_content());
 		jso.put("article_time", getArticle_time());
 		jso.put("member_id",getMember_id());
+		jso.put("article_id",getArticle_id());
 		return jso;
 	}
 	public String getTitle() {
@@ -51,6 +53,9 @@ public class article {
 	}
 	public String getArticle_content() {
 		return this.article_content;
+	}
+	public int getArticle_id() {
+		return this.article_id;
 	}
 }
 
