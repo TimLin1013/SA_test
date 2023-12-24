@@ -31,7 +31,7 @@ public class messageHelper {
             conn = DBMgr.getConnection();
             /** SQL指令 */
             String sql = "INSERT INTO `sa`.`tbl_message`(`message_content`, `message_time`,`article_id`, `member_id`)"
-                    + " VALUES(?, ?, ?, ?, ?)";
+                    + " VALUES(?, ?, ?, ?)";
             
             /** 取得所需之參數 */
             String message_content = mes.getContent();            
@@ -45,8 +45,8 @@ public class messageHelper {
             pres = conn.prepareStatement(sql);
             pres.setString(1, message_content);
             pres.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            pres.setInt(3, article_id);
-            pres.setInt(4, member_id);
+            //pres.setInt(3, article_id);
+            pres.setInt(3, member_id);
             
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
