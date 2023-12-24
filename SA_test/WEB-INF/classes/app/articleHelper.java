@@ -116,10 +116,10 @@ public class articleHelper {
                 String title = rs.getString("title");
                 String  article_content= rs.getString("article_content");
                 Timestamp article_time= rs.getTimestamp("article_time");
-                
+                int article_id = rs.getInt("article_id");
                 
                 /** 將每一筆article資料產生一名新article物件 */
-                a = new article(id,title, article_content,article_time);
+                a = new article(id,title, article_content,article_time,article_id);
                 /** 取出該article之資料並封裝至 JSONsonArray 內 */
                 jsa.put(a.getData());
             }
@@ -197,7 +197,7 @@ public class articleHelper {
             conn = DBMgr.getConnection();
             
             /** SQL指令 */
-            String sql = "DELETE FROM `sa`.`tbl_article` WHERE `member_id` = ? LIMIT 2";
+            String sql = "DELETE FROM `sa`.`tbl_article` WHERE `article_id` = ? LIMIT 2";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);

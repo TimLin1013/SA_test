@@ -136,6 +136,7 @@ public class paidrecordHelper {
 
 		return response;
 	}
+	//生成序列亂數
 	private static int generateRandomNumber(int digits, Random random) {
 	        // 確保digits在有效範圍內
 	        if (digits <= 0 || digits > 10) {

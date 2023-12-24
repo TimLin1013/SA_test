@@ -22,7 +22,7 @@ public class AnnouncementHelper {
     /**
      * 创建公告
      */
-    public JSONObject create(Announcement announcement) {
+    public JSONObject create(Announcement a) {
         String execute_sql = "";
         long start_time = System.nanoTime();
         int row = 0;
@@ -30,16 +30,17 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
-            String sql = "INSERT INTO `sa`.`tbl_announcement`(`title`, `content`, `created_time`) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO `sa`.`tbl_announcement`(`announcement_content`, `announcement_time`, `member_id`,`announcement_title`) VALUES (?, ?, ?,?)";
 
-            String title = announcement.getTitle();
-            String content = announcement.getContent();
+            String title =a.getTitle();
+            String content = a.getContent();
+            int id=a.getAdminId();
 
             pres = conn.prepareStatement(sql);
-            pres.setString(1, title);
-            pres.setString(2, content);
-            pres.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-
+            pres.setString(1, content);
+            pres.setTimestamp(2,Timestamp.valueOf(LocalDateTime.now()) );
+            pres.setInt(3, id);
+            pres.setString(4, title);
             row = pres.executeUpdate();
 
         } catch (SQLException e) {
@@ -116,16 +117,17 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
-            String sql = "UPDATE `sa`.`tbl_announcement` SET `title` = ?, `content` = ? WHERE `announcement_id` = ?";
+            // 更新语句中 SET 和 WHERE 子句应该是分开的
+            String sql = "UPDATE `sa`.`tbl_announcement` SET `announcement_title` = ?, `announcement_content` = ? WHERE `announcement_id` = ?";
 
             String title = announcement.getTitle();
             String content = announcement.getContent();
-            int id = announcement.getAdminId();
+            int announcement_id = announcement.getAnnouncement_id();
 
             pres = conn.prepareStatement(sql);
             pres.setString(1, title);
             pres.setString(2, content);
-            pres.setInt(3, id);
+            pres.setInt(3, announcement_id);
 
             row = pres.executeUpdate();
 
@@ -152,10 +154,11 @@ public class AnnouncementHelper {
         return response;
     }
 
+
     /**
      * 获取所有公告
      */
-    public JSONObject getAllAnnouncements() {
+    public JSONObject getAllAnnouncement() {
         Announcement announcement = null;
         JSONArray jsa = new JSONArray();
         String execute_sql = "";
@@ -177,13 +180,13 @@ public class AnnouncementHelper {
             while (rs.next()) {
                 row += 1;
 
-                int id = rs.getInt("announcement_id");
-                String title = rs.getString("title");
-                String content = rs.getString("content");
-                Timestamp create_time = rs.getTimestamp("created_time");
-
-                announcement = new Announcement(id, title, content, create_time);
-                jsa.put(announcement.getData());
+               int id = rs.getInt("member_id");
+               String title = rs.getString("announcement_title");
+               String content = rs.getString("announcement_content");
+               Timestamp create_time = rs.getTimestamp("announcement_time");
+               int announcement_id=rs.getInt("announcement_id");
+              announcement = new Announcement(announcement_id,id, title, content, create_time);
+              jsa.put(announcement.getData());
             }
 
         } catch (SQLException e) {
@@ -210,12 +213,10 @@ public class AnnouncementHelper {
      * 根据ID获取公告
      */
     public JSONObject getAnnouncementByID(int id) {
-        Announcement announcement = null;
-        JSONArray jsa = new JSONArray();
+
         String execute_sql = "";
         long start_time = System.nanoTime();
         int row = 0;
-        ResultSet rs = null;
 
         try {
             conn = DBMgr.getConnection();
@@ -224,30 +225,18 @@ public class AnnouncementHelper {
 
             pres = conn.prepareStatement(sql);
             pres.setInt(1, id);
-
-            rs = pres.executeQuery();
+            row = pres.executeUpdate();
 
             execute_sql = pres.toString();
             System.out.println(execute_sql);
 
-            while (rs.next()) {
-                row += 1;
-
-                int announcementId = rs.getInt("announcement_id");
-                String title = rs.getString("title");
-                String content = rs.getString("content");
-                Timestamp create_time = rs.getTimestamp("created_time");
-
-                announcement = new Announcement(announcementId, title, content, create_time);
-                jsa.put(announcement.getData());
-            }
 
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBMgr.close(rs, pres, conn);
+            DBMgr.close( pres, conn);
         }
 
         long end_time = System.nanoTime();
@@ -257,7 +246,7 @@ public class AnnouncementHelper {
         response.put("sql", execute_sql);
         response.put("row", row);
         response.put("time", duration);
-        response.put("data", jsa);
+
 
         return response;
     }
