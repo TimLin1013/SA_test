@@ -22,7 +22,7 @@ import tools.JsonReader;
 public class messageController extends HttpServlet{
 	private messageHelper msh = messageHelper.getHelper();
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
+	    throws ServletException, IOException {
 	    JsonReader jsr = new JsonReader(request);
 	    JSONObject jso = jsr.getObject();
 	    int article_id = jso.getInt("article_id");
