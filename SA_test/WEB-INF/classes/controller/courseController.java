@@ -26,14 +26,16 @@ public class courseController extends HttpServlet{
   }
   public void doPut(HttpServletRequest request, HttpServletResponse response)//新增設課評價和繳交作業
 	      throws ServletException, IOException {
-	  String submitHomework= request.getParameter("Homework");	
+	 String submitHomework= request.getParameter("Homework");	
 	  int member_id = Integer.parseInt(request.getParameter("member_id"));
 	  int course_id = Integer.parseInt(request.getParameter("course_id"));
-	  int course_value = Integer.parseInt(request.getParameter("rating"));
+	  String Str_course_value = request.getParameter("rating");
 	  String content=request.getParameter("content");
-	  if(submitHomework.equals("Yes")) {
-		  JSONObject data = ch.submitHomework(member_id,course_id,content);
-		  JSONObject resp = new JSONObject();
+	  
+	  if("Yes".equals(submitHomework)) {
+		  	JSONObject resp = new JSONObject();
+		  	JSONObject data = ch.submitHomework(member_id,course_id,content);
+		 
 			resp.put("status", "200");
 			resp.put("message", "所有資料取得成功");
 			resp.put("response", data);    
@@ -42,10 +44,10 @@ public class courseController extends HttpServlet{
 			response.getWriter().write(resp.toString());
 	  }
 	  else {
-		
+		  JSONObject resp = new JSONObject();
+		  int course_value=Integer.parseInt(Str_course_value);
 		JSONObject data = ch.createCourseRating(member_id,course_id,course_value);
 		int Rating =ch.getRating(member_id,course_id);
-		JSONObject resp = new JSONObject();
 		resp.put("status", "200");
 		resp.put("message", "所有資料取得成功");
 		resp.put("response", data);    
@@ -53,7 +55,7 @@ public class courseController extends HttpServlet{
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(resp.toString()); 
-	  }
+	 }
 	  
 	  	
 	      

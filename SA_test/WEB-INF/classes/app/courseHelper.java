@@ -181,7 +181,7 @@ public class courseHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "INSERT INTO `sa`.`tbl_course_value` (`member_id`, `course_id`,`content`,`score`,`homework_time`) VALUES (?, ?, ?)";
+	            String sql = "INSERT INTO `sa`.`tbl_homework` (`member_id`, `course_id`,`content`,`score`,`homework_time`) VALUES (?, ?, ?,?,?)";
 
 	        
 	            
@@ -190,6 +190,8 @@ public class courseHelper {
 	            pres.setInt(1, member_id);
 	            pres.setInt(2, course_id);
 	            pres.setString(3, content );
+	            pres.setInt(4,0);
+	            pres.setTimestamp(5,Timestamp.valueOf(LocalDateTime.now()));
 	           
 	            
 	            /** 執行新增之SQL指令並記錄影響之行數 */
