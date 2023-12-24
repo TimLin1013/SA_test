@@ -74,7 +74,7 @@
                     var data_string = JSON.stringify(data_object);
 
                     $.ajax({
-                        type: "POST", // Assuming you want to use POST for modifying an announcement
+                        type: "POST",
                         url: "api/announcement.do",
                         data: data_string,
                         crossDomain: true,
@@ -84,14 +84,50 @@
                         success: function (response) {
                             $('#flashMessage').html(response.message);
                             $('#flashMessage').show();
-                            // Additional logic for success
+                            if(response.status == 200){
+                                 getAnnouncement();
+                                 alert("更新成功");
+                                 window.location.href = 'announcement_list.html';
+                            }
                         },
                         error: function () {
-                            alert("Unable to connect to the server!");
+                            alert("無法連線到伺服器！");
                         }
-                    });
-                }
+                });
             }
+        }
+        function getAnnouncement() {
+            $.ajax({
+                type: "GET",
+                url: "api/announcement.do",
+                crossDomain: true,
+                data: "id=" + id,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if(response.status == 200){
+                    
+                    	document.getElementById('title').value = response['response']['data'][0]['title'];
+                    	document.getElementById('content').value = response['response']['data'][0]['content'];
+                    	
+                    }
+                    console.log(response);
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            });
+        }
+
+        $('#submit').click(function() {
+            updateAnnouncement(id)
+        });
+        
+        $(document).ready(function() {
+        	// 發出GET的AJAX請求取得原本該會員的資料
+         	$("#sql_log > tbody").empty();
+            getAnnouncement();
         });
     </script>
 </body>
