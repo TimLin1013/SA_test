@@ -28,10 +28,7 @@ public class AnnouncementController extends HttpServlet {
 	        String content = jso.getString("content");
 	        int id = jso.getInt("id");
 	        Announcement a = new Announcement(title,content,id);
-	        if(title.isEmpty() || content.isEmpty()) {
-	            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
-	            jsr.response(resp, response);
-	        }
+	        
 	        
 	            JSONObject data = ah.create(a);//member_helper中有一個create
 
@@ -96,12 +93,12 @@ public class AnnouncementController extends HttpServlet {
 	        JSONObject jso = jsr.getObject();
 	        
 	        /** 取出經解析到JSONObject之Request參數 */
-	        int id = jso.getInt("id");
+	        int announcement_id = jso.getInt("announcement_id");
 	        String title = jso.getString("title");
 	        String content = jso.getString("content");
-
+	        
 	        /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-	        Announcement a = new Announcement(title,content, id);
+	        Announcement a = new Announcement(announcement_id,title,content);
 	        
 	        /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
 	        JSONObject data = ah.update(a);
