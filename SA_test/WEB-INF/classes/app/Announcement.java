@@ -31,7 +31,11 @@ public class Announcement {
         this.title = title;
         this.admin_id = admin_id;
     }
-
+    public Announcement( int announcement_id,String title, String announcement_content) {
+        this.announcement_content = announcement_content;
+        this.title = title;
+        this.announcement_id = announcement_id;
+    }
     public Announcement(int member_id) {
         this.admin_id = member_id;
     }

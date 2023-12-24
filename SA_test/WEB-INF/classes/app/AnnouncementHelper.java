@@ -30,16 +30,17 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
-            String sql = "INSERT INTO `sa`.`tbl_announcement`(`announcement_`content, `announcement_time`, `member_id`,`announcement_title`) VALUES (?, ?, ?,?)";
+            String sql = "INSERT INTO `sa`.`tbl_announcement`(`announcement_content`, `announcement_time`, `member_id`,`announcement_title`) VALUES (?, ?, ?,?)";
 
             String title =a.getTitle();
             String content = a.getContent();
+            int id=a.getAdminId();
 
             pres = conn.prepareStatement(sql);
-            pres.setString(1, title);
-            pres.setString(2, content);
-            pres.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-
+            pres.setString(1, content);
+            pres.setTimestamp(2,Timestamp.valueOf(LocalDateTime.now()) );
+            pres.setInt(3, id);
+            pres.setString(4, title);
             row = pres.executeUpdate();
 
         } catch (SQLException e) {
@@ -116,16 +117,17 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
+            // 更新语句中 SET 和 WHERE 子句应该是分开的
             String sql = "UPDATE `sa`.`tbl_announcement` SET `announcement_title` = ?, `announcement_content` = ? WHERE `announcement_id` = ?";
 
             String title = announcement.getTitle();
             String content = announcement.getContent();
-            int id = announcement.getAdminId();
+            int announcement_id = announcement.getAnnouncement_id();
 
             pres = conn.prepareStatement(sql);
             pres.setString(1, title);
             pres.setString(2, content);
-            pres.setInt(3, id);
+            pres.setInt(3, announcement_id);
 
             row = pres.executeUpdate();
 
@@ -151,6 +153,7 @@ public class AnnouncementHelper {
 
         return response;
     }
+
 
     /**
      * 获取所有公告

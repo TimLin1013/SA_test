@@ -101,7 +101,7 @@
 				        table_html += '<td>' + value['title'] + '</td>';
 				        table_html += '<td>' + value['announcement_content'] + '</td>';
 				        table_html += '<td>' + value['admin_id'] + '</td>'; // 新增建立者欄位
-				        table_html += '<td>' + '<a href="edit_ann.html?id=' + value['announcement_id'] + '">修改</a> | ';
+				        table_html += '<td>' + '<a href="edit_ann.html?announcement_id=' + value['announcement_id'] +"&id="+id+ '">修改</a> | ';
 				        table_html += '<a href="javascript: deleteAnnouncement(' + value['announcement_id'] + ');">刪除</a></td>';
 				        table_html += '</tr>';
 				    });
