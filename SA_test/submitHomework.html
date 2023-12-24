@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>社課作業繳交</title>
     <style>
         body {
@@ -35,16 +36,49 @@
 <body>
     <h1>作業繳交</h1>
     <p>請輸入文字:</p>
-    <textarea id="inputBox" placeholder="在這裡輸入文字..."></textarea>
+    <textarea id="inputBox" placeholder="在這裡輸入心得..."></textarea>
     
     <!-- 新增繳交按鈕 --> 
     <button id="submitButton" onclick="submitAssignment()">繳交</button>
 
     <script>
+		// 從 URL 中取得參數
+	    const urlParams = new URLSearchParams(window.location.search);
+	    
+	    // 從參數中取得相應的值
+	    const courseName = urlParams.get("course_name");
+	    const courseTime = urlParams.get("course_time");
+	    const courseLocation = urlParams.get("course_location");
+	    const teacherId = urlParams.get("teacher_id");
+	    const courseId =urlParams.get("course_id");
+	    const member_id=urlParams.get("id");
         function submitAssignment() {
-            // 在這裡可以加入處理繳交邏輯的 JavaScript 代碼
-            var userInput = document.getElementById("inputBox").value;
-            alert(userInput);
+            var content = document.getElementById("inputBox").value;
+          	var data_string ="member_id="+encodeURIComponent(member_id)+"&course_id="+encodeURIComponent(courseId)+"&content="+encodeURIComponent(content)+"&Homework="+encodeURIComponent("Yes");
+          
+	    	 $.ajax({
+	            type: "PUT",
+	            url: "api/course.do?"+data_string,
+	            data: data_string,  
+	            crossDomain: true,
+	            cache: false,
+	            dataType: 'json', 
+	            timeout: 5000,
+	            success: function (response) {
+				       if(response.response.row===0){
+						    alert("您已繳交過")
+					   }
+					   else{
+						  ;alert("成功繳交");
+					   }
+				      
+				    },
+				    error: function () {
+				        alert("無法連線到伺服器！");
+				    }
+	          
+	        });
+            
         }
     </script>
 </body>

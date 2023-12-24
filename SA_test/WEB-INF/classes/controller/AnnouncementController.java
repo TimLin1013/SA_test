@@ -28,10 +28,7 @@ public class AnnouncementController extends HttpServlet {
 	        String content = jso.getString("content");
 	        int id = jso.getInt("id");
 	        Announcement a = new Announcement(title,content,id);
-	        if(title.isEmpty() || content.isEmpty()) {
-	            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
-	            jsr.response(resp, response);
-	        }
+	        
 	        
 	            JSONObject data = ah.create(a);//member_helper中有一個create
 
@@ -50,20 +47,19 @@ public class AnnouncementController extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 		
-	      JsonReader jsr = new JsonReader(request);
-	        JSONObject jso = jsr.getObject();
-	    String title = request.getParameter("title");
-	    String content = request.getParameter("content");
-	    String id = request.getParameter("id");
+	    
+	   // String title = request.getParameter("title");
+	   // String content = request.getParameter("content");
+	   // String id = request.getParameter("id");
 	    
 
-	    JSONObject query = ah.getAnnouncementByID(Integer.parseInt(id));
-           
+	  //  JSONObject query = ah.getAnnouncementByID(Integer.parseInt(id));
+           JSONObject data = ah.getAllAnnouncement();
            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
            JSONObject resp = new JSONObject();
            resp.put("status", "200");
            resp.put("message", "公告資料取得成功");
-           resp.put("response", query);
+           resp.put("response", data);
            response.setContentType("application/json");
 	       response.setCharacterEncoding("UTF-8");
 	       response.getWriter().write(resp.toString());
@@ -97,12 +93,12 @@ public class AnnouncementController extends HttpServlet {
 	        JSONObject jso = jsr.getObject();
 	        
 	        /** 取出經解析到JSONObject之Request參數 */
-	        int id = jso.getInt("id");
+	        int announcement_id = jso.getInt("announcement_id");
 	        String title = jso.getString("title");
 	        String content = jso.getString("content");
-
+	        
 	        /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-	        Announcement a = new Announcement(title,content, id);
+	        Announcement a = new Announcement(announcement_id,title,content);
 	        
 	        /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
 	        JSONObject data = ah.update(a);
