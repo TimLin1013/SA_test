@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Admin Page</title>
+    <link rel="stylesheet" href="statics/css/registerStyle.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Create Admin</h2>
+        <form class="register-form">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="group">Group:</label>
+                <select id="group" name="group">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="flute">直笛</option>
+                    <option value="triangle">三角鐵</option>
+                    <option value="xylophone">響板</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="identity">Identity:</label>
+                <select id="identity" name="identity">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="1">社員</option>
+                    <option value="2">系統管理員</option>
+                    <option value="3">老師</option>
+                </select>
+            </div>
+
+            <button type="button" class="submit" id="submit">Submit</button>      
+        </form>
+    </div>
+
+    <script type="text/javascript">
+                // 取得網址參數
+
+                function createAdmin(id) {
+                    var name = $('#name').val();
+                    var email = $('#email').val();
+                    var password = $('#password').val();
+                    var phone = $('#phone').val();
+                    var group = $('#group').val();
+					var identity = $('#identity').val();
+                    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+                    if(!password_rule.test(password)) {
+                        alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+                    }
+                    else {
+                        // 將資料組成JSON格式
+                        var data_object = {
+                            "id": id,
+                            "email": email,
+                            "name": name,
+                            "password": password,
+                            "phone": phone,
+                            "identity": identity,
+                            "group":group
+                        };
+
+                        // 將JSON格式轉換成字串
+                        var data_string = JSON.stringify(data_object);
+
+            
+                        $.ajax({
+                                type: "POST",
+                                url: "api/member.do",
+                                data: data_string,
+                                crossDomain: true,
+                                cache: false,
+                                dataType: 'json',
+                                timeout: 5000,
+                                success: function (response) {
+                                    $('#flashMessage').html(response.message);
+                                    $('#flashMessage').show();
+                                    if(response.status == 200){
+                                         getMember();
+                                         alert("新增成功");
+                                         window.location.href = 'admin_home_page.html';
+                                    }
+                                },
+                                error: function () {
+                                    alert("無法連線到伺服器！");
+                                }
+                        });
+                    }
+                }
+
+    </script>
+</body>
+</html>
