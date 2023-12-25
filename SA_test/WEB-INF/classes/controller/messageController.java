@@ -30,6 +30,7 @@ public class messageController extends HttpServlet{
 	    int article_id = jso.getInt("article_id");
 	    String message_content = jso.getString("message_content");
 	    String message_time= jso.getString("message_time");
+	    
 	    Timestamp messageTime = null;
 
 	    try {
@@ -58,20 +59,17 @@ public class messageController extends HttpServlet{
 	// Handle GET requests for retrieving messages
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 	        throws ServletException, IOException {
-	    String articleIdString = request.getParameter("article_id");
-	    if (articleIdString != null && !articleIdString.isEmpty()) {
-	        try {
-	            int articleId = Integer.parseInt(articleIdString);
-	            JSONObject replies = msh.getByArticleId(articleId);
-	            response.setContentType("application/json");
-	            response.setCharacterEncoding("UTF-8");
-	            response.getWriter().write(replies.toString());
-	        } catch (NumberFormatException e) {
-	            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid article ID");
-	        }
-	    } else {
-	        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Article ID is required");
-	    }
+		String Str_article_id = request.getParameter("article_id");	
+		int article_id=Integer.parseInt(Str_article_id);
+		JSONObject query = msh.getmessageByid(article_id);
+			
+	      JSONObject resp = new JSONObject();
+	      resp.put("status", "200");
+	      resp.put("message", "所有資料取得成功");
+	      resp.put("response", query);        
+	      response.setContentType("application/json");
+	      response.setCharacterEncoding("UTF-8");
+	      response.getWriter().write(resp.toString());
 	}
 
 }
