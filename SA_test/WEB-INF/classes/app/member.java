@@ -38,13 +38,12 @@ public class member {
         this.id=id;
         this.identity=identity;
 	}
-	public member(int id,String name,String password,String phone,String group,String identity) {
+	public member(int id,String name,String password,String phone,String group) {
 		this.name=name;
         this.password=password;
         this.phone=phone;
         this.group=group; 
         this.id=id;
-        this.identity=identity;
 	}
 	public member(String account,String name,String password,String phone,String group,String identity) {
 		this.name=name;

@@ -181,11 +181,10 @@ public class memberController extends HttpServlet {
 	        String phone = jso.getString("phone");
 	        String password = jso.getString("password");
 	        String name = jso.getString("name");
-	        String identity = jso.getString("identity");
 	        String group = jso.getString("group");
 
 	        /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-	        member m = new member(id,name, password,phone,group,identity);
+	        member m = new member(id,name, password,phone,group);
 	        
 	        /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
 	        JSONObject data = m.update();

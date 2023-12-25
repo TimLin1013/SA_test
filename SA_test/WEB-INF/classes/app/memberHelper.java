@@ -558,22 +558,20 @@ public class memberHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa`.`tbl_member` SET `member_name` = ? ,`member_password` = ? , `member_phone` = ? , `member_group` = ?, `identity` = ? WHERE `member_id` = ?";
+            String sql = "Update `sa`.`tbl_member` SET `member_name` = ? ,`member_password` = ? , `member_phone` = ? , `member_group` = ? WHERE `member_id` = ?";
             /** 取得所需之參數 */
             String name = m.getName();
             int id = m.getID();
             String password = m.getPassword();
             String phone = m.getPhone();
             String group = m.getGroup();
-            String identity = m.getIdentity();
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1, name);
             pres.setString(2, password);
             pres.setString(3, phone);
             pres.setString(4, group);
-            pres.setString(5, identity);
-            pres.setInt(6, id);
+            pres.setInt(5, id);
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
