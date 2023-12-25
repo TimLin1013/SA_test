@@ -81,6 +81,7 @@
            	function deleteByid(borrowRecordID,instrumentID) {
 			var request = {'id': borrowRecordID,'instrument_id' :instrumentID};
             var data_string = JSON.stringify(request);
+
          	$.ajax({
             	type: "DELETE",
                 url: "api/borrowrecord.do?",
@@ -126,7 +127,7 @@ $.each(data, function(index, value) {
     var returnTime = new Date(value['return_time']).getTime();
 
     if (borrowTime > currentTime) {
-        table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ')">取消登記</button></td>';
+        table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] +','+value['instrument_id']+')">取消登記</button></td>';
     } else if (isNaN(returnTime)) {
         table_html += '<td>未歸還</td>';   
     } else {
