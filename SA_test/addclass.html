@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <title>社課輸入介面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #FADDA5;
+            border: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h2>社課輸入介面</h2>
+
+<form id="class-input-form">
+    <label for="courseName">社課名稱:</label>
+    <input type="text" id="courseName" name="courseName" required>
+
+    <label for="teacherID">老師ID:</label>
+    <input type="text" id="teacherID" name="teacherID" required>
+
+    <label for="datetime">時間:</label>
+    <input type="datetime-local" id="datetime" name="datetime" required>
+
+    <label for="location">地點:</label>
+    <input type="text" id="location" name="location" required>
+
+    <button type="button" onclick="submitClass()">提交</button>
+</form>
+
+<script>
+    function submitClass() {
+        // 獲取輸入的值
+        var courseName = document.getElementById("courseName").value;
+        var teacherID = document.getElementById("teacherID").value;
+        var datetime = document.getElementById("datetime").value;
+        var location = document.getElementById("location").value;
+		var data_object = {
+		    "course_name": courseName,
+		    "teacher_id": teacherID,
+		    "course_start_time":datetime,
+		    "course_location":location
+		};
+		var data_string = JSON.stringify(data_object);
+
+		$.ajax({
+	            type: "Put",
+	            url: "api/course.do?admin=yes",
+	            data: data_string,
+	            crossDomain: true,
+	            cache: false,
+	            dataType: 'json',
+	            timeout: 5000,
+	            success: function (response) {
+	                console.log (response);
+	                if(response.status == 200){
+	                     if(response.response.row==0){
+							 alert("老師ID不存在");
+						 }
+						 else{
+							 alert("新增成功");
+						 }
+	                }
+	            },
+	            error: function () {
+	                alert("無法連線到伺服器！");
+	            }
+	    });
+        
+        // 清空表單
+        document.getElementById("class-input-form").reset();
+    }
+</script>
+
+</body>
+</html>

@@ -170,61 +170,72 @@ function filterCanSignUpClasses() {
     });
 
     function displayClassInfo() {
-        const container = document.getElementById("class-info-container");
-		container.innerHTML = ""; // 清除現有內容
-		const heading = document.createElement("h2");
-    	heading.textContent = "可報名社課列表";
-        container.appendChild(heading);
-        
+    const container = document.getElementById("class-info-container");
+    container.innerHTML = ""; // 清除現有內容
+    const heading = document.createElement("h2");
+    heading.textContent = "報名社課列表";
+    container.appendChild(heading);
 
-        canSignUpClasses.forEach((classInfo, index) => {
-            const classDiv = document.createElement("div");
-            classDiv.classList.add("class-info");
+    canSignUpClasses.forEach((classInfo, index) => {
+        const classDiv = document.createElement("div");
+        classDiv.classList.add("class-info");
 
-            const signUpButton = document.createElement("button");
-            signUpButton.textContent = "報名";
-            signUpButton.addEventListener("click", () => handleSignUp(index));
-            classDiv.appendChild(signUpButton);
+        const signUpButton = document.createElement("button");
+        signUpButton.textContent = "報名";
+        signUpButton.addEventListener("click", () => handleSignUp(index));
+        classDiv.appendChild(signUpButton);
 
-            const infoText = document.createTextNode(`課名: ${classInfo.course_name}, 時間: ${classInfo.course_time}, 地點: ${classInfo.course_location}, 老師id: ${classInfo.teacher_id}`);
-            classDiv.appendChild(infoText);
+        const infoText = document.createTextNode(`課名: ${classInfo.course_name}, 時間: ${classInfo.course_time}, 地點: ${classInfo.course_location}, 老師id: ${classInfo.teacher_id}`);
+        classDiv.appendChild(infoText);
 
-            container.appendChild(classDiv);
-        });
-    }
+        // 判斷是否已經過去的課程，如果是，加上 "已結束" 文字
+        if (isPastTime(classInfo.course_start_time)) {
+            const pastText = document.createTextNode(" (已結束)");
+            classDiv.appendChild(pastText);
+        }
+
+        container.appendChild(classDiv);
+    });
+}
 
     function handleSignUp(index) {
-        const signedUpClass = canSignUpClasses[index];
+    const signedUpClass = canSignUpClasses[index];
 
-       
-        signedUpClasses.push(signedUpClass);
-
-        var data_string = "id=" + encodeURIComponent(id) + "&course_id=" + encodeURIComponent(canSignUpClasses[index].course_id);
-
-        $.ajax({
-            type: "PUT",
-            url: "api/courserecord.do?" + data_string,
-            crossDomain: true,
-            cache: false,
-            dataType: 'json',
-            timeout: 5000,
-            success: function (response) {
-                console.log(response);
-            },
-            error: function () {
-                alert("無法連線到伺服器！");
-            }
-        });
-
-        // Display past sign-ups
-        displayPastSignUps();
-
-        // Remove the signed-up class from the available classes
-        canSignUpClasses.splice(index, 1);
-
-        // Update the displayed classes
-        displayClassInfo();
+    // 检查课程是否已经结束
+    if (isPastTime(signedUpClass.course_start_time)) {
+        alert("抱歉，該課程已結束，無法報名。");
+        return;
     }
+
+    signedUpClasses.push(signedUpClass);
+
+    var data_string = "id=" + encodeURIComponent(id) + "&course_id=" + encodeURIComponent(canSignUpClasses[index].course_id);
+
+    $.ajax({
+        type: "PUT",
+        url: "api/courserecord.do?" + data_string,
+        crossDomain: true,
+        cache: false,
+        dataType: 'json',
+        timeout: 5000,
+        success: function (response) {
+            console.log(response);
+        },
+        error: function () {
+            alert("無法連線到伺服器！");
+        }
+    });
+
+    // Display past sign-ups
+    displayPastSignUps();
+
+    // Remove the signed-up class from the available classes
+    canSignUpClasses.splice(index, 1);
+
+    // Update the displayed classes
+    displayClassInfo();
+}
+
 
     function displayPastSignUps() {
     const pastSignUpsContainer = document.getElementById("past-signups-container");
@@ -282,7 +293,21 @@ function filterCanSignUpClasses() {
         displayClassInfo();
         displayPastSignUps();
     }
+	// 判斷課程是否已經開始
+function isPastTime(courseStartTime) {
+    var now = new Date().toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    
+    var courseStart = new Date(courseStartTime).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    
+    // 將日期字符串轉換為日期對象
+    var nowDate = new Date(now);
+    
+    // 減去 8 小時的毫秒數
+    var courseStartDate = new Date(new Date(courseStart).getTime() - (8 * 60 * 60 * 1000));
 
+
+    return courseStartDate < nowDate;
+}
     displayClassInfo();
 </script>
 

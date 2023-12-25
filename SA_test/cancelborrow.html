@@ -111,7 +111,6 @@ $.each(data, function(index, value) {
     table_html += '<td>' + value['instrument_name'] + '</td>';
 
 
-    // 將 borrow_time 加上 8 小時
     var borrowTime = new Date(value['borrow_time']).getTime() - (8 * 60 * 60 * 1000);
     
     // 獲取 borrowTime 並調整格式
