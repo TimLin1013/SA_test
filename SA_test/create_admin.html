@@ -27,20 +27,11 @@
                 <label for="phone">Phone:</label>
                 <input type="tel" id="phone" name="phone">
             </div>
-            <div class="form-group">
-                <label for="group">Group:</label>
-                <select id="group" name="group">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="flute">直笛</option>
-                    <option value="triangle">三角鐵</option>
-                    <option value="xylophone">響板</option>
-                </select>
-            </div>
+            
             <div class="form-group">
                 <label for="identity">Identity:</label>
                 <select id="identity" name="identity">
                     <option value="" disabled selected>Select an option</option>
-                    <option value="1">社員</option>
                     <option value="2">系統管理員</option>
                     <option value="3">老師</option>
                 </select>
@@ -52,13 +43,21 @@
 
     <script type="text/javascript">
                 // 取得網址參數
-
-                function createAdmin(id) {
+				$(document).ready(function() {
+                    var $form = $('#submit');
+                    $form.click(function() {
+                      	createAdmin();
+                    });
+                });
+                
+                
+                function createAdmin() {
+					alert("a");
                     var name = $('#name').val();
                     var email = $('#email').val();
                     var password = $('#password').val();
                     var phone = $('#phone').val();
-                    var group = $('#group').val();
+                    var group = "無";
 					var identity = $('#identity').val();
                     var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
@@ -68,7 +67,6 @@
                     else {
                         // 將資料組成JSON格式
                         var data_object = {
-                            "id": id,
                             "email": email,
                             "name": name,
                             "password": password,
@@ -79,11 +77,9 @@
 
                         // 將JSON格式轉換成字串
                         var data_string = JSON.stringify(data_object);
-
-            
                         $.ajax({
-                                type: "POST",
-                                url: "api/member.do",
+                                type: "Put",
+                                url: "api/member.do?admin=yes",
                                 data: data_string,
                                 crossDomain: true,
                                 cache: false,
@@ -92,10 +88,10 @@
                                 success: function (response) {
                                     $('#flashMessage').html(response.message);
                                     $('#flashMessage').show();
+                                    console.log (response.response);
                                     if(response.status == 200){
-                                         getMember();
                                          alert("新增成功");
-                                         window.location.href = 'admin_home_page.html';
+                                         //window.location.href = 'admin_home_page.html';
                                     }
                                 },
                                 error: function () {
