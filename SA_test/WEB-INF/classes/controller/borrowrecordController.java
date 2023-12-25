@@ -77,7 +77,8 @@ public class borrowrecordController extends HttpServlet{
 	  		   JSONObject jso = jsr.getObject();
 	  		   
 		       int borrowrecordID=jso.getInt("id");
-		       JSONObject query = br.deleteByID(borrowrecordID);
+		       int instrumentID=jso.getInt("instrument_id");
+		       JSONObject query = br.deleteByID(borrowrecordID,instrumentID);
 		           
 		       /** 新建一個JSONObject用於將回傳之資料進行封裝 */
 		       JSONObject resp = new JSONObject();

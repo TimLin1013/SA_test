@@ -78,8 +78,8 @@
                 }
               });
            }
-           	function deleteByid(borrowRecordID) {
-			var request = {'id': borrowRecordID};
+           	function deleteByid(borrowRecordID,instrumentID) {
+			var request = {'id': borrowRecordID,'instrument_id' :instrumentID};
             var data_string = JSON.stringify(request);
          	$.ajax({
             	type: "DELETE",
@@ -101,6 +101,7 @@
               });
            }
             function updateTable(data) {
+
     $("#table > tbody").empty();
     var table_html = '';
 $.each(data, function(index, value) {
@@ -137,6 +138,7 @@ $.each(data, function(index, value) {
 $("#table > tbody").append(table_html);
 
 }
+
 
     </script>
     </div>
