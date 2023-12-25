@@ -2,240 +2,147 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Forum</title>
-	<style>
-	    body {
-	        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	        margin: 0;
-	        padding: 0;
-	        background-color: #2b2b2b; /* 深灰背景，不是純黑 */
-	        color: #f0f0f0; /* 亮色文字 */
-	    }
-	    .comment {
-	        margin-bottom: 10px;
-	        border: 1px solid #3d3d3d; /* 略深邊框 */
-	        padding: 10px;
-	        background-color: #333; /* 深色背景 */
-	        border-radius: 8px; /* 圓角邊框 */
-	        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 輕微陰影 */
-	    }
-	    .reply-form {
-	        margin-top: 10px;
-	        margin-left: 30px;
-	    }
-	    #new-discussion-button {
-	        display: block;
-	        margin: 20px auto;
-	        padding: 10px 20px;
-	        background-color: #4a4a4a; /* 深灰按鈕 */
-	        color: white;
-	        border: none;
-	        border-radius: 5px;
-	        cursor: pointer;
-	        transition: background-color 0.3s; /* 漸變效果 */
-	    }
-	    #new-discussion-button:hover {
-	        background-color: #5a5a5a; /* 滑鼠懸停時變色 */
-	    }
-	    .replies {
-	        margin-left: 20px;
-	    }
-	
-	    /* 輸入框和按鈕的樣式 */
-	    input[type="text"], textarea {
-	        width: 100%; /* 全寬 */
-	        padding: 8px;
-	        margin: 6px 0;
-	        display: inline-block;
-	        border: 1px solid #ccc;
-	        border-radius: 4px;
-	        box-sizing: border-box;
-	        background-color: #f0f0f0; /* 淺色背景 */
-	        color: #333; /* 深色文字 */
-	    }
-	
-	    input[type="submit"] {
-	        width: 100%;
-	        background-color: #4a4a4a;
-	        color: white;
-	        padding: 14px 20px;
-	        margin: 8px 0;
-	        border: none;
-	        border-radius: 4px;
-	        cursor: pointer;
-	    }
-	
-	    input[type="submit"]:hover {
-	        background-color: #5a5a5a;
-	    }
-	</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2b2b2b; /* 深灰背景，不是純黑 */
+            color: #f0f0f0; /* 亮色文字 */
+        }
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        #articles-list {
+            margin-top: 20px;
+        }
+
+        .article {
+            border: 1px solid #3d3d3d; /* 略深邊框 */
+            padding: 10px;
+            background-color: #333; /* 深色背景 */
+            border-radius: 8px; /* 圓角邊框 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 輕微陰影 */
+            margin-bottom: 10px;
+        }
+
+        .reply {
+            background-color: #444; /* 回覆的背景色 */
+            border: 1px solid #3d3d3d; /* 略深邊框 */
+            border-radius: 5px; /* 圓角邊框 */
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        #new-article-button, .reply-button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background-color: #4a4a4a; /* 深灰按鈕 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* 漸變效果 */
+        }
+
+        #new-article-button:hover, .reply-button:hover {
+            background-color: #5a5a5a; /* 滑鼠懸停時變色 */
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Forum</h1>
-    <div id="articles-list" style="margin-top: 20px;"></div>
-    <button id="new-discussion-button">新增討論</button>
-    <div id="comments"></div>
+    <h1>討論區</h1>
+    <button id="new-article-button">發起文章</button>
+    <div id="articles-list"></div>
 
     <script>
-        let replyFormIdCounter = 0;
+        async function displayArticles() {
+    const articlesList = document.getElementById('articles-list');
+    articlesList.textContent = '';
+
+    try {
+        const response = await $.ajax({
+            type: "GET",
+            url: "api/article.do",
+            contentType: 'application/json',
+        });
+
+        const articles = response.response.data;
+
+        for (const article of articles) {
+            const articleDiv = document.createElement('div');
+            articleDiv.classList.add('article');
+            articleDiv.innerHTML = `
+                <h3>${article.title}</h3>
+                <p>${article.article_content}</p>
+                <button class="reply-button" data-article-id="${article.article_id}">回覆</button>
+                <div class="replies-container" data-article-id="${article.article_id}"></div>`;
+
+            articlesList.appendChild(articleDiv);
+
+            const repliesContainer = articleDiv.querySelector('.replies-container');
+            await displayReplies(article.article_id, repliesContainer);
+
+            const replyButton = articleDiv.querySelector('.reply-button');
+            replyButton.addEventListener('click', showReplyDialog);
+        }
+    } catch (error) {
+        console.error("Error fetching articles:", error);
+        alert("Error fetching articles");
+    }
+}
+
+async function displayReplies(articleId, container) {
+    try {
+        const response = await $.ajax({
+            type: "GET",
+            url: "api/message.do?article_id=" + articleId,
+            contentType: 'application/json',
+        });
+
+        const replies = response.response.replies;
+
+        if (replies && replies.length > 0) {
+            replies.forEach(reply => {
+                const replyDiv = document.createElement('div');
+                replyDiv.classList.add('reply');
+                replyDiv.textContent = reply.message_content;
+                container.appendChild(replyDiv);
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching replies:", error);
+        alert("Error fetching replies");
+    }
+}
+
+// 其餘的程式碼...
 
 
-        function toggleReplyForm(article_id) {
-            const replyForm = document.getElementById(`reply-form-${article_id}`);
-            if (replyForm) {
-                replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+        function showNewArticleDialog() {
+            const title = prompt('輸入文章標題：');
+            const content = prompt('輸入文章內容：');
+
+            if (title && content) {
+                // 假設有一個添加文章的函數 addArticle
+                addArticle(title, content);
             }
         }
 
-        function handleReplyFormSubmit(event) {
+        function showReplyDialog(event) {
+            const articleId = event.target.getAttribute('data-article-id');
+            const content = prompt('回覆內容：');
 
-            event.preventDefault();
-            const form = event.target;
-            const comment = form.querySelector('textarea[name="reply-comment"]').value;
-            const messageContentDiv = form.closest('.message_content');
-            const article_id = messageContentDiv.getAttribute('data-article-id');
-
-            if (comment.trim() === '') {
-                alert('回覆內容不能為空！');
-                return;
+            if (content) {
+                // 假設有一個添加回覆的函數 addReply
+                addReply(articleId, content);
             }
-
-            postMessage(comment, new Date(), article_id);
-            const repliesContainer = messageContentDiv.querySelector('.replies') || createRepliesContainer(messageContentDiv);
-            const newReplyDiv = document.createElement('div');
-            newReplyDiv.classList.add('comment');
-            newReplyDiv.innerHTML = `<p>回覆：${comment}</p>`;
-
-            repliesContainer.appendChild(newReplyDiv);
-            form.reset();
         }
 
-
-        function createRepliesContainer(commentDiv) {
-            const repliesDiv = document.createElement('div');
-            repliesDiv.classList.add('replies');
-            commentDiv.appendChild(repliesDiv);
-            return repliesDiv;
-        }
-
-        function addNewDiscussion(title, content) {
-            const commentsSection = document.getElementById('comments');
-            const newDiscussionDiv = document.createElement('div');
-            newDiscussionDiv.classList.add('message_content');
-            const article_id = `comment-${++replyFormIdCounter}`;
-            newDiscussionDiv.innerHTML = `
-                <h3>${title}</h3>
-                <p>${content}</p>
-
-                <button class="reply-button" data-article-id="${article_id}">回覆</button>
-                <div class="reply-form" id="reply-form-${article_id}" style="display: none;">
-                    <form>
-                        <div>
-
-                            <label for="reply-comment-${article_id}">回覆內容：</label>
-                            <textarea id="reply-comment-${article_id}" name="reply-comment" rows="3" cols="40" required></textarea>
-                        </div>
-                        <div>
-                            <input type="submit" value="提交回覆">
-                        </div>
-                    </form>
-                </div>`;
-            commentsSection.appendChild(newDiscussionDiv);
-
-            const newReplyButton = newDiscussionDiv.querySelector('.reply-button');
-            newReplyButton.addEventListener('click', function() {
-                toggleReplyForm(article_id);
-            });
-
-
-            const newForm = newDiscussionDiv.querySelector('form');
-            newForm.addEventListener('submit', handleReplyFormSubmit);
-        }
-
-        function init() {
-            document.getElementById('new-discussion-button').addEventListener('click', function() {
-                const title = prompt('Please insert title：');
-                if (title !== null && title.trim() !== '') {
-                    const content = prompt('Please insert content：');
-                    if (content !== null && content.trim() !== '') {
-                        addNewDiscussion(title, content);
-                        postArticle(title, content);
-                    }
-                }
-            });
-
-            getArticle();
-        }
-        
-		function getArticle() {
-		    $.ajax({
-		        type: "GET",
-		        url: "/SA_test/api/article.do",
-		        dataType: 'json',
-		        success: function(response) {
-
-		            const articlesListDiv = document.getElementById('articles-list');
-		            if (response && response.response && Array.isArray(response.response.data)) {
-		                articlesListDiv.innerHTML = '';
-		                response.response.data.forEach(function(article) {
-		                    // Fetch and display replies for each article
-		                    getRepliesForArticle(article.article_id, function(replies) {
-								console.log("article_id:",article.article_id);
-		                        // Construct HTML for article and its replies
-		                        const articleDiv = document.createElement('div');
-		                        articleDiv.classList.add('message_content');
-		                        articleDiv.setAttribute('data-article-id', article.article_id);
-		
-		                        let repliesHTML = '';
-		                        replies.forEach(reply => {
-		                            repliesHTML += `<div class="comment"><p>${reply.message_content}</p></div>`;
-		                        });
-		
-		                        articleDiv.innerHTML = `
-		                            <h3>${article.title}</h3>
-		                            <p>${article.article_content}</p>
-		                            <span>Posted on: ${new Date(article.article_time).toLocaleString()}</span>
-		                            ${repliesHTML}
-		                            <button class="reply-button" data-article-id="${article.article_id}">Reply</button>
-		                            <div class="reply-form" id="reply-form-${article.article_id}" style="display: none;">
-		                                <form>
-		                                    <div>
-		                                        <label for="reply-comment-${article.article_id}">Reply Content:</label>
-		                                        <textarea id="reply-comment-${article.article_id}" name="reply-comment" rows="3" cols="40" required></textarea>
-		                                    </div>
-		                                    <div>
-		                                        <input type="submit" value="Submit Reply">
-		                                    </div>
-		                                </form>
-		                            </div>
-		                        `;
-		
-		                        articlesListDiv.appendChild(articleDiv);
-								const replyButton = articleDiv.querySelector('.reply-button');
-                            	replyButton.addEventListener('click', function() {
-                                toggleReplyForm(article.article_id);
-                            });
-
-                            const replyForm = articleDiv.querySelector('.reply-form form');
-                            replyForm.addEventListener('submit', handleReplyFormSubmit);
-		                    });
-		                });
-		            } else {
-		                console.error("Error: 'data' is not an array", response.response && response.response.data);
-		            }
-		        },
-
-		        error: function(jqXHR, textStatus, errorThrown) {
-		            console.error("AJAX error:", textStatus, errorThrown);
-		            alert("Unable to connect to the server!");
-		        }
-		    });
-		}
-
-
-        function postArticle(title, content) {
+        // 假設有一個添加文章的函數
+        function addArticle(title, content) {
             var url = new URL(window.location.href);
             var id = url.searchParams.get("id");
             var data = {
@@ -250,6 +157,7 @@
                 data: JSON.stringify(data),
                 success: function(response) {
                     console.log(response);
+                    displayArticles();  // 重新顯示文章列表
                 },
                 error: function() {
                     alert("Error posting article");
@@ -257,52 +165,52 @@
             });
         }
 
-        function postMessage(message_content, message_time, article_id) {
-            var url = new URL(window.location.href);
-            var id = url.searchParams.get("id");
-            var data = {
-                message_content: message_content,
-                message_time: message_time.toISOString(),
-                article_id: article_id,
-                member_id: id
-            };
-            $.ajax({
-                type: "POST",
-                url: "api/message.do",
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                success: function(response) {
-                    alert('回覆已成功提交！');
-                },
-                error: function() {
-                    alert('提交回覆時發生錯誤！');
-                }
-            });
-        }
-        
-        function getRepliesForArticle(article_id, callback) {
+        // 假設有一個添加回覆的函數
+        function addReply(articleId, content) {
+		    var url = new URL(window.location.href);
+		    var id = url.searchParams.get("id");
+		
+		    var currentDateTime = new Date();
+		    var formattedDateTime = currentDateTime.toISOString();
+		
+		    var data = {
+		        message_content: content,
+		        message_time: formattedDateTime,
+		        article_id: articleId,
+		        member_id: id
+		    };
+		
 		    $.ajax({
-		        type: "GET",
-		        url: `/SA_test/api/message.do?article_id=${article_id}`,
-		        dataType: 'json',
+		        type: "POST",
+		        url: "api/message.do",
+		        contentType: 'application/json',
+		        data: JSON.stringify(data),
 		        success: function(response) {
-		            if (response && response.replies) {
-		                callback(response.replies);
-		            } else {
-		                callback([]);
-		            }
+		            const repliesContainer = $(`[data-article-id="${articleId}"] .replies-container`);
+		            const replyDiv = document.createElement('div');
+		            replyDiv.classList.add('reply');
+		            replyDiv.textContent = content;
+		            repliesContainer.append(replyDiv);
+		
+		            alert('回覆已成功提交！');
+		            
+		            // 在成功添加回覆後，重新顯示文章和回覆列表
+		            displayArticles();
 		        },
 		        error: function() {
-		            callback([]);
+		            alert('提交回覆時發生錯誤！');
 		        }
 		    });
 		}
 
 
-        $(document).ready(function() {
-            init();
+        document.addEventListener('DOMContentLoaded', function () {
+            displayArticles();
 
+            const newArticleButton = document.getElementById('new-article-button');
+            newArticleButton.addEventListener('click', showNewArticleDialog);
         });
+       
     </script>
 </body>
 </html>

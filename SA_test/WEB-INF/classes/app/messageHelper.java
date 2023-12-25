@@ -44,9 +44,9 @@ public class messageHelper {
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1, message_content);
-            pres.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            //pres.setInt(3, article_id);
-            pres.setInt(3, member_id);
+            pres.setTimestamp(2, message_time);
+            pres.setInt(3, article_id);
+            pres.setInt(4, member_id);
             
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
@@ -78,8 +78,8 @@ public class messageHelper {
 
         return response;
     }
-    
-    public JSONObject getByArticleId(int article_id) {
+
+    public JSONObject getmessageByid(int id) {
         JSONObject result = new JSONObject();
         JSONArray messages = new JSONArray();
         String execute_sql = "";
@@ -88,7 +88,7 @@ public class messageHelper {
             conn = DBMgr.getConnection();
             String sql = "SELECT * FROM `tbl_message` WHERE `article_id` = ?";
             pres = conn.prepareStatement(sql);
-            pres.setInt(1, article_id);
+            pres.setInt(1, id);  // Set the article_id parameter
 
             ResultSet rs = pres.executeQuery();
 
@@ -99,7 +99,7 @@ public class messageHelper {
                 message.put("message_time", rs.getTimestamp("message_time").toString());
                 message.put("article_id", rs.getInt("article_id"));
                 message.put("member_id", rs.getInt("member_id"));
-                
+
                 messages.put(message);
             }
 
@@ -117,5 +117,6 @@ public class messageHelper {
 
         return result;
     }
+
 }
 

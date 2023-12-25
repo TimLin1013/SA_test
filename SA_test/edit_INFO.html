@@ -9,47 +9,49 @@
 </head>
 <body>
     <div class="register-container">
-        <h2>Edit Information</h2>
-        <form class="register-form">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" disabled>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone">
-            </div>
-            <div class="form-group">
-                <label for="group">Group:</label>
-                <select id="group" name="group" >
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="flute">直笛</option>
-                    <option value="triangle">三角鐵</option>
-                    <option value="xylophone">響板</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="identity">Identity:</label>
-                <select id="identity" name="identity">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="1">社員</option>
-                    <option value="2">系統管理員</option>
-                    <option value="3">老師</option>
-                </select>
-            </div>
-            <div id="flashMessage" class="message" style="display: none;"></div>
+    <h2>Edit Information</h2>
+    <form class="register-form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" disabled>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="group">Group:</label>
+            <select id="group" name="group">
+                <option value="" disabled selected>Select an option</option>
+                <option value="flute">直笛</option>
+                <option value="triangle">三角鐵</option>
+                <option value="xylophone">響板</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="identity">Identity:</label>
+            <select id="identitySelect" name="identity" disabled>
+                <option value="" disabled>Select an option</option>
+                <option value="1">社員</option>
+                <option value="2">系統管理員</option>
+                <option value="3">老師</option>
+            </select>
+        </div>
+        <div id="flashMessage" class="message" style="display: none;"></div>
 
-            <button type="button" class="submit" id="submit">確認更改</button>      
-        </form>
-    </div>
+        <button type="button" class="submit" id="submit" onclick="enableIdentity()">確認更改</button>
+    </form>
+
+</div>
+
 
      <script type="text/javascript">
                 // 取得網址參數
