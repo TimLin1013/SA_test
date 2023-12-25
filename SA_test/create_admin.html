@@ -42,6 +42,9 @@
     </div>
 
     <script type="text/javascript">
+                let url_string = window.location.href;
+    			let url = new URL(url_string);
+    			let id = url.searchParams.get("id");
                 // 取得網址參數
 				$(document).ready(function() {
                     var $form = $('#submit');
@@ -52,7 +55,6 @@
                 
                 
                 function createAdmin() {
-					alert("a");
                     var name = $('#name').val();
                     var email = $('#email').val();
                     var password = $('#password').val();
@@ -61,9 +63,15 @@
 					var identity = $('#identity').val();
                     var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-                    if(!password_rule.test(password)) {
-                        alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
-                    }
+                     if (!email_rule.test(email)) {
+                            alert("Email格式不符！");
+                        }
+                        else if(!password_rule.test(password)) {
+                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+                        }
+                        else if(group===null){
+							alert("未選擇組別!");
+						}
                     else {
                         // 將資料組成JSON格式
                         var data_object = {
@@ -88,10 +96,10 @@
                                 success: function (response) {
                                     $('#flashMessage').html(response.message);
                                     $('#flashMessage').show();
-                                    console.log (response.response);
+                                    console.log (response);
                                     if(response.status == 200){
                                          alert("新增成功");
-                                         //window.location.href = 'admin_home_page.html';
+                                         window.location.href = 'admin_home_page.html?id='+id;
                                     }
                                 },
                                 error: function () {

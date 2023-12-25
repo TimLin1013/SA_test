@@ -28,18 +28,16 @@ public class memberController extends HttpServlet {
         String name = jso.getString("name");
         String phone= jso.getString("phone");
         String group = jso.getString("group");
-        String identity=jso.getString("identity");
-        member m = new member(account,name,password,phone,group);
-        member m1= new member(account,name,password,phone,group,identity);
+        
+       
+        
         String isAdmin = request.getParameter("admin");
+
         
-        if(account.isEmpty() || password.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
-            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
-            jsr.response(resp, response);
-        }
-        
-        else if ("yes".equals(isAdmin)) {
-            if(!mh.checkDuplicate(m1)) {
+        if ("yes".equals(isAdmin)) {
+        	String identity=jso.getString("identity");
+        	member m1= new member(account,name,password,phone,group,identity);
+        	if(!mh.checkDuplicate(m1)) {
             	JSONObject data = mh.createSystemAdmin(m1);//member_helper中有一個create
                 
                 JSONObject resp = new JSONObject();
@@ -57,7 +55,8 @@ public class memberController extends HttpServlet {
             }
         	
         }
-        else if (!"yes".equals(isAdmin)) {
+        else{
+        	 member m = new member(account,name,password,phone,group);
             if(!mh.checkDuplicate(m)) {
             	JSONObject data = mh.create(m);//member_helper中有一個create
                 
