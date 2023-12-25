@@ -22,7 +22,9 @@ import tools.JsonReader;
 public class messageController extends HttpServlet{
 	private messageHelper msh = messageHelper.getHelper();
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
+
+	    throws ServletException, IOException {
+
 	    JsonReader jsr = new JsonReader(request);
 	    JSONObject jso = jsr.getObject();
 	    int article_id = jso.getInt("article_id");
@@ -51,6 +53,25 @@ public class messageController extends HttpServlet{
 	    resp.put("status", "200");
 	    resp.put("response", data);
 	    jsr.response(resp, response);
+	}
+	
+	// Handle GET requests for retrieving messages
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	        throws ServletException, IOException {
+	    String articleIdString = request.getParameter("article_id");
+	    if (articleIdString != null && !articleIdString.isEmpty()) {
+	        try {
+	            int articleId = Integer.parseInt(articleIdString);
+	            JSONObject replies = msh.getByArticleId(articleId);
+	            response.setContentType("application/json");
+	            response.setCharacterEncoding("UTF-8");
+	            response.getWriter().write(replies.toString());
+	        } catch (NumberFormatException e) {
+	            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid article ID");
+	        }
+	    } else {
+	        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Article ID is required");
+	    }
 	}
 
 }

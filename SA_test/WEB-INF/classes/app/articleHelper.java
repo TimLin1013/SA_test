@@ -95,7 +95,7 @@ public class articleHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa`.`tbl_article`";
+            String sql = "SELECT * FROM `sa`.`tbl_article`ORDER BY `article_time` DESC;";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -182,7 +182,7 @@ public class articleHelper {
         }
     	return identity;
     }
-    public JSONObject deleteByID(int id) {
+    public JSONObject deleteByID(int article_id) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
         /** 紀錄程式開始執行時間 */
@@ -201,7 +201,7 @@ public class articleHelper {
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setInt(1, id);
+            pres.setInt(1, article_id);
             /** 執行刪除之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
