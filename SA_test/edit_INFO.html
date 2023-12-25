@@ -36,18 +36,9 @@
                 <option value="xylophone">響板</option>
             </select>
         </div>
-        <div class="form-group">
-            <label for="identity">Identity:</label>
-            <select id="identitySelect" name="identity" disabled>
-                <option value="" disabled>Select an option</option>
-                <option value="1">社員</option>
-                <option value="2">系統管理員</option>
-                <option value="3">老師</option>
-            </select>
-        </div>
         <div id="flashMessage" class="message" style="display: none;"></div>
 
-        <button type="button" class="submit" id="submit" onclick="enableIdentity()">確認更改</button>
+        <button type="button" class="submit" id="submit">確認更改</button>
     </form>
 
 </div>
@@ -65,7 +56,6 @@
                     var password = $('#password').val();
                     var phone = $('#phone').val();
                     var group = $('#group').val();
-					var identity = $('#identity').val();
                     var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
                     if(!password_rule.test(password)) {
@@ -78,14 +68,11 @@
                             "name": name,
                             "password": password,
                             "phone": phone,
-                            "identity": identity,
                             "group":group
                         };
 
                         // 將JSON格式轉換成字串
                         var data_string = JSON.stringify(data_object);
-
-            
                         $.ajax({
                                 type: "POST",
                                 url: "api/member.do",
@@ -100,7 +87,6 @@
                                     if(response.status == 200){
                                          getMember();
                                          alert("更新成功");
-                                         window.location.href = 'admin_home_page.html';
                                     }
                                 },
                                 error: function () {
@@ -126,7 +112,6 @@
                             	document.getElementById('password').value = response['response']['data'][0]['password'];
                             	document.getElementById('phone').value = response['response']['data'][0]['phone'];
                             	document.getElementById('group').value = response['response']['data'][0]['group'];
-                            	document.getElementById('identity').value = response['response']['data'][0]['identity'];
                             }
                             console.log(response);
                         },
