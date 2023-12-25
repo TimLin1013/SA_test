@@ -409,7 +409,26 @@ public class memberHelper {
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
-            
+         // 刪除相關聯的 tbl_paid_record 記錄
+            String deletePaidRecordSQL = "DELETE FROM `sa`.`tbl_paid_record` WHERE `member_id` = ?";
+            PreparedStatement deletePaidRecordPS = conn.prepareStatement(deletePaidRecordSQL);
+            deletePaidRecordPS.setInt(1, id);
+            deletePaidRecordPS.executeUpdate();
+
+         // 刪除相關聯的 tbl_course_value 記錄
+            String deleteCourseValueSQL = "DELETE FROM `sa`.`tbl_course_value` WHERE `member_id` = ?";
+            PreparedStatement deleteCourseValuePS = conn.prepareStatement(deleteCourseValueSQL);
+            deleteCourseValuePS.setInt(1, id);
+            deleteCourseValuePS.executeUpdate();
+
+            String deleteRegistrationRecordSQL = "DELETE FROM `sa`.`tbl_course_registration_record` WHERE `member_id` = ?";
+            PreparedStatement deleteRegistrationRecordPS = conn.prepareStatement(deleteRegistrationRecordSQL);
+            deleteRegistrationRecordPS.setInt(1, id);
+            deleteRegistrationRecordPS.executeUpdate();
+            String deleteHomeworkSQL = "DELETE FROM `sa`.`tbl_homework` WHERE `member_id` = ?";
+            PreparedStatement deleteHomeworkPS = conn.prepareStatement(deleteHomeworkSQL);
+            deleteHomeworkPS.setInt(1, id);
+            deleteHomeworkPS.executeUpdate();
             /** SQL指令 */
             String sql = "DELETE FROM `sa`.`tbl_member` WHERE `member_id` = ? LIMIT 1";
             
