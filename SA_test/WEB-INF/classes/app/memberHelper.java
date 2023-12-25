@@ -409,6 +409,12 @@ public class memberHelper {
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
+         // 刪除相關聯的 tbl_announcement 記錄
+            String deleteAnnouncementSQL = "DELETE FROM `sa`.`tbl_announcement` WHERE `member_id` = ?";
+            PreparedStatement deleteAnnouncementPS = conn.prepareStatement(deleteAnnouncementSQL);
+            deleteAnnouncementPS.setInt(1, id);
+            deleteAnnouncementPS.executeUpdate();
+
          // 刪除相關聯的 tbl_paid_record 記錄
             String deletePaidRecordSQL = "DELETE FROM `sa`.`tbl_paid_record` WHERE `member_id` = ?";
             PreparedStatement deletePaidRecordPS = conn.prepareStatement(deletePaidRecordSQL);
