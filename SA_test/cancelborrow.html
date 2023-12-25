@@ -101,38 +101,43 @@
               });
            }
             function updateTable(data) {
-                    $("#table > tbody").empty();
-                    var table_html = '';
-                    $.each(data, function(index, value) {
-                        table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
-                        table_html += '<td>' + value['member_name'] + '</td>';
-                        table_html += '<td>' + value['instrument_name'] + '</td>';
-                                
-       	 				var borrowTime = new Date(value['borrow_time']).getTime();
-       	 				var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime(); 
-        				var currentTime = new Date().getTime();
-						var returnTime = new Date(value['return_time']).getTime();
-        				if (borrowTime > currentTime && isNaN(returnTime)) {
-            				table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ')">取消登記</button></td>';
-        				} 
-        				else{
-						    if(returnTime>threeHoursLater && isNaN(returnTime)){
-								table_html += '<td>未歸還</td>';
-							}
-							else if(returnTime>threeHoursLater && !isNaN(returnTime)){
-								table_html += '<td>逾期歸還</td>';
-							}
-							
-							else{
-            					table_html += '<td>歸還</td>';
-            				}
-       				    }
+    $("#table > tbody").empty();
+    var table_html = '';
+$.each(data, function(index, value) {
+    table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
+    table_html += '<td>' + value['member_name'] + '</td>';
+    table_html += '<td>' + value['instrument_name'] + '</td>';
 
-        					table_html += '</tr>';
-                    })
 
-                    $("#table > tbody").append(table_html);
-                }
+    // 將 borrow_time 加上 8 小時
+    var borrowTime = new Date(value['borrow_time']).getTime() - (8 * 60 * 60 * 1000);
+    
+    // 獲取 borrowTime 並調整格式
+    var borrowTimeString = new Date(borrowTime).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime();
+
+    // 獲取當前時間並調整格式
+    var currentTime = new Date();
+    var currentTimeString = currentTime.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+
+    var returnTime = new Date(value['return_time']).getTime();
+
+    if (borrowTime > currentTime) {
+        table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ')">取消登記</button></td>';
+    } else if (isNaN(returnTime)) {
+        table_html += '<td>未歸還</td>';   
+    } else {
+        table_html += '<td>歸還</td>';
+    }
+    table_html += '</tr>';
+});
+
+$("#table > tbody").append(table_html);
+
+}
+
     </script>
     </div>
     </div>
