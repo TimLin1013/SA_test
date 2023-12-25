@@ -46,6 +46,14 @@ public class member {
         this.id=id;
         this.identity=identity;
 	}
+	public member(String account,String name,String password,String phone,String group,String identity) {
+		this.name=name;
+        this.password=password;
+        this.phone=phone;
+        this.group=group; 
+        this.identity=identity;
+        this.account=account;
+	}
 	public JSONObject getData() {
         /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
         JSONObject jso = new JSONObject();

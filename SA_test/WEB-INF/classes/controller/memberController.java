@@ -23,35 +23,60 @@ public class memberController extends HttpServlet {
         throws ServletException, IOException {
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
-        String account = jso.getString("account");
+        String account = jso.getString("email");
         String password = jso.getString("password");
         String name = jso.getString("name");
         String phone= jso.getString("phone");
         String group = jso.getString("group");
-        String id = request.getParameter("id");
-        member m = new member(account,name,password,phone,group);
         
+       
         
-        if(account.isEmpty() || password.isEmpty() || name.isEmpty()|| phone.isEmpty()) {
-            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
-            jsr.response(resp, response);
-        }
-        
-        else if (!mh.checkDuplicate(m)) {
-            JSONObject data = mh.create(m);//member_helper中有一個create
+        String isAdmin = request.getParameter("admin");
 
-            JSONObject resp = new JSONObject();
-            
-            resp.put("status", "200");
-            resp.put("message", "成功! 註冊會員資料...");
-            resp.put("response", data);
-            resp.put("id",mh.getId(account) );
-            jsr.response(resp, response);
+        
+        if ("yes".equals(isAdmin)) {
+        	String identity=jso.getString("identity");
+        	member m1= new member(account,name,password,phone,group,identity);
+        	if(!mh.checkDuplicate(m1)) {
+            	JSONObject data = mh.createSystemAdmin(m1);//member_helper中有一個create
+                
+                JSONObject resp = new JSONObject();
+                
+                resp.put("status", "200");
+                resp.put("message", "成功! 註冊會員資料...");
+                resp.put("response", data);
+                resp.put("id",mh.getId(account) );
+                jsr.response(resp, response);
+            }
+            else {
+
+            	  String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
+                  jsr.response(resp, response);
+            }
+        	
         }
-        else {
-            String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
-            jsr.response(resp, response);
+        else{
+        	 member m = new member(account,name,password,phone,group);
+            if(!mh.checkDuplicate(m)) {
+            	JSONObject data = mh.create(m);//member_helper中有一個create
+                
+                JSONObject resp = new JSONObject();
+                
+                resp.put("status", "200");
+                resp.put("message", "成功! 註冊會員資料...");
+                resp.put("response", data);
+                resp.put("id",mh.getId(account) );
+                jsr.response(resp, response);
+            }
+            else {
+
+            	  String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
+                  jsr.response(resp, response);
+            }
+        	
         }
+       
+          
         
     }
 	

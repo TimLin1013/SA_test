@@ -33,6 +33,7 @@ public class memberHelper {
             String password = m.getPassword();
             String phone = m.getPhone();
             String group=m.getGroup();
+            String identity=m.getIdentity();
             
             pres = conn.prepareStatement(sql);
             pres.setString(1, name);
@@ -40,7 +41,7 @@ public class memberHelper {
             pres.setString(3, phone);
             pres.setString(4, group);
             pres.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
-            pres.setString(6, "2"); 
+            pres.setString(6, identity); 
             pres.setString(7, account);
             
             /** 執行新增之SQL指令並記錄影響之行數 */
