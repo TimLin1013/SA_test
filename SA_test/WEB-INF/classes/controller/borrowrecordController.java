@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import org.json.*;
 import app.borrowrecordHelper;
 import app.instrumentHelper;
+import app.member;
 import app.borrowrecord;
 import tools.JsonReader;
 import javax.servlet.annotation.WebServlet;
@@ -48,17 +49,27 @@ public class borrowrecordController extends HttpServlet{
   public void doGet(HttpServletRequest request, HttpServletResponse response)
 		    throws ServletException, IOException {
 			   String id = request.getParameter("id");
-		       int memberID=Integer.valueOf(id);
-		       JSONObject query = br.getByID(memberID);
+			   if(id!=null) {
+				   int memberID=Integer.valueOf(id);	
+				   JSONObject query = br.getByID(memberID);
 		           
-		       /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-		       JSONObject resp = new JSONObject();
-		       resp.put("status", "200");
-		       resp.put("response", query);
-		       response.setContentType("application/json");
-			   response.setCharacterEncoding("UTF-8");
-			   response.getWriter().write(resp.toString());
-		      
+				   /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+				   JSONObject resp = new JSONObject();
+				   resp.put("status", "200");
+				   resp.put("response", query);
+				   response.setContentType("application/json");
+				   response.setCharacterEncoding("UTF-8");
+				   response.getWriter().write(resp.toString());
+			   }
+			   else {
+				   JSONObject temp=br.getAllBorrowRecord();			   
+			   	   JSONObject resp = new JSONObject();
+			   	   resp.put("status", "200");
+			   	   resp.put("response", temp);
+			   	   response.setContentType("application/json");
+			   	   response.setCharacterEncoding("UTF-8");
+			   	   response.getWriter().write(resp.toString());
+			   }
 		  }
   public void doDelete(HttpServletRequest request, HttpServletResponse response)
 		    throws ServletException, IOException {
@@ -77,4 +88,24 @@ public class borrowrecordController extends HttpServlet{
 			   response.getWriter().write(resp.toString());
 		      
 		  }
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	        
+	        /** 取出經解析到JSONObject之Request參數 */
+	        String ID = request.getParameter("id");
+	        int borrow_record_id=Integer.valueOf(ID);
+	        String instrument_id = request.getParameter("instrument_id");
+	        int instrumentID=Integer.valueOf(instrument_id);
+	        JSONObject data = br.update(borrow_record_id,instrumentID);
+	        
+	        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+	        JSONObject resp = new JSONObject();
+	        resp.put("status", "200");
+	        resp.put("message", "成功!");
+	        resp.put("response", data);
+	        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+	        response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(resp.toString());
+	    }
 }

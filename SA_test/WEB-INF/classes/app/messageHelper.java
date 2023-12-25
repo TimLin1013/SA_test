@@ -45,8 +45,8 @@ public class messageHelper {
             pres = conn.prepareStatement(sql);
             pres.setString(1, message_content);
             pres.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            pres.setInt(3, article_id);
-            pres.setInt(4, member_id);
+            //pres.setInt(3, article_id);
+            pres.setInt(3, member_id);
             
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();

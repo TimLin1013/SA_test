@@ -81,6 +81,7 @@
     <script>
         let replyFormIdCounter = 0;
 
+
         function toggleReplyForm(article_id) {
             const replyForm = document.getElementById(`reply-form-${article_id}`);
             if (replyForm) {
@@ -89,6 +90,7 @@
         }
 
         function handleReplyFormSubmit(event) {
+
             event.preventDefault();
             const form = event.target;
             const comment = form.querySelector('textarea[name="reply-comment"]').value;
@@ -110,6 +112,7 @@
             form.reset();
         }
 
+
         function createRepliesContainer(commentDiv) {
             const repliesDiv = document.createElement('div');
             repliesDiv.classList.add('replies');
@@ -125,10 +128,12 @@
             newDiscussionDiv.innerHTML = `
                 <h3>${title}</h3>
                 <p>${content}</p>
+
                 <button class="reply-button" data-article-id="${article_id}">回覆</button>
                 <div class="reply-form" id="reply-form-${article_id}" style="display: none;">
                     <form>
                         <div>
+
                             <label for="reply-comment-${article_id}">回覆內容：</label>
                             <textarea id="reply-comment-${article_id}" name="reply-comment" rows="3" cols="40" required></textarea>
                         </div>
@@ -143,6 +148,7 @@
             newReplyButton.addEventListener('click', function() {
                 toggleReplyForm(article_id);
             });
+
 
             const newForm = newDiscussionDiv.querySelector('form');
             newForm.addEventListener('submit', handleReplyFormSubmit);
@@ -169,6 +175,7 @@
 		        url: "/SA_test/api/article.do",
 		        dataType: 'json',
 		        success: function(response) {
+
 		            const articlesListDiv = document.getElementById('articles-list');
 		            if (response && response.response && Array.isArray(response.response.data)) {
 		                articlesListDiv.innerHTML = '';
@@ -219,6 +226,7 @@
 		                console.error("Error: 'data' is not an array", response.response && response.response.data);
 		            }
 		        },
+
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            console.error("AJAX error:", textStatus, errorThrown);
 		            alert("Unable to connect to the server!");
@@ -293,6 +301,7 @@
 
         $(document).ready(function() {
             init();
+
         });
     </script>
 </body>
