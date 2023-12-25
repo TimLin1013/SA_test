@@ -78,8 +78,8 @@
                 }
               });
            }
-           	function deleteByid(borrowRecordID) {
-			var request = {'id': borrowRecordID};
+           	function deleteByid(borrowRecordID,instrumentID) {
+			var request = {'id': borrowRecordID,'instrument_id' :instrumentID};
             var data_string = JSON.stringify(request);
          	$.ajax({
             	type: "DELETE",
@@ -107,26 +107,25 @@
                         table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
                         table_html += '<td>' + value['member_name'] + '</td>';
                         table_html += '<td>' + value['instrument_name'] + '</td>';
-                                
+             
        	 				var borrowTime = new Date(value['borrow_time']).getTime();
        	 				var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime(); 
         				var currentTime = new Date().getTime();
 						var returnTime = new Date(value['return_time']).getTime();
-        				if (borrowTime > currentTime && isNaN(returnTime)) {
-            				table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ')">取消登記</button></td>';
+        				if (borrowTime > currentTime) {
+            				table_html += '<td><button onclick="deleteByid(' + value['borrow_record_id'] + ' , ' + value['instrument_id'] + ')">取消登記</button></td>';
         				} 
-        				else{
-						    if(returnTime>threeHoursLater && isNaN(returnTime)){
-								table_html += '<td>未歸還</td>';
-							}
-							else if(returnTime>threeHoursLater && !isNaN(returnTime)){
-								table_html += '<td>逾期歸還</td>';
-							}
+        				else if(returnTime>threeHoursLater && isNaN(returnTime)){
+							table_html += '<td>未歸還</td>';
+						}
+						else if(returnTime>threeHoursLater && !isNaN(returnTime)){
+							table_html += '<td>逾期歸還</td>';
+						}
 							
-							else{
-            					table_html += '<td>歸還</td>';
-            				}
-       				    }
+						else{
+            				table_html += '<td>歸還</td>';
+            			}
+       				    
 
         					table_html += '</tr>';
                     })

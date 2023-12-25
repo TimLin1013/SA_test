@@ -123,7 +123,7 @@ public class borrowrecordHelper {
 			/** 取得資料庫之連線 */
 			conn = DBMgr.getConnection();
 			/** SQL指令 */
-			String sql = "SELECT b.borrow_record_id,m.member_name,i.instrument_name,b.borrow_time,b.return_time "+
+			String sql = "SELECT b.borrow_record_id,m.member_name,i.instrument_name,b.borrow_time,b.return_time,i.instrument_id "+
 					     "FROM `sa`.`tbl_borrow_record` b "+
 					     "JOIN `sa`.`tbl_member` m ON b.member_id = m.member_id "+
 					     "JOIN `sa`.`tbl_instrument` i ON b.instrument_id = i.instrument_id "+
@@ -146,12 +146,14 @@ public class borrowrecordHelper {
 				String instrument_name=rs.getString("instrument_name");
 				Timestamp borrow_time=rs.getTimestamp("borrow_time");
 				Timestamp return_time=rs.getTimestamp("return_time");
+				int instrument_id=rs.getInt("instrument_id");
 				JSONObject recordObject = new JSONObject();
 				recordObject.put("borrow_record_id", borrowrecord_id);
 			    recordObject.put("member_name", member_name);
 				recordObject.put("instrument_name", instrument_name);
 				recordObject.put("borrow_time",borrow_time);
 				recordObject.put("return_time",return_time);
+				recordObject.put("instrument_id",instrument_id);
 				jsa.put(recordObject);
 				
 			}
@@ -260,7 +262,7 @@ public class borrowrecordHelper {
 	        return response;
 	    }
 	 //為社員取消登記
-	  public JSONObject deleteByID(int id) {
+	  public JSONObject deleteByID(int id,int instrument_id) {
 	        /** 記錄實際執行之SQL指令 */
 	        String exexcute_sql = "";
 	        /** 紀錄程式開始執行時間 */
@@ -282,7 +284,22 @@ public class borrowrecordHelper {
 	            pres.setInt(1, id);
 	            /** 執行刪除之SQL指令並記錄影響之行數 */
 	            row = pres.executeUpdate();
+	          //資料庫器材數量+1
+				String sqlQuantity = "SELECT `instrument_quantity` FROM `sa`.`tbl_instrument` WHERE `instrument_id` = ? LIMIT 1";
 
+				pres = conn.prepareStatement(sqlQuantity);
+				pres.setInt(1,instrument_id );
+				ResultSet rsQuantity = pres.executeQuery();
+
+				int currentQuantity = 0;
+				if (rsQuantity.next()) {
+					currentQuantity = rsQuantity.getInt("instrument_quantity");
+				}
+					String sqlUpdate = "UPDATE `sa`.`tbl_instrument` SET `instrument_quantity` = ? WHERE `instrument_id` = ?";
+					pres = conn.prepareStatement(sqlUpdate);
+					pres.setInt(1, currentQuantity + 1);
+					pres.setInt(2, instrument_id);
+					pres.executeUpdate();
 	            /** 紀錄真實執行的SQL指令，並印出 **/
 	            exexcute_sql = pres.toString();
 	            System.out.println(exexcute_sql);
