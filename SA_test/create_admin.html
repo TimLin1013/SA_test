@@ -61,6 +61,7 @@
                     var phone = $('#phone').val();
                     var group = "無";
 					var identity = $('#identity').val();
+					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
                     var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
                      if (!email_rule.test(email)) {
