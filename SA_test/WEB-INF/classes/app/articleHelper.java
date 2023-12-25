@@ -183,55 +183,61 @@ public class articleHelper {
     	return identity;
     }
     public JSONObject deleteByID(int article_id) {
-        /** 記錄實際執行之SQL指令 */
-        String exexcute_sql = "";
+        /** 記錄實際執行之 SQL 指令 */
+        String execute_sql = "";
         /** 紀錄程式開始執行時間 */
         long start_time = System.nanoTime();
-        /** 紀錄SQL總行數 */
+        /** 紀錄 SQL 總行數 */
         int row = 0;
-        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
-        ResultSet rs = null;
-        
+
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
-            
+
+            // 刪除 tbl_message 中相依的訊息
+            String deleteMessageSQL = "DELETE FROM `sa`.`tbl_message` WHERE `article_id` = ?";
+            PreparedStatement deleteMessagePS = conn.prepareStatement(deleteMessageSQL);
+            deleteMessagePS.setInt(1, article_id);
+            deleteMessagePS.executeUpdate();
+
             /** SQL指令 */
-            String sql = "DELETE FROM `sa`.`tbl_article` WHERE `article_id` = ? LIMIT 2";
-            
-            /** 將參數回填至SQL指令當中 */
+            String sql = "DELETE FROM `sa`.`tbl_article` WHERE `article_id` = ?";
+
+            /** 將參數回填至 SQL 指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setInt(1, article_id);
-            /** 執行刪除之SQL指令並記錄影響之行數 */
+            
+            /** 執行刪除之 SQL 指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
-            /** 紀錄真實執行的SQL指令，並印出 **/
-            exexcute_sql = pres.toString();
-            System.out.println(exexcute_sql);
-            
+            /** 紀錄真實執行的 SQL 指令，並印出 **/
+            execute_sql = pres.toString();
+            System.out.println(execute_sql);
+
         } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
+            /** 印出 JDBC SQL 指令錯誤 **/
             System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             /** 若錯誤則印出錯誤訊息 */
             e.printStackTrace();
         } finally {
             /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close(rs, pres, conn);
+            DBMgr.close(null, pres, null);
         }
 
         /** 紀錄程式結束執行時間 */
         long end_time = System.nanoTime();
         /** 紀錄程式執行時間 */
         long duration = (end_time - start_time);
-        
-        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+
+        /** 將 SQL 指令、花費時間與影響行數，封裝成 JSONObject 回傳 */
         JSONObject response = new JSONObject();
-        response.put("sql", exexcute_sql);
+        response.put("sql", execute_sql);
         response.put("row", row);
         response.put("time", duration);
         return response;
     }
+
     public String getId(String account) {
     	String id = null; // 初始化為空值
     	try {
