@@ -94,7 +94,7 @@
 
         function deleteArticle(article_id) {
             if (!confirm('確定要刪除這篇文章嗎？')) return;
-            alert(article_id);
+            
             $.ajax({
                 type: "DELETE",
                 url: "/SA_test/api/article.do?id=" + article_id,
