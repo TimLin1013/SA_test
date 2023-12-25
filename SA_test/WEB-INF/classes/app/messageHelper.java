@@ -78,5 +78,44 @@ public class messageHelper {
 
         return response;
     }
+    
+    public JSONObject getByArticleId(int article_id) {
+        JSONObject result = new JSONObject();
+        JSONArray messages = new JSONArray();
+        String execute_sql = "";
+
+        try {
+            conn = DBMgr.getConnection();
+            String sql = "SELECT * FROM `tbl_message` WHERE `article_id` = ?";
+            pres = conn.prepareStatement(sql);
+            pres.setInt(1, article_id);
+
+            ResultSet rs = pres.executeQuery();
+
+            while (rs.next()) {
+                JSONObject message = new JSONObject();
+                message.put("message_id", rs.getInt("message_id"));
+                message.put("message_content", rs.getString("message_content"));
+                message.put("message_time", rs.getTimestamp("message_time").toString());
+                message.put("article_id", rs.getInt("article_id"));
+                message.put("member_id", rs.getInt("member_id"));
+                
+                messages.put(message);
+            }
+
+            result.put("replies", messages);
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBMgr.close(pres, conn);
+        }
+
+        execute_sql = pres.toString();
+        System.out.println(execute_sql);
+
+        return result;
+    }
 }
 

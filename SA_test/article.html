@@ -162,58 +162,70 @@
 
             getArticle();
         }
-
-        function getArticle() {
-            $.ajax({
-                type: "GET",
-                url: "/SA_test/api/article.do",
-                dataType: 'json',
-                success: function(response) {
-                    const articlesListDiv = document.getElementById('articles-list');
-                    if (response && response.response && Array.isArray(response.response.data)) {
-                        articlesListDiv.innerHTML = '';
-                        response.response.data.forEach(function(article) {
-                            const articleDiv = document.createElement('div');
-                            articleDiv.classList.add('message_content');
-                            articleDiv.setAttribute('data-article-id', article.article_id);
-
-                            articleDiv.innerHTML = `
-                                <h3>${article.title}</h3>
-                                <p>${article.article_content}</p>
-                                <span>Posted on: ${new Date(article.article_time).toLocaleString()}</span>
-                                <button class="reply-button" data-article-id="${article.article_id}">回覆</button>
-                                <div class="reply-form" id="reply-form-${article.article_id}" style="display: none;">
-                                    <form>
-                                        <div>
-                                            <label for="reply-comment-${article.article_id}">回覆內容：</label>
-                                            <textarea id="reply-comment-${article.article_id}" name="reply-comment" rows="3" cols="40" required></textarea>
-                                        </div>
-                                        <div>
-                                            <input type="submit" value="提交回覆">
-                                        </div>
-                                    </form>
-                                </div>
-                            `;
-
-                            articlesListDiv.appendChild(articleDiv);
-                            const replyButton = articleDiv.querySelector('.reply-button');
-                            replyButton.addEventListener('click', function() {
+        
+		function getArticle() {
+		    $.ajax({
+		        type: "GET",
+		        url: "/SA_test/api/article.do",
+		        dataType: 'json',
+		        success: function(response) {
+		            const articlesListDiv = document.getElementById('articles-list');
+		            if (response && response.response && Array.isArray(response.response.data)) {
+		                articlesListDiv.innerHTML = '';
+		                response.response.data.forEach(function(article) {
+		                    // Fetch and display replies for each article
+		                    getRepliesForArticle(article.article_id, function(replies) {
+								console.log("article_id:",article.article_id);
+		                        // Construct HTML for article and its replies
+		                        const articleDiv = document.createElement('div');
+		                        articleDiv.classList.add('message_content');
+		                        articleDiv.setAttribute('data-article-id', article.article_id);
+		
+		                        let repliesHTML = '';
+		                        replies.forEach(reply => {
+		                            repliesHTML += `<div class="comment"><p>${reply.message_content}</p></div>`;
+		                        });
+		
+		                        articleDiv.innerHTML = `
+		                            <h3>${article.title}</h3>
+		                            <p>${article.article_content}</p>
+		                            <span>Posted on: ${new Date(article.article_time).toLocaleString()}</span>
+		                            ${repliesHTML}
+		                            <button class="reply-button" data-article-id="${article.article_id}">Reply</button>
+		                            <div class="reply-form" id="reply-form-${article.article_id}" style="display: none;">
+		                                <form>
+		                                    <div>
+		                                        <label for="reply-comment-${article.article_id}">Reply Content:</label>
+		                                        <textarea id="reply-comment-${article.article_id}" name="reply-comment" rows="3" cols="40" required></textarea>
+		                                    </div>
+		                                    <div>
+		                                        <input type="submit" value="Submit Reply">
+		                                    </div>
+		                                </form>
+		                            </div>
+		                        `;
+		
+		                        articlesListDiv.appendChild(articleDiv);
+								const replyButton = articleDiv.querySelector('.reply-button');
+                            	replyButton.addEventListener('click', function() {
                                 toggleReplyForm(article.article_id);
                             });
 
                             const replyForm = articleDiv.querySelector('.reply-form form');
                             replyForm.addEventListener('submit', handleReplyFormSubmit);
-                        });
-                    } else {
-                        console.error("Error: 'data' is not an array", response.response && response.response.data);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("AJAX error:", textStatus, errorThrown);
-                    alert("无法连接到服务器！");
-                }
-            });
-        }
+		                    });
+		                });
+		            } else {
+		                console.error("Error: 'data' is not an array", response.response && response.response.data);
+		            }
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.error("AJAX error:", textStatus, errorThrown);
+		            alert("Unable to connect to the server!");
+		        }
+		    });
+		}
+
 
         function postArticle(title, content) {
             var url = new URL(window.location.href);
@@ -259,6 +271,25 @@
                 }
             });
         }
+        
+        function getRepliesForArticle(article_id, callback) {
+		    $.ajax({
+		        type: "GET",
+		        url: `/SA_test/api/message.do?article_id=${article_id}`,
+		        dataType: 'json',
+		        success: function(response) {
+		            if (response && response.replies) {
+		                callback(response.replies);
+		            } else {
+		                callback([]);
+		            }
+		        },
+		        error: function() {
+		            callback([]);
+		        }
+		    });
+		}
+
 
         $(document).ready(function() {
             init();
