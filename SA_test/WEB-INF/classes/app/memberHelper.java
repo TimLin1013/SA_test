@@ -482,17 +482,40 @@ public class memberHelper {
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
-         // 刪除相關聯的 tbl_announcement 記錄
-            String deleteAnnouncementSQL = "DELETE FROM `sa`.`tbl_announcement` WHERE `member_id` = ?";
-            PreparedStatement deleteAnnouncementPS = conn.prepareStatement(deleteAnnouncementSQL);
-            deleteAnnouncementPS.setInt(1, id);
-            deleteAnnouncementPS.executeUpdate();
+            String deleteBorrowRecordSQL = "DELETE FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ?";
+            try (PreparedStatement deleteBorrowRecordPS = conn.prepareStatement(deleteBorrowRecordSQL)) {
+                deleteBorrowRecordPS.setInt(1, id);
+                deleteBorrowRecordPS.executeUpdate();
+            }
 
-         // 刪除相關聯的 tbl_paid_record 記錄
+         // 刪除相關聯的 tbl_message 記錄
+            String deleteMessageSQL = "DELETE FROM `sa`.`tbl_message` WHERE `article_id` IN (SELECT `article_id` FROM `sa`.`tbl_article` WHERE `member_id` = ?)";
+            try (PreparedStatement deleteMessagePS = conn.prepareStatement(deleteMessageSQL)) {
+                deleteMessagePS.setInt(1, id);
+                deleteMessagePS.executeUpdate();
+            }
+
+            // 刪除相關聯的 tbl_announcement 記錄
+            String deleteAnnouncementSQL = "DELETE FROM `sa`.`tbl_announcement` WHERE `member_id` = ?";
+            try (PreparedStatement deleteAnnouncementPS = conn.prepareStatement(deleteAnnouncementSQL)) {
+                deleteAnnouncementPS.setInt(1, id);
+                deleteAnnouncementPS.executeUpdate();
+            }
+
+            // 刪除相關聯的 tbl_paid_record 記錄
             String deletePaidRecordSQL = "DELETE FROM `sa`.`tbl_paid_record` WHERE `member_id` = ?";
-            PreparedStatement deletePaidRecordPS = conn.prepareStatement(deletePaidRecordSQL);
-            deletePaidRecordPS.setInt(1, id);
-            deletePaidRecordPS.executeUpdate();
+            try (PreparedStatement deletePaidRecordPS = conn.prepareStatement(deletePaidRecordSQL)) {
+                deletePaidRecordPS.setInt(1, id);
+                deletePaidRecordPS.executeUpdate();
+            }
+
+            // 刪除相關聯的 tbl_article 記錄
+            String deleteArticleSQL = "DELETE FROM `sa`.`tbl_article` WHERE `member_id` = ?";
+            try (PreparedStatement deleteArticlePS = conn.prepareStatement(deleteArticleSQL)) {
+                deleteArticlePS.setInt(1, id);
+                deleteArticlePS.executeUpdate();
+            }
+
 
          // 刪除相關聯的 tbl_course_value 記錄
             String deleteCourseValueSQL = "DELETE FROM `sa`.`tbl_course_value` WHERE `member_id` = ?";

@@ -132,6 +132,9 @@ function submitHomework(courseId,courseName,courseLocation,courseTime,TeacherId)
     // 將 course_start_time 轉換為 JavaScript Date 對象
     var startTime = new Date(course_start_time);
 
+    // 減去 8 小時
+    startTime.setHours(startTime.getHours() - 8);
+
     // 檢查 course_start_time 是否小於現在的時間
     if (startTime < new Date()) {
         // 如果是，顯示警告訊息
@@ -155,10 +158,9 @@ function submitHomework(courseId,courseName,courseLocation,courseTime,TeacherId)
                 alert("無法連線到伺服器！");
             }
         });
-        
-        
     }
 }
+
 
 	</script>
 </body>

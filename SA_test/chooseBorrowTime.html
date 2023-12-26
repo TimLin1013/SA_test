@@ -87,56 +87,57 @@ button {
     });
 
     $(document).ready(function () {
-        var $form = $('#confirm-time');
-        $form.click(function () {
-            confirm();
-        });
+    var $form = $('#confirm-time');
+    $form.click(function () {
+        confirm();
+    });
 
-        function confirm() {
-            var borrowtime = $('#borrow-time').val();
-            var instrument_id = url.searchParams.get("instrument_id");
-            var id = url.searchParams.get("id");
-			var borrowTime = document.getElementById('borrow-time').value;
-    		var borrowTimeStr = borrowTime;
-    	    var data_object = {
-                "borrow-time": borrowtime,
-                "instrument_id": instrument_id,
-                "id": id,
-            };
-   
-        	var data_string = "borrow-time=" + encodeURIComponent(borrowtime)+ "&instrument_id=" + encodeURIComponent(instrument_id)+"&id="+encodeURIComponent(id);
-    		if (borrowTime) {
-                $.ajax({
+    function confirm() {
+        var borrowTime = $('#borrow-time').val();
+        var instrument_id = url.searchParams.get("instrument_id");
+        var id = url.searchParams.get("id");
+
+        if (isValidBorrowTime(borrowTime)) {
+            var data_string = "borrow-time=" + encodeURIComponent(borrowTime) + "&instrument_id=" + encodeURIComponent(instrument_id) + "&id=" + encodeURIComponent(id);
+
+            $.ajax({
                 type: "PUT",
                 url: "api/borrowrecord.do?" + data_string,
-                data: data_string,  
+                data: data_string,
                 crossDomain: true,
                 cache: false,
-                dataType: 'json',  // 正確的拼寫
+                dataType: 'json',
                 timeout: 5000,
                 success: function (response) {
-                	console.log(response.response.check);
-                	if(response.response.check=="can'tborrow"){
-						alert("你有還沒歸還的器材!");
-					}
-					else{
-						var borrowTime = new Date(borrowTimeStr);
-        				borrowTime.setHours(borrowTime.getHours() + 3);
-       					alert(`借用器材為： ${instrumentName} 歸還時間為： ${borrowTime}`);
-					}
-			
+                    console.log(response.response.check);
+                    if (response.response.check == "can'tborrow") {
+                        alert("你有還沒歸還的器材!");
+                    } else {
+                        var borrowedTime = new Date(borrowTime);
+                        borrowedTime.setHours(borrowedTime.getHours() + 3);
+                        alert(`借用器材為： ${instrumentName} 歸還時間為： ${borrowedTime}`);
+                        window.location.href = 'user_home_page.html?id=' + id;
+                    }
                 },
-              
             });
-        // 在這裡處理借用邏輯，例如更新資料庫或導向確認頁面
-    		} else {
-            alert('Please select a time.');
-        	}	
-      
+        } else {
+            alert('無法選擇過去的時間。');
+        }
+    }
 
+    function isValidBorrowTime(borrowTime) {
+        const selectedTime = new Date(borrowTime);
+        const currentTime = new Date();
+		      
+        if (selectedTime <= currentTime) {
+          
+            return false;
+        }
 
-        	}
-    	});
+        return true;
+    }
+});
+
 </script>
 
 
