@@ -482,12 +482,12 @@ public class memberHelper {
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
-            String deleteBorrowRecordSQL = "DELETE FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ?";
+            String deleteBorrowRecordSQL = "DELETE FROM `sa`.`tbl_borrow_record` WHERE `member_id` = ? AND `return_time` IS NOT NULL";
             try (PreparedStatement deleteBorrowRecordPS = conn.prepareStatement(deleteBorrowRecordSQL)) {
                 deleteBorrowRecordPS.setInt(1, id);
                 deleteBorrowRecordPS.executeUpdate();
             }
-
+        
          // 刪除相關聯的 tbl_message 記錄
             String deleteMessageSQL = "DELETE FROM `sa`.`tbl_message` WHERE `article_id` IN (SELECT `article_id` FROM `sa`.`tbl_article` WHERE `member_id` = ?)";
             try (PreparedStatement deleteMessagePS = conn.prepareStatement(deleteMessageSQL)) {
