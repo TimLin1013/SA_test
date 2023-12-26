@@ -14,9 +14,11 @@
     <header>
         <h1>音樂社團</h1>
         <script>
+			
             function getCurrentURLParams() {
                 var currentURL = new URL(window.location.href);
                 var params = new URLSearchParams(currentURL.search);
+                
                 return params;
             }
 
@@ -29,12 +31,14 @@
 
     <nav>
         <a href="javascript:void(0);" onclick="navigateToPage('borrow.html')">預約器材</a>
-        <a href="javascript:void(0);" onclick="navigateToPage('edit_INFO.html')">更改個人資料</a>
-        <a href="javascript:void(0);" onclick="navigateToPage('classINFO.html')">報名社課</a>
-        <a href="javascript:void(0);" onclick="navigateToPage('article.html')">討論區</a>
-        <a href="javascript:void(0);" onclick="navigateToPage('PaidRecord.html')">顯示繳費記錄</a>
-        <a href="javascript:void(0);" onclick="navigateToPage('registrationRecord.html')">檢視報名紀錄</a>
-        <a href="javascript:void(0);" onclick="navigateToPage('cancelborrow.html')">取消預約</a>
+		<a href="javascript:void(0);" onclick="updateIdInHref()">更改個人資料</a>
+		<a href="javascript:void(0);" onclick="navigateToPage('classINFO.html')">報名社課</a>
+		<a href="javascript:void(0);" onclick="navigateToPage('article.html')">討論區</a>
+		<a href="javascript:void(0);" onclick="navigateToPage('PaidRecord.html')">顯示繳費記錄</a>
+		<a href="javascript:void(0);" onclick="navigateToPage('registrationRecord.html')">檢視報名紀錄</a>
+		<a href="javascript:void(0);" onclick="navigateToPage('cancelborrow.html')">取消預約</a>
+
+
     </nav>
 
     <section>
@@ -50,6 +54,10 @@
     </footer>
 
     <script>
+		 var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+		
         $(document).ready(function () {
             getAllAnnouncement();
         });
@@ -84,6 +92,10 @@
 
                 $("#announcementList").append(listItem);
             });
+        }
+        function updateIdInHref() {
+        	window.location.href = 'edit_INFO.html?id=' + id + '&edit_id=' + id;
+
         }
     </script>
 

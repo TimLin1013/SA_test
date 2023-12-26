@@ -123,6 +123,7 @@
             dataType: 'json',
             timeout: 5000,
             success: function (response) {
+               console.log(response);
                 if (response.status == 200) {
                     document.getElementById('name').value = response['response']['data'][0]['name'];
                     document.getElementById('email').value = response['response']['data'][0]['account'];
@@ -130,7 +131,7 @@
                     document.getElementById('phone').value = response['response']['data'][0]['phone'];
                     document.getElementById('group').value = response['response']['data'][0]['group'];
                 }
-                console.log(response);
+                
             },
             error: function () {
                 alert("無法連線到伺服器！");

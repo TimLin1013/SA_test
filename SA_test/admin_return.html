@@ -107,7 +107,10 @@
         				if (isNaN(returnTime)) {
             				table_html += '<td><button onclick="inputreturntime(' + value['borrow_record_id'] + ', ' + value['instrument_id'] + ')">登記歸還</button></td>';
 
-        				} 
+        				}
+        				else{
+							table_html += '<td>已歸還</td>';
+						}
 
         					table_html += '</tr>';
                     })
