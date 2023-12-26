@@ -139,19 +139,23 @@
     });
 
     $(document).ready(function () {
-    	$("#sql_log > tbody").empty();
-   			getMember();
-    		if (identity === '2') {
-        		var groupSelect = $('#group');
-       			groupSelect.prop('disabled', true);
-        		groupSelect.empty();
-				groupSelect.append($('<option>', {
-            	value: '無',
-            	text: '無',
-            	selected: true
-        		}));
-    		}
-	});
+
+    $("#sql_log > tbody").empty();
+    getMember();
+    if (identity === '2'||identity === '3') {
+        var groupSelect = $('#group');
+        groupSelect.prop('disabled', true);
+
+        groupSelect.empty();
+
+        groupSelect.append($('<option>', {
+            value: '無',
+            text: '無',
+            selected: true
+        }));
+    }
+});
+
 </script>
 </body>
 </html>

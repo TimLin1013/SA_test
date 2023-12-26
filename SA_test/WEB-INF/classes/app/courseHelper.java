@@ -2,6 +2,8 @@ package app;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.json.*;
 import app.course;
 import util.DBMgr;
@@ -274,6 +276,148 @@ public class courseHelper {
 	        response.put("sql", exexcute_sql);
 	        response.put("time", duration);
 	        response.put("row", row);
+	        return response;
+	    }
+	   public JSONObject getAllhomework(int teacher_id) {
+	        course c = null;
+
+	        JSONArray jsa = new JSONArray();
+	        
+	        /** 記錄實際執行之SQL指令 */
+	        String exexcute_sql = "";
+	        /** 紀錄程式開始執行時間 */
+	        long start_time = System.nanoTime();
+	        /** 紀錄SQL總行數 */
+	        int row = 0;
+	        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
+	        ResultSet rs = null;
+	        
+	        try {
+	            /** 取得資料庫之連線 */
+	            conn = DBMgr.getConnection();
+	            /** SQL指令 */
+	            String sql = "SELECT h.member_id, h.content, h.homework_time, h.score, h.course_id " +
+	                    "FROM `sa`.`tbl_course` c " +
+	                    "JOIN `sa`.`tbl_homework` h ON h.course_id = c.course_id " +
+	                    "WHERE c.member_id = ?";
+
+	            
+	            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
+	            pres = conn.prepareStatement(sql);
+	            pres.setInt(1,teacher_id);
+	            rs = pres.executeQuery();
+
+	            /** 紀錄真實執行的SQL指令，並印出 **/
+	            exexcute_sql = pres.toString();
+	            System.out.println(exexcute_sql);
+	            
+	            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
+	            while (rs.next()) {
+	                JSONObject tmp = new JSONObject();
+	                /** 每執行一次迴圈表示有一筆資料 */
+	                row += 1;
+
+	                /** 將 ResultSet 之資料取出 */
+	                int content = rs.getInt("content");
+	                tmp.put("content", content);
+	                int student_id = rs.getInt("member_id");
+	                tmp.put("student_id", student_id);
+
+	                // Parse the original homework_time
+	                String originalHomeworkTime = rs.getString("homework_time");
+	                LocalDateTime originalDateTime = LocalDateTime.parse(originalHomeworkTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+	                // Add 8 hours to the original homework_time
+	                LocalDateTime adjustedDateTime = originalDateTime.plusHours(8);
+
+	                // Format the adjusted homework_time
+	                String adjustedHomeworkTime = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	                tmp.put("homework_time", adjustedHomeworkTime);
+
+	                int score = rs.getInt("score");
+	                tmp.put("score", score);
+	                int course_id = rs.getInt("course_id");
+	                tmp.put("course_id",course_id);
+
+	                jsa.put(tmp);
+	            }
+
+	        } catch (SQLException e) {
+	            /** 印出JDBC SQL指令錯誤 **/
+	            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+	        } catch (Exception e) {
+	            /** 若錯誤則印出錯誤訊息 */
+	            e.printStackTrace();
+	        } finally {
+	            /** 關閉連線並釋放所有資料庫相關之資源 **/
+	            DBMgr.close(rs, pres, conn);
+	        }
+	        
+	        /** 紀錄程式結束執行時間 */
+	        long end_time = System.nanoTime();
+	        /** 紀錄程式執行時間 */
+	        long duration = (end_time - start_time);
+	        
+	        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+	        JSONObject response = new JSONObject();
+	        response.put("sql", exexcute_sql);
+	        response.put("row", row);
+	        response.put("time", duration);
+	        response.put("data", jsa);
+	        return response;
+	    }
+	    public JSONObject updateScore(int student_id,int course_id,int score) {
+	        /** 紀錄回傳之資料 */
+	        JSONArray jsa = new JSONArray();
+	        /** 記錄實際執行之SQL指令 */
+	        String exexcute_sql = "";
+	        /** 紀錄程式開始執行時間 */
+	        long start_time = System.nanoTime();
+	        /** 紀錄SQL總行數 */
+	        int row = 0;
+	        
+	        try {
+	            /** 取得資料庫之連線 */
+	            conn = DBMgr.getConnection();
+	            /** SQL指令 */
+	            String sql = "Update `sa`.`tbl_homework` SET `score` = ?   WHERE `member_id` = ? AND `course_id` = ?";
+	            ;
+	            /** 將參數回填至SQL指令當中 */
+	            pres = conn.prepareStatement(sql);
+	            pres.setInt(1, score);
+	            pres.setInt(2, student_id);
+	            pres.setInt(3, course_id);
+	   
+	            /** 執行更新之SQL指令並記錄影響之行數 */
+	            row = pres.executeUpdate();
+
+	            /** 紀錄真實執行的SQL指令，並印出 **/
+	            exexcute_sql = pres.toString();
+	            System.out.println(exexcute_sql);
+
+	        } catch (SQLException e) {
+	            /** 印出JDBC SQL指令錯誤 **/
+	            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+	        } catch (Exception e) {
+	            /** 若錯誤則印出錯誤訊息 */
+	            e.printStackTrace();
+	        } finally {
+	            /** 關閉連線並釋放所有資料庫相關之資源 **/
+	            DBMgr.close(pres, conn);
+	        }
+	        
+	        /** 紀錄程式結束執行時間 */
+	        long end_time = System.nanoTime();
+	        /** 紀錄程式執行時間 */
+	        long duration = (end_time - start_time);
+	        
+	        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+	        JSONObject response = new JSONObject();
+	        response.put("sql", exexcute_sql);
+	        response.put("row", row);
+	        response.put("time", duration);
+	        response.put("data", jsa);
+
 	        return response;
 	    }
 }
