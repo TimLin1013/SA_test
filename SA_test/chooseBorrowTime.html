@@ -51,19 +51,18 @@ button {
 </head>
 <body>
 <header>
-  <h1>Select Borrowing Time</h1>
+  <h1>選擇借用時段</h1>
 </header>
 <div id ="instrument_name"></div>
 <main class="main-content">
 	
   <div id="instrument-selected" class="instrument-selected"></div>
   <div class="time-selection">
-    <label for="borrow-time">Choose a time:</label>
-    <!-- 加上 min 和 max 屬性限制可選的範圍 -->
+    <label for="borrow-time">選擇時段:</label>
     <input type="datetime-local" id="borrow-time" name="borrow-time" min="" max="" />
   </div>
   
-  <button id="confirm-time">Confirm</button>
+  <button id="confirm-time">確認</button>
 </main>
 
 <script>
@@ -72,12 +71,12 @@ button {
     var modified = "你所選的器材為: " + instrumentName;
     var instrumentNameDiv = document.getElementById('instrument_name');
 	instrumentNameDiv.innerHTML =modified;
-    // 設定 min 為當下時間
+    
     const now = new Date();
     const minDate = now.toISOString().slice(0, 16); // 格式為 "YYYY-MM-DDTHH:mm"
     document.getElementById('borrow-time').setAttribute('min', minDate);
 
-    // 設定 max 為當下一天後的時間
+
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const maxDate = tomorrow.toISOString().slice(0, 16);
@@ -123,7 +122,7 @@ button {
 					else{
 						var borrowTime = new Date(borrowTimeStr);
         				borrowTime.setHours(borrowTime.getHours() + 3);
-       					alert(`You have chosen to borrow the ${instrumentName} at ${borrowTime}`);
+       					alert(`借用器材為： ${instrumentName} 歸還時間為： ${borrowTime}`);
 					}
 			
                 },
