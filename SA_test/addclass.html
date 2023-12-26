@@ -58,47 +58,54 @@
 </form>
 
 <script>
-    function submitClass() {
-        // 獲取輸入的值
-        var courseName = document.getElementById("courseName").value;
-        var teacherID = document.getElementById("teacherID").value;
-        var datetime = document.getElementById("datetime").value;
-        var location = document.getElementById("location").value;
-		var data_object = {
-		    "course_name": courseName,
-		    "teacher_id": teacherID,
-		    "course_start_time":datetime,
-		    "course_location":location
-		};
-		var data_string = JSON.stringify(data_object);
+   function submitClass() {
+    // 獲取輸入的值
+    var courseName = document.getElementById("courseName").value;
+    var teacherID = document.getElementById("teacherID").value;
+    var datetime = document.getElementById("datetime").value;
+    var location = document.getElementById("location").value;
 
-		$.ajax({
-	            type: "Put",
-	            url: "api/course.do?admin=yes",
-	            data: data_string,
-	            crossDomain: true,
-	            cache: false,
-	            dataType: 'json',
-	            timeout: 5000,
-	            success: function (response) {
-	                console.log (response);
-	                if(response.status == 200){
-	                     if(response.response.row==0){
-							 alert("老師ID不存在");
-						 }
-						 else{
-							 alert("新增成功");
-						 }
-	                }
-	            },
-	            error: function () {
-	                alert("無法連線到伺服器！");
-	            }
-	    });
-        
-        // 清空表單
-        document.getElementById("class-input-form").reset();
+    // 檢查是否有空值
+    if (courseName === "" || teacherID === "" || datetime === "" || location === "") {
+        alert("請填寫所填欄位");
+        return;
     }
+
+    var data_object = {
+        "course_name": courseName,
+        "teacher_id": teacherID,
+        "course_start_time": datetime,
+        "course_location": location
+    };
+    var data_string = JSON.stringify(data_object);
+
+    $.ajax({
+        type: "Put",
+        url: "api/course.do?admin=yes",
+        data: data_string,
+        crossDomain: true,
+        cache: false,
+        dataType: 'json',
+        timeout: 5000,
+        success: function (response) {
+            console.log(response);
+            if (response.status == 200) {
+                if (response.response.row == 0) {
+                    alert("老師ID不存在");
+                } else {
+                    alert("新增成功");
+                }
+            }
+        },
+        error: function () {
+            alert("無法連線到伺服器！");
+        }
+    });
+
+    // 清空表單
+    document.getElementById("class-input-form").reset();
+}
+
 </script>
 
 </body>

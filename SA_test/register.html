@@ -86,8 +86,14 @@
                                     timeout: 5000,
                                     success: function (response) {
                                        	$('#flashMessage').html(response.message);
-                                        $('#flashMessage').show();  
-                                          window.location.href = 'Paid.html?id=' + response.id;        
+                                        $('#flashMessage').show(); 
+                                        if(respnse.status==200){
+											 window.location.href = 'Paid.html?id=' + response.id;
+										} 
+										else{
+											alert("E-mail帳號重複");
+										}
+                                                 
                                     },
                                     error: function () {
                                         alert("無法連線到伺服器！");
