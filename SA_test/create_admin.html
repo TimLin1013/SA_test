@@ -20,7 +20,7 @@
                 <input type="email" id="email" name="email">
             </div>
             <div class="form-group">
-                <label for="password">姓名:</label>
+                <label for="password">密碼:</label>
                 <input type="password" id="password" name="password">
             </div>
             <div class="form-group">
@@ -101,7 +101,9 @@
                                     if(response.status == 200){
                                          alert("新增成功");
                                          window.location.href = 'admin_home_page.html?id='+id;
-                                    }
+                                    }else if (response.status==400){
+										alert("E-mail帳號重複");
+									}
                                 },
                                 error: function () {
                                     alert("無法連線到伺服器！");
