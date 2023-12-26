@@ -89,7 +89,7 @@ public class memberController extends HttpServlet {
 	    String login = request.getParameter("login");
 	    String id = request.getParameter("id");
 	    String admin = request.getParameter("admin");
-	    
+	    String teacher = request.getParameter("teacher");
 	   if("yes".equals(login)) {
 		   if (mh.checkPassword(account, password)) {
 		        
@@ -124,6 +124,17 @@ public class memberController extends HttpServlet {
 			   response.setCharacterEncoding("UTF-8");
 			   response.getWriter().write(resp.toString());
 		   }
+		   else if ("yes".equals(teacher)) {
+	           /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
+				   JSONObject query = mh.getAllteacher();
+				   JSONObject resp = new JSONObject();
+				   resp.put("status", "200");
+				   resp.put("message", "所有會員資料取得成功");
+				   resp.put("response", query);        
+				   response.setContentType("application/json");
+				   response.setCharacterEncoding("UTF-8");
+				   response.getWriter().write(resp.toString());
+			   }
 		   else {
 			   JSONObject query = mh.getAllmember();
 			   JSONObject resp = new JSONObject();
