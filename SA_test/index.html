@@ -72,6 +72,9 @@
 						            // 直接使用 id 屬性
 						            window.location.href = 'user_home_page.html?id=' + response.id;
 						        }
+						        else if(Rsp == 1 && response.identity == 3) {
+									window.location.href = 'teacher_home_page.html?id=' + response.id;
+								}
 						    },
 						    error: function () {
 						        alert("無法連線到伺服器！");

@@ -21,15 +21,30 @@ public class courseController extends HttpServlet{
   private courseHelper ch =  courseHelper.getHelper();
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-	  JSONObject query = ch.getAllcourse();
-      JSONObject resp = new JSONObject();
-      resp.put("status", "200");
-      resp.put("message", "所有資料取得成功");
-      resp.put("response", query);        
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.getWriter().write(resp.toString());
-      
+	  String isHomework=request.getParameter("homework");
+	  if ("yes".equals(isHomework)) {
+		  String Str_teacher_id=request.getParameter("teacher_id");
+		  int teacher_id=Integer.parseInt(Str_teacher_id);
+		  JSONObject query=ch.getAllhomework(teacher_id);
+		  JSONObject resp = new JSONObject();
+	      resp.put("status", "200");
+	      resp.put("message", "所有資料取得成功");
+	      resp.put("response", query);        
+	      response.setContentType("application/json");
+	      response.setCharacterEncoding("UTF-8");
+	      response.getWriter().write(resp.toString());
+	  }else {
+		  JSONObject query = ch.getAllcourse();
+	      JSONObject resp = new JSONObject();
+	      resp.put("status", "200");
+	      resp.put("message", "所有資料取得成功");
+	      resp.put("response", query);        
+	      response.setContentType("application/json");
+	      response.setCharacterEncoding("UTF-8");
+	      response.getWriter().write(resp.toString());
+	      
+	  }
+	  
   }
   public void doPut(HttpServletRequest request, HttpServletResponse response)//新增設課評價和繳交作業
 	      throws ServletException, IOException {
@@ -116,6 +131,23 @@ public class courseController extends HttpServlet{
 	  	
 	      
   }
-	  
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+	      throws ServletException, IOException {
+		  int score=Integer.parseInt(request.getParameter("new_score"));
+		  int student_id=Integer.parseInt(request.getParameter("student_id"));
+		  int course_id=Integer.parseInt(request.getParameter("course_id"));
+		  	JSONObject query = ch.updateScore(student_id,course_id,score);
+			  
+		      JSONObject resp = new JSONObject();
+		      resp.put("status", "200");
+		      resp.put("message", "所有資料取得成功");
+		      resp.put("response", query);        
+		      response.setContentType("application/json");
+		      response.setCharacterEncoding("UTF-8");
+		      response.getWriter().write(resp.toString());
+		      
+		  
+		  
+	  }
   
 }
