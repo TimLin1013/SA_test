@@ -53,6 +53,8 @@
 				<th>借用編號</th>
                 <th>社員姓名</th>
                 <th>借用器材</th>
+                <th>借用時間</th>
+                <th>歸還時間</th>
                 <th>登記歸還</th>
             </tr>
         </thead>
@@ -111,10 +113,19 @@
                         table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
                         table_html += '<td>' + value['member_name'] + '</td>';
                         table_html += '<td>' + value['instrument_name'] + '</td>';
-						var returnTime = new Date(value['return_time']).getTime();
+						var returnTime = new Date(value['return_time']).getTime() - (8 * 60 * 60 * 1000);
 						var borrowTime = new Date(value['borrow_time']).getTime() - (8 * 60 * 60 * 1000);
+						var borrowTimeString = new Date(borrowTime).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+						var returnTimeString =new Date(returnTime).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
   			 			var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime();
     				 	var currentTime = new Date();
+    				 	 table_html += '<td>' + borrowTimeString + '</td>';
+    				 	if(isNaN(returnTime)){
+				 				table_html += '<td>無 </td>';
+				 
+			 			}else{
+				  				table_html += '<td>' + returnTimeString + '</td>';
+						 }
         				if (isNaN(returnTime)) {
 							if(borrowTime>currentTime){
 								table_html += '<td>已預約</td>';

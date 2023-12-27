@@ -12,19 +12,19 @@
         }
 
         h1 {
-            background-color: #F6EDFF; /* 底色為淡紫色 */
-            padding: 10px; /* 可以根據需要調整內邊距 */
+            background-color: #F6EDFF;
+            padding: 10px; 
         }
 
         #inputBox {
             width: 100%;
             height: 200px;
             resize: none;
-            margin-bottom: 10px; /* 新增這一行，增加輸入框和按鈕之間的間距 */
+            margin-bottom: 10px; 
         }
 
         #submitButton {
-            background-color: #4CAF50; /* 綠色按鈕背景色 */
+            background-color: #4CAF50; 
             color: white;
             padding: 10px 15px;
             border: none;
@@ -42,10 +42,8 @@
     <button id="submitButton" onclick="submitAssignment()">繳交</button>
 
     <script>
-		// 從 URL 中取得參數
 	    const urlParams = new URLSearchParams(window.location.search);
 	    
-	    // 從參數中取得相應的值
 	    const courseName = urlParams.get("course_name");
 	    const courseTime = urlParams.get("course_time");
 	    const courseLocation = urlParams.get("course_location");

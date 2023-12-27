@@ -20,7 +20,8 @@ import app.courseRecordHelper;
 @WebServlet("/api/courserecord.do")
 public class courseRecordController extends HttpServlet{
 	 private static final long serialVersionUID = 1L;
-	private courseRecordHelper crh=courseRecordHelper.getHelper();
+	 private courseRecordHelper crh=courseRecordHelper.getHelper();
+	//為classinfo的put報名社課
 	  public void doPut(HttpServletRequest request, HttpServletResponse response)
 	      throws ServletException, IOException {
 		  int member_id = Integer.parseInt(request.getParameter("id"));
@@ -40,11 +41,12 @@ public class courseRecordController extends HttpServlet{
 	       }
 	      
 	  }
+	//為classinfo的delete 取消報名
 	  public void doDelete(HttpServletRequest request, HttpServletResponse response)
 		      throws ServletException, IOException {
 			  int member_id = Integer.parseInt(request.getParameter("id"));
 			  int course_id = Integer.parseInt(request.getParameter("course_id"));
-			   JSONObject resp = new JSONObject();
+			  JSONObject resp = new JSONObject();
 			   try {
 				   JSONObject data =crh.deleterecord(member_id,course_id);
 		    
@@ -59,11 +61,13 @@ public class courseRecordController extends HttpServlet{
 		       }
 		      
 		  }
+	  //為registrationrecord.html的get
 	  public void doGet(HttpServletRequest request, HttpServletResponse response)
 		      throws ServletException, IOException {
 			  int member_id = Integer.parseInt(request.getParameter("id"));
 			   JSONObject resp = new JSONObject();
 			   try {
+				   //檢視社員報名紀錄
 				   JSONObject data =crh.getAllRecordById(member_id);
 		    
 		           resp.put("response", data);

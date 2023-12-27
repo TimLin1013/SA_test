@@ -21,7 +21,9 @@ public class courseController extends HttpServlet{
   private courseHelper ch =  courseHelper.getHelper();
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+	  //teacher_home_page的ajax get api/course.do?homework=yes抓的參數
 	  String isHomework=request.getParameter("homework");
+	  //如果是上面抓的參數就執行helper的getallhomework();
 	  if ("yes".equals(isHomework)) {
 		  String Str_teacher_id=request.getParameter("teacher_id");
 		  int teacher_id=Integer.parseInt(Str_teacher_id);
@@ -34,6 +36,8 @@ public class courseController extends HttpServlet{
 	      response.setCharacterEncoding("UTF-8");
 	      response.getWriter().write(resp.toString());
 	  }else {
+		  //這裡為course_list.html和classinfo.html ajax的get
+		  //如果沒有抓到參數就執行getallcourse();
 		  JSONObject query = ch.getAllcourse();
 	      JSONObject resp = new JSONObject();
 	      resp.put("status", "200");
@@ -46,9 +50,11 @@ public class courseController extends HttpServlet{
 	  }
 	  
   }
-  public void doPut(HttpServletRequest request, HttpServletResponse response)//新增設課評價和繳交作業
+  public void doPut(HttpServletRequest request, HttpServletResponse response)
 	      throws ServletException, IOException {
-	  String admin= request.getParameter("admin");
+	  	//為addclass.html ajax put  url: "api/course.do?admin=yes"
+	  	String admin= request.getParameter("admin");
+	  	//有抓到就新增社課
 	    if ("yes".equals(admin)) {
 	        JsonReader jsr = new JsonReader(request);
 	        JSONObject jso = jsr.getObject();
@@ -67,10 +73,8 @@ public class courseController extends HttpServlet{
 
 	        	Timestamp Course_start_time = new Timestamp(adjustedTime);
 
-	        	// 格式化時間
 	        	String formattedTime = outputDateFormat.format(parsedDate);
 
-	        	// 計算下一個時間點
 	        	Calendar calendar = Calendar.getInstance();
 	        	calendar.setTime(parsedDate);
 	        	calendar.add(Calendar.HOUR, 2); // 加2小時
@@ -94,13 +98,15 @@ public class courseController extends HttpServlet{
 	            e.printStackTrace();
 	        }
 	    }
+	   //沒有則為社課評價與繳交作業
 	  else {
+		  //為submitHomework.html的ajax put Homework="+encodeURIComponent("Yes")
 		  String submitHomework= request.getParameter("Homework");	
 		  int member_id = Integer.parseInt(request.getParameter("member_id"));
 		  int course_id = Integer.parseInt(request.getParameter("course_id"));
 		  String Str_course_value = request.getParameter("rating");
 		  String content=request.getParameter("content");
-		  
+		  //如果有這個參數就執行繳交作業
 		  if("Yes".equals(submitHomework)) {
 			  	JSONObject resp = new JSONObject();
 			  	JSONObject data = ch.submitHomework(member_id,course_id,content);
@@ -112,42 +118,38 @@ public class courseController extends HttpServlet{
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(resp.toString());
 		  }
+		  //沒有則社課評價
 		  else {
 			  JSONObject resp = new JSONObject();
 			  int course_value=Integer.parseInt(Str_course_value);
-			JSONObject data = ch.createCourseRating(member_id,course_id,course_value);
-			int Rating =ch.getRating(member_id,course_id);
-			resp.put("status", "200");
-			resp.put("message", "所有資料取得成功");
-			resp.put("response", data);    
-			resp.put("Rating", Rating);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(resp.toString()); 
+			  JSONObject data = ch.createCourseRating(member_id,course_id,course_value);
+			  int Rating =ch.getRating(member_id,course_id);
+			  resp.put("status", "200");
+			  resp.put("message", "所有資料取得成功");
+			  resp.put("response", data);    
+			  resp.put("Rating", Rating);
+			  response.setContentType("application/json");
+			  response.setCharacterEncoding("UTF-8");
+			  response.getWriter().write(resp.toString()); 
 		 } 
 	  }
-	  
-	  
-	  	
 	      
   }
+  //為teacher_home_page.html的post
   public void doPost(HttpServletRequest request, HttpServletResponse response)
 	      throws ServletException, IOException {
-		  int score=Integer.parseInt(request.getParameter("new_score"));
-		  int student_id=Integer.parseInt(request.getParameter("student_id"));
-		  int course_id=Integer.parseInt(request.getParameter("course_id"));
+		  	int score=Integer.parseInt(request.getParameter("new_score"));
+		  	int student_id=Integer.parseInt(request.getParameter("student_id"));
+		  	int course_id=Integer.parseInt(request.getParameter("course_id"));
 		  	JSONObject query = ch.updateScore(student_id,course_id,score);
 			  
-		      JSONObject resp = new JSONObject();
-		      resp.put("status", "200");
-		      resp.put("message", "所有資料取得成功");
-		      resp.put("response", query);        
-		      response.setContentType("application/json");
-		      response.setCharacterEncoding("UTF-8");
-		      response.getWriter().write(resp.toString());
-		      
-		  
-		  
+		    JSONObject resp = new JSONObject();
+		    resp.put("status", "200");
+		    resp.put("message", "所有資料取得成功");
+		    resp.put("response", query);        
+		    response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+		    response.getWriter().write(resp.toString());  
 	  }
   
 }

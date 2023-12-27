@@ -8,11 +8,8 @@
 </head>
 
 <body>
-    <div id="container">
-        
+    <div id="container">     
         <div id="content">
-            
-
             <div id="flashMessage" class="message" style="display: none;"></div>
 
             <table id="table">
@@ -36,7 +33,6 @@
 		   		 var id = url.searchParams.get("id");
 
                 function getAllhomework() {
-                    // 發出POST的GET請求取得所有會員列表
                     $.ajax({
                             type: "GET",
                             url: "api/course.do?homework=yes&teacher_id="+id,
@@ -76,35 +72,30 @@
                     getAllhomework();
                 });
                 function changeScore(student_id, course_id) {
-    // Prompt the user for a new score
-    var newScore = prompt("請輸入新的分數（0-100）：");
+   				var newScore = prompt("請輸入新的分數（0-100）：");
 
-    // Validate the input
-    if (newScore !== null && !isNaN(newScore)) {
-        // Ensure the entered score is within the valid range (0-100)
-        newScore = Math.max(0, Math.min(100, parseInt(newScore, 10)));
+    			if (newScore !== null && !isNaN(newScore)) {
 
-        // Perform the AJAX request to update the score
-        $.ajax({
-            type: "POST",
-            url: "api/course.do?student_id=" + student_id + "&course_id=" + course_id + "&new_score=" + newScore,
-            crossDomain: true,
-            cache: false,
-            dataType: 'json',
-            timeout: 5000,
-            success: function (response) {
-                console.log(response);
-                // Update the table after successful score change
-                getAllhomework();
-            },
-            error: function () {
-                alert("無法連線到伺服器！");
-            }
-        });
-    } else {
-        // Handle invalid input or cancellation
-        alert("請輸入有效的分數（0-100）。");
-    }
+       				 newScore = Math.max(0, Math.min(100, parseInt(newScore, 10)));
+       					 $.ajax({
+            				type: "POST",
+            				url: "api/course.do?student_id=" + student_id + "&course_id=" + course_id + "&new_score=" + newScore,
+            				crossDomain: true,
+           					cache: false,
+            				dataType: 'json',
+            				timeout: 5000,
+           					success: function (response) {
+                				console.log(response);
+                				getAllhomework();
+           	 				},
+            				error: function () {
+                				alert("無法連線到伺服器！");
+            				}
+        				});
+    				} else {
+
+        				alert("請輸入有效的分數（0-100）。");
+    				}
 }
 
                 

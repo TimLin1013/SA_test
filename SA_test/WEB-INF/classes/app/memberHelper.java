@@ -216,7 +216,7 @@ public class memberHelper {
         return (row == 0) ? false : true;
     }
     public String getIdentity(String account) {
-    	String identity = null; // 初始化為空值
+    	String identity = null;
     	try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();

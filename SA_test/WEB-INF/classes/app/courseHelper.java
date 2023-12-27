@@ -19,6 +19,7 @@ public class courseHelper {
         if(ch == null) ch = new courseHelper();
         return ch;
     }
+	   //取得所有課程
 	   public JSONObject getAllcourse() {
 	        course c = null;
 
@@ -60,7 +61,6 @@ public class courseHelper {
 	                Timestamp course_start_time	= rs.getTimestamp("course_start_time");
 	                String  course_location= rs.getString("course_location");
 	                c = new course(course_id,course_name, course_start_time,member_id,course_time,course_location);
-	                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
 	                jsa.put(c.getData());
 	            }
 
@@ -88,6 +88,7 @@ public class courseHelper {
 	        response.put("data", jsa);
 	        return response;
 	    }
+	   //新增社課評價
 	   public JSONObject createCourseRating(int member_id,int course_id,int course_value) {
 		   /** 記錄實際執行之SQL指令 */
 	        String exexcute_sql = "";
@@ -140,6 +141,7 @@ public class courseHelper {
 	        response.put("row", row);
 	        return response;
 	    }
+	   //得到社課評價
 	   public int getRating(int member_id,int course_id) {
 	    	int rating = 0; // 初始化為空值
 	    	try {
@@ -171,6 +173,7 @@ public class courseHelper {
 	        }
 	    	return rating;
 	    }
+	   //繳交作業
 	   public JSONObject submitHomework(int member_id,int course_id,String content) {
 		   /** 記錄實際執行之SQL指令 */
 	        String exexcute_sql = "";
@@ -225,6 +228,7 @@ public class courseHelper {
 	        response.put("row", row);
 	        return response;
 	    }
+	   //新增社課
 	   public JSONObject createCourse(String course_name,Timestamp course_start_time,int member_id,String course_location,String time) {
 		   /** 記錄實際執行之SQL指令 */
 	        String exexcute_sql = "";
@@ -278,6 +282,7 @@ public class courseHelper {
 	        response.put("row", row);
 	        return response;
 	    }
+	   //取得所有作業
 	   public JSONObject getAllhomework(int teacher_id) {
 	        course c = null;
 
@@ -323,14 +328,11 @@ public class courseHelper {
 	                int student_id = rs.getInt("member_id");
 	                tmp.put("student_id", student_id);
 
-	                // Parse the original homework_time
 	                String originalHomeworkTime = rs.getString("homework_time");
 	                LocalDateTime originalDateTime = LocalDateTime.parse(originalHomeworkTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-	                // Add 8 hours to the original homework_time
 	                LocalDateTime adjustedDateTime = originalDateTime.plusHours(8);
 
-	                // Format the adjusted homework_time
 	                String adjustedHomeworkTime = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	                tmp.put("homework_time", adjustedHomeworkTime);
 
@@ -366,6 +368,7 @@ public class courseHelper {
 	        response.put("data", jsa);
 	        return response;
 	    }
+	    //更改分數
 	    public JSONObject updateScore(int student_id,int course_id,int score) {
 	        /** 紀錄回傳之資料 */
 	        JSONArray jsa = new JSONArray();

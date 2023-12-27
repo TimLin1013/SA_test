@@ -13,6 +13,7 @@ public class courseRecordHelper {
 		if(crh == null) crh = new courseRecordHelper();
 		return crh; 
 	}
+	//新增社課報名紀錄
 	public JSONObject createrecord(int member_id ,int course_id){
 		String exexcute_sql = "";
 		long start_time = System.nanoTime();
@@ -55,7 +56,7 @@ public class courseRecordHelper {
 
         return response;
   }
-	
+	//取消報名
 	public JSONObject deleterecord(int member_id ,int course_id){
 		String exexcute_sql = "";
 		long start_time = System.nanoTime();
@@ -98,6 +99,7 @@ public class courseRecordHelper {
 
         return response;
   }
+	//檢視社員報名紀錄
 	 public JSONObject getAllRecordById(int id) {
 	        JSONArray jsa = new JSONArray();
 	        String exexcute_sql = "";
