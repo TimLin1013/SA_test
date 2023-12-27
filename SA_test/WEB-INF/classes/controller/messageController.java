@@ -34,20 +34,16 @@ public class messageController extends HttpServlet{
 	    Timestamp messageTime = null;
 
 	    try {
-	        // Parse the ISO 8601 string to a LocalDateTime
 	        LocalDateTime dateTime = LocalDateTime.parse(message_time, DateTimeFormatter.ISO_DATE_TIME);
-	        // Convert LocalDateTime to Timestamp
 	        messageTime = Timestamp.valueOf(dateTime);
 	    } catch (DateTimeParseException e) {
-	        // Handle exception if the format is not parsable
 	        e.printStackTrace();
-	        // Send an error response back to client or set a default timestamp
 	        messageTime = new Timestamp(System.currentTimeMillis());
 	    }
 	    
 	    int member_id = jso.getInt("member_id");
 	    message mes = new message(message_content, messageTime, article_id,member_id);
-	    JSONObject data = msh.create(mes); // article_helper中有一個create
+	    JSONObject data = msh.create(mes); 
 
 	    JSONObject resp = new JSONObject();
 

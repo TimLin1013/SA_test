@@ -19,7 +19,7 @@ import org.json.JSONObject;
 @WebServlet("/api/article.do")
 public class articleController extends HttpServlet{
 	private articleHelper ah = articleHelper.getHelper();
-	
+	//這裡的post是新增和其他地方不一樣其他為put
 	 public void doPost(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 	        JsonReader jsr = new JsonReader(request);
@@ -39,41 +39,34 @@ public class articleController extends HttpServlet{
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	     throws ServletException, IOException {
-			
-	    	
 	    	JSONObject data = ah.getArticle();//article_helper中有一個getArticle
 	    	JSONObject resp = new JSONObject();
-	           resp.put("status", "200");
-	           resp.put("message", "article取得成功");
-	           resp.put("response", data);
-	           response.setContentType("application/json");
-		       response.setCharacterEncoding("UTF-8");
-		       response.getWriter().write(resp.toString());     
+	        resp.put("status", "200");
+	        resp.put("message", "article取得成功");
+	        resp.put("response", data);
+	        response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+		    response.getWriter().write(resp.toString());     
     }
 	public void doDelete(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
+			String idStr = request.getParameter("id");
+			int id = Integer.parseInt(idStr);
+			JSONObject data = ah.deleteByID(id);
 
-	    // Extract article ID from the request
-	    String idStr = request.getParameter("id");
-	    int id = Integer.parseInt(idStr);
+			JSONObject resp = new JSONObject();
+			if (data.getInt("row") > 0) {
+				resp.put("status", "200");
+				resp.put("message", "Article deleted successfully");
+			} else {
+				resp.put("status", "400");
+				resp.put("message", "Article deletion failed");
+				resp.put("response",data);
+			}
 
-	    // Call the delete method from articleHelper
-	    JSONObject data = ah.deleteByID(id);
-
-	    // Prepare the response
-	    JSONObject resp = new JSONObject();
-	    if (data.getInt("row") > 0) {
-	        resp.put("status", "200");
-	        resp.put("message", "Article deleted successfully");
-	    } else {
-	        resp.put("status", "400");
-	        resp.put("message", "Article deletion failed");
-	        resp.put("response",data);
-	    }
-
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write(resp.toString());
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(resp.toString());
 	}
 
 }

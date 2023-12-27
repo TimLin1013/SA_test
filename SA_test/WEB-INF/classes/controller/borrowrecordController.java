@@ -25,9 +25,8 @@ public class borrowrecordController extends HttpServlet{
 	   String instrument_id = request.getParameter("instrument_id");
 	   String id = request.getParameter("id");
 	   JSONObject resp = new JSONObject();
-	  //2023-12-13T18:27 時間格式
 	   try {
-           SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+           SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");//為2023-12-13T18:27 時間格式
            java.util.Date parsedDate = dateFormat.parse(borrowtime);
            Timestamp borrow_time = new Timestamp(parsedDate.getTime());
       

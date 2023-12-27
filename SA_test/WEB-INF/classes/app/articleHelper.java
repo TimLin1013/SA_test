@@ -17,6 +17,7 @@ public class articleHelper {
         if(ah == null) ah = new articleHelper();
         return ah;
     }
+    //創建文章
     public JSONObject create(article a) {
     	/** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
@@ -77,6 +78,7 @@ public class articleHelper {
 
         return response;
     }
+    //取得所有文章
     public JSONObject getArticle() {
         /** 新建一個 Article物件之 a 變數，用於紀錄每一位查詢回之article資料 */
         article a = null;
@@ -95,6 +97,7 @@ public class articleHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
+            //用article_time去抓出,oreder by 就是用順序抓，然後寫desc就是到著抓所以代表最新的會先被抓出來
             String sql = "SELECT * FROM `sa`.`tbl_article`ORDER BY `article_time` DESC;";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
@@ -152,36 +155,6 @@ public class articleHelper {
 
         return response;
     }
-    public String getIdentity(String account) {
-    	String identity = null; // 初始化為空值
-    	try {
-            /** 取得資料庫之連線 */
-            conn = DBMgr.getConnection();
-            /** SQL指令 */
-             String sql ="SELECT identity FROM `sa`.`tbl_member` WHERE `member_account` = ? LIMIT 1";
-            /** 將參數回填至SQL指令當中 */
-            pres = conn.prepareStatement(sql);
-            pres.setString(1, account);
-            /** 執行查詢 */
-            ResultSet rs = pres.executeQuery();
-
-            /** 檢查是否有查詢結果 */
-            if (rs.next()) {
-                identity = rs.getString("identity");
-            }
-           
-        } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
-            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            /** 若錯誤則印出錯誤訊息 */
-            e.printStackTrace();
-        } finally {
-            /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close( pres, conn);
-        }
-    	return identity;
-    }
     public JSONObject deleteByID(int article_id) {
         /** 記錄實際執行之 SQL 指令 */
         String execute_sql = "";
@@ -238,35 +211,6 @@ public class articleHelper {
         return response;
     }
 
-    public String getId(String account) {
-    	String id = null; // 初始化為空值
-    	try {
-            /** 取得資料庫之連線 */
-            conn = DBMgr.getConnection();
-            /** SQL指令 */
-             String sql ="SELECT member_id FROM `sa`.`tbl_member` WHERE `member_account` = ? LIMIT 1";
-            /** 將參數回填至SQL指令當中 */
-            pres = conn.prepareStatement(sql);
-            pres.setString(1, account);
-            /** 執行查詢 */
-            ResultSet rs = pres.executeQuery();
-
-            /** 檢查是否有查詢結果 */
-            if (rs.next()) {
-                id = rs.getString("member_id");
-            }
-           
-        } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
-            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            /** 若錯誤則印出錯誤訊息 */
-            e.printStackTrace();
-        } finally {
-            /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close( pres, conn);
-        }
-    	return id;
-    }
+   
 
 }
