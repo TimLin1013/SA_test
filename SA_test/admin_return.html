@@ -21,16 +21,24 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
-             color: white;
+            color:white;
+            background-color:black;
         }
 
         th {
-            background-color:black;
+			background-color:black;
         }
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            
+        }
+
     </style>
 </head>
 <body>
@@ -103,12 +111,19 @@
                         table_html += '<tr><td scope="row">' + value['borrow_record_id'] + '</td>';
                         table_html += '<td>' + value['member_name'] + '</td>';
                         table_html += '<td>' + value['instrument_name'] + '</td>';
-                        var borrowTime = new Date(value['borrow_time']).getTime();
 						var returnTime = new Date(value['return_time']).getTime();
+						var borrowTime = new Date(value['borrow_time']).getTime() - (8 * 60 * 60 * 1000);
+  			 			var threeHoursLater = new Date(borrowTime + 3 * 60 * 60 * 1000).getTime();
+    				 	var currentTime = new Date();
         				if (isNaN(returnTime)) {
-            				table_html += '<td><button onclick="inputreturntime(' + value['borrow_record_id'] + ', ' + value['instrument_id'] + ')">登記歸還</button></td>';
-
+							if(borrowTime>currentTime){
+								table_html += '<td>已預約</td>';
+							}
+							else{
+            					table_html += '<td><button onclick="inputreturntime(' + value['borrow_record_id'] + ', ' + value['instrument_id'] + ')">登記歸還</button></td>';	
+            				}	
         				}
+   			 			
         				else{
 							table_html += '<td>已歸還</td>';
 						}

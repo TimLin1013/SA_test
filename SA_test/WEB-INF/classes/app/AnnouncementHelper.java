@@ -19,9 +19,7 @@ public class AnnouncementHelper {
         return ah;
     }
 
-    /**
-     * 创建公告
-     */
+   //創建公告
     public JSONObject create(Announcement a) {
         String execute_sql = "";
         long start_time = System.nanoTime();
@@ -31,7 +29,7 @@ public class AnnouncementHelper {
             conn = DBMgr.getConnection();
 
             String sql = "INSERT INTO `sa`.`tbl_announcement`(`announcement_content`, `announcement_time`, `member_id`,`announcement_title`) VALUES (?, ?, ?,?)";
-
+            //因為有放入建構子所以可以使用announcement的get方法
             String title =a.getTitle();
             String content = a.getContent();
             int id=a.getAdminId();
@@ -65,9 +63,7 @@ public class AnnouncementHelper {
         return response;
     }
 
-    /**
-     * 根据ID删除公告
-     */
+   //用announcement_id刪除公告
     public JSONObject deleteByID(int id) {
         String execute_sql = "";
         long start_time = System.nanoTime();
@@ -104,10 +100,7 @@ public class AnnouncementHelper {
 
         return response;
     }
-
-    /**
-     * 更新公告
-     */
+    //更新公告
     public JSONObject update(Announcement announcement) {
         JSONArray jsa = new JSONArray();
         String execute_sql = "";
@@ -117,9 +110,9 @@ public class AnnouncementHelper {
         try {
             conn = DBMgr.getConnection();
 
-            // 更新语句中 SET 和 WHERE 子句应该是分开的
+           
             String sql = "UPDATE `sa`.`tbl_announcement` SET `announcement_title` = ?, `announcement_content` = ? WHERE `announcement_id` = ?";
-
+            //因為有放入建構子所以可以使用announcement的get方法
             String title = announcement.getTitle();
             String content = announcement.getContent();
             int announcement_id = announcement.getAnnouncement_id();
@@ -154,10 +147,7 @@ public class AnnouncementHelper {
         return response;
     }
 
-
-    /**
-     * 获取所有公告
-     */
+    //取得所有公告
     public JSONObject getAllAnnouncement() {
         Announcement announcement = null;
         JSONArray jsa = new JSONArray();
@@ -179,14 +169,16 @@ public class AnnouncementHelper {
 
             while (rs.next()) {
                 row += 1;
-
+               //從資料庫抓取資料
                int id = rs.getInt("member_id");
                String title = rs.getString("announcement_title");
                String content = rs.getString("announcement_content");
                Timestamp create_time = rs.getTimestamp("announcement_time");
                int announcement_id=rs.getInt("announcement_id");
-              announcement = new Announcement(announcement_id,id, title, content, create_time);
-              jsa.put(announcement.getData());
+               //放入建構子
+               announcement = new Announcement(announcement_id,id, title, content, create_time);
+               //可以用announcemnt的jsonobject的getdata方法取得資料
+               jsa.put(announcement.getData());
             }
 
         } catch (SQLException e) {
@@ -208,10 +200,7 @@ public class AnnouncementHelper {
 
         return response;
     }
-
-    /**
-     * 根据ID获取公告
-     */
+    //用announcement_id取得公告
     public JSONObject getAnnouncementByID(int id) {
 
         String execute_sql = "";

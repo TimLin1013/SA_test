@@ -28,34 +28,22 @@ public class AnnouncementController extends HttpServlet {
 	        String content = jso.getString("content");
 	        int id = jso.getInt("id");
 	        Announcement a = new Announcement(title,content,id);
-	        
-	        
-	            JSONObject data = ah.create(a);//member_helper中有一個create
+	        //呼叫helper的create方法
+	        JSONObject data = ah.create(a);
 
-	            JSONObject resp = new JSONObject();
+	        JSONObject resp = new JSONObject();
 	            
-	            resp.put("status", "200");
-	            resp.put("message", "成功! 新增公告...");
-	            resp.put("response", data);
-	            resp.put("id",id);
-	            jsr.response(resp, response);
-	        }
-	        
-	        
-	    
-    
+	        resp.put("status", "200");
+	        resp.put("message", "成功! 新增公告...");
+	        resp.put("response", data);
+	        resp.put("id",id);
+	        jsr.response(resp, response);
+	  }
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
-		
-	    
-	   // String title = request.getParameter("title");
-	   // String content = request.getParameter("content");
-	   // String id = request.getParameter("id");
-	    
-
-	  //  JSONObject query = ah.getAnnouncementByID(Integer.parseInt(id));
+		   //呼叫helper的gellallannouncement方法
            JSONObject data = ah.getAllAnnouncement();
-           /** 新建一個JSONObject用於將回傳之資料進行封裝 */
            JSONObject resp = new JSONObject();
            resp.put("status", "200");
            resp.put("message", "公告資料取得成功");
@@ -67,14 +55,12 @@ public class AnnouncementController extends HttpServlet {
     }
 	public void doDelete(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
-	        /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
 	        JsonReader jsr = new JsonReader(request);
 	        JSONObject jso = jsr.getObject();
 	        
 	        /** 取出經解析到JSONObject之Request參數 */
 	        int id = jso.getInt("id");
-	        
-	        /** 透過MemberHelper物件的deleteByID()方法至資料庫刪除該名會員，回傳之資料為JSONObject物件 */
+	        //呼叫helper的deletebyid方法
 	        JSONObject query = ah.deleteByID(id);
 	        
 	        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
@@ -97,10 +83,10 @@ public class AnnouncementController extends HttpServlet {
 	        String title = jso.getString("title");
 	        String content = jso.getString("content");
 	        
-	        /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
+	        //把這些參數放到announcement參數
 	        Announcement a = new Announcement(announcement_id,title,content);
 	        
-	        /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
+	        //呼叫helper的update方法
 	        JSONObject data = ah.update(a);
 	        
 	        /** 新建一個JSONObject用於將回傳之資料進行封裝 */

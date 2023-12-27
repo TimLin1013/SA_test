@@ -4,13 +4,13 @@ import java.sql.Timestamp;
 import org.json.JSONObject;
 
 public class Announcement {
-    private int announcement_id; // Unique identifier for the announcement
+    private int announcement_id; 
     private String title;
     private String announcement_content;
     private Timestamp announcement_time;
-    private int admin_id; // Identifier for the admin who created the announcement
+    private int admin_id; 
 
-    // Constructors
+    
     public Announcement(String announcement_content, String title, Timestamp announcement_time, int admin_id) {
         this.announcement_content = announcement_content;
         this.title = title;
@@ -40,7 +40,7 @@ public class Announcement {
         this.admin_id = member_id;
     }
 
-    // Method to return data to the frontend
+   
     public JSONObject getData() {
         JSONObject jsonAnnouncement = new JSONObject();
         jsonAnnouncement.put("title", getTitle());
@@ -51,7 +51,7 @@ public class Announcement {
         return jsonAnnouncement;
     }
 
-    // Getter methods
+    
     public String getTitle() {
         return this.title;
     }

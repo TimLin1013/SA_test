@@ -140,7 +140,7 @@ public class borrowrecordHelper {
 			System.out.println(exexcute_sql);
 			while(rs.next()) {
 				row += 1;
-				/** 將 ResultSet 之資料取出 */
+				//因為我使用join所以沒有建構子可以用所以我就用jsonobject的put放到jsonarray裡面
 				int borrowrecord_id = rs.getInt("borrow_record_id");
 				String member_name=rs.getString("member_name");
 				String instrument_name=rs.getString("instrument_name");
@@ -284,7 +284,7 @@ public class borrowrecordHelper {
 	            pres.setInt(1, id);
 	            /** 執行刪除之SQL指令並記錄影響之行數 */
 	            row = pres.executeUpdate();
-	          //資料庫器材數量+1
+	            //資料庫器材數量+1
 				String sqlQuantity = "SELECT `instrument_quantity` FROM `sa`.`tbl_instrument` WHERE `instrument_id` = ? LIMIT 1";
 
 				pres = conn.prepareStatement(sqlQuantity);
