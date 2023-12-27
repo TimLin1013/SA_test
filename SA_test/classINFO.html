@@ -48,6 +48,10 @@
         #past-signups-container {
             margin-top: 20px;
         }
+        .past-class-text {
+	        color: red; 
+	        font-weight: bold; 
+	    }
     </style>
 </head>
 <body>
@@ -182,9 +186,11 @@
         		const infoText = document.createTextNode(`課名: ${classInfo.course_name}, 時間: ${classInfo.course_time}, 地點: ${classInfo.course_location}, 老師id: ${classInfo.teacher_id}`);
         		classDiv.appendChild(infoText);
         		if (isPastTime(classInfo.course_start_time)) {
-           		 	const pastText = document.createTextNode(" (已結束)");
-            		classDiv.appendChild(pastText);
-        		}
+				    const pastText = document.createElement("span");
+				    pastText.textContent = " (已結束)";
+				    pastText.classList.add("past-class-text"); 
+				    classDiv.appendChild(pastText);
+				}
 
         		container.appendChild(classDiv);
     		});

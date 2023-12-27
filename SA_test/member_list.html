@@ -56,13 +56,17 @@
                             timeout: 5000,
                             success: function (response) {
                                 if(response.response.row==0){
+									
 									$("#flashMessage").html("該會員還有尚未歸還的器材");
                                     $("#flashMessage").show();
+                                    alert("刪除失敗");
                                     getAllmember();
 								}
                                 else {
+									
                                     $("#flashMessage").html("成功! 已經成功刪除會員...");
                                     $("#flashMessage").show();
+                                    alert("刪除成功");
                                     getAllmember();
                                 }
                                 console.log(response);

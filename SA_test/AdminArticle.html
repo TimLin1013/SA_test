@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Forum</title>
+    <title>文章列表</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,27 +22,32 @@
             margin-top: 20px;
         }
 
-     th, td {
+     th {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-    color: white; /* 设置文字颜色为白色 */
+    color:white;
 }
-
+ td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    color: black;
+}
 th {
     background-color: #333; /* 设置表头背景颜色为深色 */
 }
 
-tr:hover {
-    background-color: #555; /* 设置悬停时行的背景颜色为更深的色调 */
+tr {
+    background-color:white; /* 设置悬停时行的背景颜色为更深的色调 */
 }
 
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>Forum</h1>
-<button id="view-all-articles-button" style="background-color: green; color: black; border: none;">檢視所有文章</button>
+    <h1>文章列表</h1>
+
 
     <table id="articles-table">
         <thead>
@@ -60,7 +65,7 @@ tr:hover {
 
     <script>
         $(document).ready(function() {
-            $('#view-all-articles-button').on('click', getArticles);
+            getArticles();
         });
 
         function getArticles() {
@@ -103,7 +108,8 @@ tr:hover {
                 url: "/SA_test/api/article.do?id=" + article_id,
                 success: function (response) {
                     if (response.status == 200) {
-                        getArticles(); // 重新获取文章列表
+                        alert("刪除成功");
+                        getArticles(); // 重新獲取文章列表
                     } else {
 						console.log(response.response.data);
                         alert("刪除失敗：" + response.message);

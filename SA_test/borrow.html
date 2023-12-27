@@ -82,7 +82,7 @@
 
     <main>
         <div class="category">
-            <h2 class="category-title">樂器</h2>
+            <h2 class="category-title">木管樂器</h2>
             <section class="product-grid">
                 <!-- Flute -->
                 <div class="product">
@@ -171,7 +171,7 @@
         </div>
 
         <div class="category">
-            <h2 class="category-title">Brass Instruments</h2>
+            <h2 class="category-title">銅管樂器</h2>
             <section class="product-grid">
                 <!-- Trumpet -->
                 <div class="product">
@@ -216,7 +216,7 @@
         </div>
 
         <div class="category">
-            <h2 class="category-title">Others</h2>
+            <h2 class="category-title">其他</h2>
             <section class="product-grid">
                 <!-- Piano -->
                 <div class="product">
@@ -325,7 +325,7 @@
                 var quantityText = $(this).siblings('.product-info').find('p').text();
                 if (quantityText.includes('Quantity: 0')) {
                     event.preventDefault();
-                    alert("Sorry, this instrument is out of stock.");
+                    alert("數量不足，無法借閱");
                 }
             });
         });
