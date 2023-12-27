@@ -12,7 +12,6 @@ public class instrument {
 		this.quantity=quantity;
 	}
 	public JSONObject getData() {
-        /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
         JSONObject jso = new JSONObject();
         jso.put("id", getId());
         jso.put("name", getName());
