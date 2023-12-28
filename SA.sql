@@ -35,13 +35,6 @@ CREATE TABLE `tbl_announcement` (
   `announcement_title` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- 傾印資料表的資料 `tbl_announcement`
---
-
-INSERT INTO `tbl_announcement` (`announcement_id`, `announcement_content`, `announcement_time`, `member_id`, `announcement_title`) VALUES
-(26, '公告內文', '2023-12-27 09:45:12', 49, '公告標題'),
-(27, 'content', '2023-12-28 01:35:27', 49, 'title');
 
 -- --------------------------------------------------------
 
@@ -71,12 +64,6 @@ CREATE TABLE `tbl_borrow_record` (
   `member_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- 傾印資料表的資料 `tbl_borrow_record`
---
-
-INSERT INTO `tbl_borrow_record` (`borrow_record_id`, `borrow_time`, `return_time`, `instrument_id`, `member_id`) VALUES
-(62, '2023-12-27 11:48:00', '2023-12-27 17:32:17', 5, 47);
 
 -- --------------------------------------------------------
 
@@ -93,20 +80,6 @@ CREATE TABLE `tbl_course` (
   `course_location` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- 傾印資料表的資料 `tbl_course`
---
-
-INSERT INTO `tbl_course` (`course_id`, `course_name`, `course_start_time`, `member_id`, `course_time`, `course_location`) VALUES
-(22, 'B社課', '2024-01-01 10:00:00', 36, '01/01 星期一 10:00 - 01/01 星期一 12:00', '新竹'),
-(23, '123123', '2023-12-26 20:36:00', 36, '12/26 星期二 20:36 - 12/26 星期二 22:36', '123123'),
-(24, '123123', '2023-12-26 20:37:00', 36, '12/26 星期二 20:37 - 12/26 星期二 22:37', '123123'),
-(25, '24234324', '2023-12-26 20:41:00', 36, '12/26 星期二 20:41 - 12/26 星期二 22:41', '234234234'),
-(26, '2342342', '2023-12-26 20:42:00', 36, '12/26 星期二 20:42 - 12/26 星期二 22:42', '234234'),
-(27, '1231231', '2023-12-26 20:43:00', 36, '12/26 星期二 20:43 - 12/26 星期二 22:43', '1212312'),
-(28, '12312313', '2023-12-26 20:47:00', 36, '12/26 星期二 20:47 - 12/26 星期二 22:47', '1231231'),
-(29, '123123', '2023-12-26 20:48:00', 36, '12/26 星期二 20:48 - 12/26 星期二 22:48', '123123'),
-(30, 'A社課', '2023-12-28 10:00:00', 36, '12/28 星期四 10:00 - 12/28 星期四 12:00', '台灣');
 
 -- --------------------------------------------------------
 
@@ -120,12 +93,6 @@ CREATE TABLE `tbl_course_registration_record` (
   `course_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- 傾印資料表的資料 `tbl_course_registration_record`
---
-
-INSERT INTO `tbl_course_registration_record` (`course_registration_record_id`, `member_id`, `course_id`) VALUES
-(322, 47, 22);
 
 -- --------------------------------------------------------
 
@@ -147,7 +114,7 @@ CREATE TABLE `tbl_course_value` (
 
 CREATE TABLE `tbl_homework` (
   `content` varchar(2000) NOT NULL,
-  `score` int(11) NOT NULL,
+  `score` int(11) DEFAULT NULL,
   `homework_time` datetime NOT NULL,
   `member_id` int(11) NOT NULL,
   `course_id` int(11) NOT NULL
@@ -170,17 +137,17 @@ CREATE TABLE `tbl_instrument` (
 --
 
 INSERT INTO `tbl_instrument` (`instrument_id`, `instrument_name`, `instrument_quantity`) VALUES
-(1, 'Flute', 0),
-(2, 'Piccolo', 0),
-(3, 'Clarinet', 0),
-(4, 'Oboe', 2),
-(5, 'Bassoon', 2),
-(6, 'Saxophone', 1),
-(7, 'Trumpet', 5),
-(8, 'Trombone', 12),
-(9, 'Horn', 2),
-(10, 'Piano', 1),
-(11, 'Double_Bass', 1);
+(1, 'Flute', 20),
+(2, 'Piccolo', 20),
+(3, 'Clarinet', 20),
+(4, 'Oboe', 20),
+(5, 'Bassoon', 20),
+(6, 'Saxophone', 20),
+(7, 'Trumpet', 20),
+(8, 'Trombone', 20),
+(9, 'Horn', 20),
+(10, 'Piano', 20),
+(11, 'Double_Bass', 20);
 
 -- --------------------------------------------------------
 
@@ -204,10 +171,7 @@ CREATE TABLE `tbl_member` (
 --
 
 INSERT INTO `tbl_member` (`member_id`, `member_name`, `member_account`, `member_password`, `member_phone`, `member_group`, `created_time`, `identity`) VALUES
-(36, '老師', 'teacher@gmail.com', '11111111a', '0903694286', '無', '2023-12-26 06:26:35', '3'),
-(47, '林冠廷', '1125899906842624abc@gmail.com', '11111111a', '0903694286', 'triangle', '2023-12-27 03:41:05', '1'),
-(48, 'tim _lin', '11258999016842624abc@gmail.com', '11111111a', '1234567899', '無', '2023-12-27 09:16:27', '3'),
-(49, 'tim _lin', '2@gmail.com', '11111111a', '123123', '無', '2023-12-27 09:34:24', '2');
+(1, 'Tim', '2@gmail.com', '11111111a', '123123', '無', '2023-12-27 09:34:24', '2');
 
 -- --------------------------------------------------------
 
