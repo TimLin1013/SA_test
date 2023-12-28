@@ -87,7 +87,7 @@
         // 如果課程已經開始，顯示取消報名、評分和繳交作業連結
         table_html += '<td>' + '<a href="#" onclick="deleterecord(' + id + ',' + value['course_id'] + ",'" + value['course_start_time'] + "');\">取消報名</a>";
         table_html += ' | <a href="#" onclick="rateCourse(\'' + value['course_id'] + '\',\'' + value['course_name'] + '\',\'' + value['course_location'] + '\',\'' + value['course_time'] + '\',\'' + value['member_id'] + '\');">評分</a>';
-        table_html += ' | <a href="#" onclick="submitHomework(\'' + value['course_id'] + '\',\'' + value['course_name'] + '\',\'' + value['course_location'] + '\',\'' + value['course_time'] + '\',\'' + value['member_id'] + '\');">繳交作業</a></td></tr>';
+        table_html += ' | <a href="#" onclick="submitHomework(\'' + value['course_id'] + '\',\'' + value['course_name'] + '\',\'' + value['course_location'] + '\',\'' + value['course_time'] + '\',\'' + value['member_id'] + '\');">繳交作業/查看成績</a></td></tr>';
     } else {
         // 如果課程還未開始，僅顯示取消報名連結
         table_html += '<td>' + '<a href="#" onclick="deleterecord(' + id + ',' + value['course_id'] + ",'" + value['course_start_time'] + "');\">取消報名</a></td></tr>";
