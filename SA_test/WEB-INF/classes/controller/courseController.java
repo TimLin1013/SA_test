@@ -38,6 +38,7 @@ public class courseController extends HttpServlet{
 		      response.setCharacterEncoding("UTF-8");
 		      response.getWriter().write(resp.toString());
 		  }else {
+              //如果有交過作業的話就會呈現分數
 			  String Str_course_id=request.getParameter("course_id");
 			  int member_id=Integer.parseInt(Str_member_id);
 			  int course_id=Integer.parseInt(Str_course_id);
