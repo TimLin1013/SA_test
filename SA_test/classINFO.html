@@ -52,6 +52,15 @@
 	        color: red; 
 	        font-weight: bold; 
 	    }
+	    #returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+		}
     </style>
 </head>
 <body>
@@ -59,7 +68,7 @@
 	<div id="class-info-header">
     	<h1>社課報名</h1>
 	</div>
-
+	<button id="returnButton" onclick="returnhome()">回到首頁</button>
 	<div id="class-info-container"></div>
 
 	<div id="past-signups-container"></div>
@@ -72,7 +81,9 @@
     	let recordClasses=[];
     	let canSignUpClasses=[];
     	let signedUpClasses = [];
-
+		function returnhome() {
+      		window.location.href = 'user_home_page.html?id=' + id;
+    	}
     	function getAllCourse() {
     		$.ajax({
         		type: "GET",

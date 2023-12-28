@@ -46,6 +46,15 @@ button {
   font-size: 18px;
   background-color: #5cb85c;
 }
+#returnButton {
+   background-color: #d9534f;
+   color: white;
+   padding: 12px 24px; 
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   margin-left: auto;
+}
 
 </style>
 </head>
@@ -53,6 +62,7 @@ button {
 <header>
   <h1>選擇借用時段</h1>
 </header>
+<button id="returnButton" onclick="returnhome()">回到首頁</button>
 <div id ="instrument_name"></div>
 <main class="main-content">
 	
@@ -71,7 +81,10 @@ button {
     var modified = "你所選的器材為: " + instrumentName;
     var instrumentNameDiv = document.getElementById('instrument_name');
 	instrumentNameDiv.innerHTML =modified;
-    
+	var id = url.searchParams.get("id");
+    function returnhome() {
+      	window.location.href = 'user_home_page.html?id=' + id;
+    }
     const now = new Date();
     const minDate = now.toISOString().slice(0, 16); // 格式為 "YYYY-MM-DDTHH:mm"
     document.getElementById('borrow-time').setAttribute('min', minDate);
@@ -96,7 +109,6 @@ button {
         var borrowTime = $('#borrow-time').val();
         var instrument_id = url.searchParams.get("instrument_id");
         var id = url.searchParams.get("id");
-
         if (isValidBorrowTime(borrowTime)) {
             var data_string = "borrow-time=" + encodeURIComponent(borrowTime) + "&instrument_id=" + encodeURIComponent(instrument_id) + "&id=" + encodeURIComponent(id);
 

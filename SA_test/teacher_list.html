@@ -8,6 +8,7 @@
 </head>
 
 <body>
+	<button id="returnButton" onclick="returnhome()">回到首頁</button>
     <div id="container">
         
         <div id="content">
@@ -37,7 +38,9 @@
                 var url_string = window.location.href;
 		   		 var url = new URL(url_string);
 		   		 var id = url.searchParams.get("id");
-
+                function returnhome() {
+      				window.location.href = 'admin_home_page.html?id=' + id;
+    			}
                 function getAllmember() {
                     // 發出POST的GET請求取得所有會員列表
                     $.ajax({

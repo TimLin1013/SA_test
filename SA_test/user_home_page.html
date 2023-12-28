@@ -14,6 +14,7 @@
     <header>
 		<img src="logo.png" alt="Logo" class="logo">
         <h1>音樂社團</h1>
+        <button id="logoutButton" onclick="logout()">登出</button>
         <script>
 			
             function getCurrentURLParams() {
@@ -27,6 +28,9 @@
                 var currentParams = getCurrentURLParams();
                 window.location.href = page + '?' + currentParams.toString();
             }
+             function logout() {
+      			window.location.href = 'index.html';
+    		}
         </script>
     </header>
 

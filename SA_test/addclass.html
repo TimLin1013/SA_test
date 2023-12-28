@@ -35,12 +35,21 @@
             border: none;
             color: #333;
         }
+         #returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+		}
     </style>
 </head>
 <body>
 
 <h2>社課輸入介面</h2>
-
+<button id="returnButton" onclick="returnhome()">回到首頁</button>
 <form id="class-input-form">
     <label for="courseName">社課名稱:</label>
     <input type="text" id="courseName" name="courseName" required>
@@ -58,6 +67,12 @@
 </form>
 
 <script>
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	var id = url.searchParams.get("id");
+	function returnhome() {
+      	window.location.href = 'admin_home_page.html?id=' + id;
+   }
    function submitClass() {
     // 獲取輸入的值
     var courseName = document.getElementById("courseName").value;
