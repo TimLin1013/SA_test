@@ -99,17 +99,18 @@
             });
         }
 
-        function updateAnnouncement(data) {
-            $("#announcementList").empty();
-            $.each(data, function (index, value) {
-                var listItem = '<li>';
-                listItem += '<strong>標題:</strong> ' + value['title'] + '<br>';
-				listItem += '<strong>內容:</strong> ' + value['announcement_content'];
-				listItem += '</li>';
+		function updateAnnouncement(data) {
+		    $("#announcementList").empty();
+		    $.each(data, function (index, value) {
+		        var listItem = '<li class="announcement-card">';
+		        listItem += '<h3 class="announcement-title">' + value['title'] + '</h3>';
+		        listItem += '<p class="announcement-content">' + value['announcement_content'] + '</p>';
+		        listItem += '</li>';
+		
+		        $("#announcementList").append(listItem);
+		    });
+		}
 
-                $("#announcementList").append(listItem);
-            });
-        }
         function updateIdInHref() {
         	window.location.href = 'edit_INFO.html?id=' + id + '&edit_id=' + id;
 

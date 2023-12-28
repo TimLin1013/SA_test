@@ -6,15 +6,15 @@ body {
 }
 
 header {
-    background-color: #333;
-    color: white;
+    background-color: white;
+    color: black;
     padding: 10px;
     text-align: center;
     display: flex;
     align-items: center;
 }
 .logo {
-    height: 50px; /* 或你想要的任何大小 */
+    height: 80px; 
     margin-right: 20px; /* 在logo和標題之間添加一些間距 */
 }
 
@@ -22,15 +22,23 @@ nav {
     background-color: #555;
     padding: 10px;
     text-align: center;
-}
-
-nav a {
     color: white;
     text-decoration: none;
     margin: 0 15px;
     padding: 8px 12px;
     border-radius: 4px;
-    background-color: #777;
+    background-color: black;
+    transition: background-color 0.5s ease; 
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #555;
+    background-color: forestgreen; 
 }
 
 section {
@@ -78,21 +86,52 @@ footer {
     min-width: 100%;
     box-sizing: border-box;
     padding: 10px;
+    display: flex; /* 使用 Flexbox */
+    flex-direction: column; /* 垂直排列 */
+    align-items: center; /* 水平居中 */
+    justify-content: center; /* 垂直居中 */
 }
 
 .slide img {
-    width: auto; /* 讓圖片寬度自適應 */
-    max-width: 100%; /* 最大寬度為容器寬度 */
-    max-height: 300px; /* 最大高度，可以根據需要調整 */
-    height: auto; /* 保持圖片比例 */
+    width: auto; /* 让图片宽度自适应 */
+    max-width: 100%; /* 最大宽度为容器宽度 */
+    max-height: 300px; /* 最大高度，可以根据需要调整 */
+    height: auto; /* 保持图片比例 */
     display: block;
-    object-fit: contain; /* 保持圖片原始比例 */
+    object-fit: contain; /* 保持图片原始比例 */
+    margin-bottom: 10px; /* 在图片和文字之间添加一些间距 */
 }
+
 .slide p {
     font-size: 16px; /* 文字大小 */
-    color: #333; /* 文字顏色 */
-    text-align: center; /* 文字置中 */
-    margin-top: 10px; /* 在圖片和文字之間添加一些間距 */
+    color: #333; /* 文字颜色 */
+    text-align: center; /* 文字居中 */
+}
+
+.announcement-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 8px; /* 圓角邊框 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 1); /* 輕微的陰影效果 */
+    padding: 15px; /* 內部間距 */
+}
+.announcement-card:hover {
+    border-color: #aaa; /* 懸浮時邊框顏色變深 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 懸浮時陰影更明顯 */
+}
+
+.announcement-title {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    padding-bottom: 10px; /* 添加一些底部內邊距 */
+    margin-bottom: 10px; /* 與內容之間的間距 */
+}
+
+.announcement-content {
+    font-size: 14px;
+    color: #666;
 }
 
 
