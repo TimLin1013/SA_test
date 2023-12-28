@@ -47,8 +47,12 @@
     var url = new URL(url_string);
     var id = url.searchParams.get("edit_id");
     var ID=url.searchParams.get("id");
-    var identity = url.searchParams.get("identity");
-	
+
+    var identity = url.searchParams.get("edit_identity");
+
+    var Identity= url.searchParams.get("identity");
+
+
     function updateMember(id) {
         var name = $('#name').val();
         var password = $('#password').val();
@@ -92,16 +96,24 @@
                     if (response.status == 200) {
                         getMember();
                         alert("更新成功");
-                        if(identity==='2'){
+                        if(Identity==='2'){
 							
-							window.location.href = 'admin.html?id='+ ID;
-						}
-						else if(identity==='3'){
-							window.location.href = 'teacher_list.html?id='+ ID;
+
+							if(identity==='1'){
+								
+								window.location.href = 'member_list.html?id='+ ID;
+							}else if(identity==='2'){
+								
+								window.location.href = 'admin.html?id='+ ID;
+							}else{
+								
+								window.location.href = 'teacher_list.html?id='+ ID;
+							}
 						}
 						else
 						{
-							window.location.href = 'user_home_page.html?id='+ ID;
+							window.location.href = 'user_home_page.html?='+ ID;
+
 						}
                         
                     }
