@@ -34,13 +34,26 @@
             border-radius: 5px;
             cursor: pointer;
         }
+         #returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+		}
     </style>
 </head>
 <body>
     <h1>作業繳交</h1>
-    
+    <button id="returnButton" onclick="returnhome()">回到首頁</button>
     <script>
-
+		var url = new URL(window.location.href);
+		var id = url.searchParams.get("id");
+		function returnhome() {
+      		window.location.href = 'user_home_page.html?id=' + id;
+    	}
         const urlParams = new URLSearchParams(window.location.search);
 
         const courseName = urlParams.get("course_name");
@@ -67,7 +80,6 @@
                         alert("您已繳交過");
                     } else {
                         alert("成功繳交");
-                        // Refresh the page or perform any other action after successful submission
                         location.reload();
                     }
                 },
@@ -91,10 +103,8 @@
                 success: function (response) {
                     console.log(response);
                     if (response.response.data.length > 0) {
-                        // Student has submitted homework, display content and grade
                         displaySubmittedContent(response.response.data[0].content, response.response.data[0].score);
                     } else {
-                        // Student has not submitted homework, display input box
                         displayInputBox();
                     }
                 },
@@ -107,12 +117,10 @@
         }
 
         function displayInputBox() {
-            // Display the input box
             document.getElementById("inputBoxContainer").style.display = "block";
         }
 
         function displaySubmittedContent(content, score) {
-            // Display the submitted content and grade
             var submittedContentDiv = document.getElementById("submittedContent");
             submittedContentDiv.style.display = "block";
             if(score===undefined){
