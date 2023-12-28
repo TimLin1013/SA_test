@@ -21,12 +21,22 @@
         .message {
             display: none;
         }
+        #returnButton {
+   			background-color: #d9534f;
+   			color: white;
+   			padding: 12px 24px; 
+   			border: none;
+   			border-radius: 5px;
+   			cursor: pointer;
+  			 margin-left: auto;
+		}
     </style>
 </head>
 <body>
     <header>
         <h1>系統管理者</h1>
 <button id="button" class="btn btn-primary" style="background-color: #4CAF50; color: #000; padding: 5px 10px; margin: 0 5px; border: none; outline: none;">新增系統管理者或老師</button>
+<button id="returnButton" onclick="returnhome()">回到首頁</button>
     </header>
     <div class="container mt-4">
         <div class="content">
@@ -48,10 +58,12 @@
             </table>
             <script type="text/javascript">
                 var url_string = window.location.href;
-		   		 var url = new URL(url_string);
-		   		 var id = url.searchParams.get("id");
-		                // 全域變數紀錄SQL指令下的次數
+		   		var url = new URL(url_string);
+		   		var id = url.searchParams.get("id");
                 var sql_num = 0;
+                function returnhome() {
+      				window.location.href = 'admin_home_page.html?id=' + id;
+    			}
                 function deleteMember(idToDelete) {
 				    var check = window.confirm("確認刪除系統使用者？");
 			    if (check == true) {

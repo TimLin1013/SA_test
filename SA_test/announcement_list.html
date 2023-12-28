@@ -11,8 +11,8 @@
     <div id="container">
         
         <div id="content">
-<button id="addAnnouncementBtn" style="background-color: #5cb85c; border: none;">新增公告</button>
-
+<button id="addAnnouncementBtn" style="background-color: #4CAF50; color: #000; padding: 5px 10px; margin: 0 5px; border: none; outline: none;">新增公告</button>
+<button id="returnButton" onclick="returnhome()">回到首頁</button>
 
             <div id="flashMessage" class="message" style="display: none;"></div>
 
@@ -35,7 +35,9 @@
                 let url_string = window.location.href;
 			    let url = new URL(url_string);
 			    let id = url.searchParams.get("id");
-                
+                function returnhome() {
+      				window.location.href = 'admin_home_page.html?id=' + id;
+    			}
                 // 全域變數紀錄SQL指令下的次數
                 var sql_num = 0;
                 function deleteAnnouncement(id) {

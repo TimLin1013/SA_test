@@ -50,16 +50,35 @@
         #new-article-button:hover, .reply-button:hover {
             background-color: #5a5a5a; 
         }
+       	#returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+		}
     </style>
 </head>
 
 <body>
-    <h1>討論區</h1>
+	<header>
+		<h1>討論區</h1>
+		<button id="returnButton" onclick="returnhome()">回到首頁</button>
+	</header>
     <button id="new-article-button">發起文章</button>
     <div id="articles-list"></div>
 
     <script>
+		let url_string = window.location.href;
+    	let url = new URL(url_string);
+		let id = url.searchParams.get("id");
+		function returnhome() {
+      		window.location.href = 'user_home_page.html?id=' + id;
+    	}
         async function displayArticles() {
+
 		    const articlesList = document.getElementById('articles-list');
 		    articlesList.textContent = '';
 		
@@ -123,6 +142,7 @@
 	        alert("Error fetching replies");
 	    }
 	}
+
 
 
 

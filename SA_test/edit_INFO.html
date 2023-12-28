@@ -47,9 +47,11 @@
     var url = new URL(url_string);
     var id = url.searchParams.get("edit_id");
     var ID=url.searchParams.get("id");
+
     var identity = url.searchParams.get("edit_identity");
 
     var Identity= url.searchParams.get("identity");
+
 
     function updateMember(id) {
         var name = $('#name').val();
@@ -96,6 +98,7 @@
                         alert("更新成功");
                         if(Identity==='2'){
 							
+
 							if(identity==='1'){
 								
 								window.location.href = 'member_list.html?id='+ ID;
@@ -110,6 +113,7 @@
 						else
 						{
 							window.location.href = 'user_home_page.html?='+ ID;
+
 						}
                         
                     }

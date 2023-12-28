@@ -56,5 +56,22 @@ body {
 #table td a:hover {
     text-decoration: none;
 }
-
+#returnButton {
+   background-color: #d9534f;
+   color: white;
+   padding: 12px 24px; 
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   margin-left: auto;
+ }
+#logoutButton {
+    background-color: #d9534f;
+    color: white;
+    padding: 12px 24px; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
+}
 
