@@ -48,6 +48,7 @@
                         <th>姓名</th>
                         <th>帳號</th>
                         <th>密碼</th>
+                        <th>電話</th>
                         <th>組別</th>
                         <th>建立時間</th>
                         <th>身分</th>
@@ -133,9 +134,18 @@
                         table_html += '<td>' + value['name'] + '</td>';
                         table_html += '<td>' + value['account'] + '</td>';
                         table_html += '<td>' + value['password'] + '</td>';
+                         table_html += '<td>' + value['phone'] + '</td>';
                         table_html += '<td>' + value['group'] + '</td>';
                         table_html += '<td>' + value['create_time'] + '</td>';
-                        table_html += '<td>' + value['identity'] + '</td>';
+                       if(value['identity']==='1'){
+							table_html += '<td>' + '社員' + '</td>';
+						}
+						else if(value['identity']==='2'){
+							table_html += '<td>' + '管理者' + '</td>';
+						}
+						else{
+							table_html += '<td>' + '老師' + '</td>';
+						}
                          table_html += '<td>' + '<a href="edit_INFO.html?edit_id=' + value['id']+"&edit_identity="+ value['identity'] +"&id="+ id+"&identity="+ '2'+ '">編輯</a> | ';
                         table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
                     })

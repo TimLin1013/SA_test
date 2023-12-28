@@ -53,7 +53,7 @@
 				<th>借用編號</th>
                 <th>社員姓名</th>
                 <th>借用器材</th>
-                <th>借用時間</th>
+                <th>預約時間</th>
                 <th>歸還時間</th>
                 <th>歸還情況</th>
             </tr>
@@ -107,6 +107,7 @@
                 success: function (response) {
        	        	if(response.status == 200){
                         get();  
+                        alert("成功取消登記");
                      }
                        console.log(response);          
                 },

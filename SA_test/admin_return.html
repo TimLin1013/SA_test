@@ -62,9 +62,9 @@
 				<th>借用編號</th>
                 <th>社員姓名</th>
                 <th>借用器材</th>
-                <th>借用時間</th>
+                <th>預約時間</th>
                 <th>歸還時間</th>
-                <th>數量</th>
+                <th>該樂器剩餘數量</th>
                 <th>登記歸還</th>
             </tr>
         </thead>
@@ -114,6 +114,7 @@
                 success: function (response) {
        	        	if(response.status == 200){
                         getAllBorrowRecord();
+                        alert("成功歸還");
                      }
                        console.log(response.response.data);          
                 },
