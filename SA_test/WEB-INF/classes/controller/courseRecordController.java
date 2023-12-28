@@ -64,21 +64,30 @@ public class courseRecordController extends HttpServlet{
 	  //為registrationrecord.html的get
 	  public void doGet(HttpServletRequest request, HttpServletResponse response)
 		      throws ServletException, IOException {
-			  int member_id = Integer.parseInt(request.getParameter("id"));
+			  	String Str_member_id = request.getParameter("id");
+		  		
 			   JSONObject resp = new JSONObject();
-			   try {
-				   //檢視社員報名紀錄
+			   if(Str_member_id==null) {
+				   JSONObject data = crh.getAllRecord();
+				   resp.put("response", data);
+		  		   resp.put("status", "0");
+		  		  
+		           response.setContentType("application/json");
+		           response.setCharacterEncoding("UTF-8");
+		           response.getWriter().write(resp.toString());
+			   }else {
+				   int member_id = Integer.parseInt(Str_member_id);
 				   JSONObject data =crh.getAllRecordById(member_id);
-		    
+				    
 		           resp.put("response", data);
 		  		   resp.put("status", "0");
 		  		  
 		           response.setContentType("application/json");
 		           response.setCharacterEncoding("UTF-8");
 		           response.getWriter().write(resp.toString());
-		       } catch (Exception e) {
-		           e.printStackTrace();
-		       }
+			   }
+				   
+		       
 		      
 		  }
 }

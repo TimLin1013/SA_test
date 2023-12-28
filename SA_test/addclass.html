@@ -46,8 +46,9 @@
     <input type="text" id="courseName" name="courseName" required>
 
     <label for="teacherID">老師ID:</label>
-    <input type="text" id="teacherID" name="teacherID" required>
-
+    <select id="teacherID" name="teacherID" required>
+       
+    </select>
     <label for="datetime">時間:</label>
     <input type="datetime-local" id="datetime" name="datetime" required>
 
@@ -101,11 +102,42 @@
             alert("無法連線到伺服器！");
         }
     });
-
     // 清空表單
     document.getElementById("class-input-form").reset();
+     
 }
+function getAllteacher() {
+    $.ajax({
+        type: "GET",
+        url: "api/member.do?teacher=yes",
+        crossDomain: true,
+        cache: false,
+        dataType: 'json',
+        timeout: 5000,
+        success: function (response) {
+            console.log(response);
+            if (response.status == 200) {
+                
+                var teacherDropdown = $('#teacherID');
+                teacherDropdown.empty();
 
+
+                $.each(response.response.data, function(index, teacher) {
+                    teacherDropdown.append($('<option>', {
+                        value: teacher.id,
+                        text: "老師ID："+teacher.id+"  老師名稱："+teacher.name
+                    }));
+                });
+            }
+        },
+        error: function () {
+            alert("無法連線到伺服器！");
+        }
+    });
+}
+$(document).ready(function() {
+        getAllteacher();
+});
 </script>
 
 </body>
