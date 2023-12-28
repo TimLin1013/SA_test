@@ -12,7 +12,7 @@
 <body>
 
     <header>
-		<img src="logo.png" alt="Logo" class="logo">
+		<img src="statics/img/logo.png" alt="Logo" class="logo">
         <h1>音樂社團</h1>
         <button id="logoutButton" onclick="logout()">登出</button>
         <script>
@@ -56,15 +56,15 @@
     <div class="slider">
 		    <div class="slides">
 		        <div class="slide">
-		            <img src="taipei_music.jpg" alt="台北愛樂">
+		            <img src="statics/img/taipei_music.jpg" alt="台北愛樂">
 		            <p>台北愛樂樂團來到本社團與社員交流，分享音樂心得和經驗。</p>
 		        </div>
 		        <div class="slide">
-		            <img src="berlin_music.jpg" alt="柏林愛樂">
+		            <img src="statics/img/berlin_music.jpg" alt="柏林愛樂">
 		            <p>柏林愛樂樂團訪問我們社團，帶來精彩的演出和互動。</p>
 		        </div>
 		        <div class="slide">
-		            <img src="city_concert.jpg" alt="市民交響樂團">
+		            <img src="statics/img/city_concert.jpg" alt="市民交響樂團">
 		            <p>市民交響樂團與我們的社員進行了一場音樂創作工作坊。</p>
 		        </div>
 		    </div>
@@ -103,17 +103,18 @@
             });
         }
 
-        function updateAnnouncement(data) {
-            $("#announcementList").empty();
-            $.each(data, function (index, value) {
-                var listItem = '<li>';
-                listItem += '<strong>標題:</strong> ' + value['title'] + '<br>';
-				listItem += '<strong>內容:</strong> ' + value['announcement_content'];
-				listItem += '</li>';
+		function updateAnnouncement(data) {
+		    $("#announcementList").empty();
+		    $.each(data, function (index, value) {
+		        var listItem = '<li class="announcement-card">';
+		        listItem += '<h3 class="announcement-title">' + value['title'] + '</h3>';
+		        listItem += '<p class="announcement-content">' + value['announcement_content'] + '</p>';
+		        listItem += '</li>';
+		
+		        $("#announcementList").append(listItem);
+		    });
+		}
 
-                $("#announcementList").append(listItem);
-            });
-        }
         function updateIdInHref() {
         	window.location.href = 'edit_INFO.html?id=' + id + '&edit_id=' + id;
 
