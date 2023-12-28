@@ -6,7 +6,7 @@
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="statics/css/admin_home_pageStyle.css">
 </head>
-
+		<button id="returnButton" onclick="returnhome()">回到首頁</button>
 <body>
     <div id="container">
         
@@ -36,7 +36,9 @@
                 var url_string = window.location.href;
 		   		 var url = new URL(url_string);
 		   		 var id = url.searchParams.get("id");
-
+				function returnhome() {
+      				window.location.href = 'admin_home_page.html?id=' + id;
+   				}
                 function getAllcourseRecord() {
 
                     $.ajax({

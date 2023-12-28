@@ -182,7 +182,7 @@ public class borrowrecordHelper {
 
 		return response;
 	}
-	//檢視所有報名紀錄
+	//檢視所有借用紀錄
 	 public JSONObject getAllBorrowRecord() {
 		 	borrowrecord b = null;
 	        JSONArray jsa = new JSONArray();
@@ -199,7 +199,7 @@ public class borrowrecordHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "SELECT b.borrow_record_id,m.member_name,i.instrument_name,b.borrow_time,b.return_time ,i.instrument_id "+
+	            String sql = "SELECT b.borrow_record_id,m.member_name,i.instrument_name,b.borrow_time,b.return_time ,i.instrument_id,i.instrument_quantity "+
 					     "FROM `sa`.`tbl_borrow_record` b "+
 					     "JOIN `sa`.`tbl_member` m ON b.member_id = m.member_id "+
 					     "JOIN `sa`.`tbl_instrument` i ON b.instrument_id = i.instrument_id ";
@@ -225,6 +225,7 @@ public class borrowrecordHelper {
 					Timestamp return_time=rs.getTimestamp("return_time");
 					Timestamp borrow_time=rs.getTimestamp("borrow_time");
 					int instrument_id=rs.getInt("instrument_id");
+					int instrument_quantity=rs.getInt("instrument_quantity");
 					JSONObject recordObject = new JSONObject();
 					recordObject.put("borrow_record_id", borrowrecord_id);
 				    recordObject.put("member_name", member_name);
@@ -232,7 +233,8 @@ public class borrowrecordHelper {
 					recordObject.put("return_time",return_time);
 					recordObject.put("borrow_time",borrow_time);
 					recordObject.put("instrument_id",instrument_id);
-	                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
+					recordObject.put("instrument_quantity", instrument_quantity);
+					/** 取出該名會員之資料並封裝至 JSONsonArray 內 */
 	                jsa.put(recordObject);
 	            }
 
