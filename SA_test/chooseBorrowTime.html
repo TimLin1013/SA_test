@@ -107,6 +107,9 @@ button {
 
     function confirm() {
         var borrowTime = $('#borrow-time').val();
+        if(borrowTime===""){
+			alert("請選擇時間");
+		}
         var instrument_id = url.searchParams.get("instrument_id");
         var id = url.searchParams.get("id");
         if (isValidBorrowTime(borrowTime)) {
@@ -123,7 +126,7 @@ button {
                 success: function (response) {
                     console.log(response.response.check);
                     if (response.response.check == "can'tborrow") {
-                        alert("你有還沒歸還的器材!");
+                        alert("你有已預約或未歸還的器材!");
                     } else {
                         var borrowedTime = new Date(borrowTime);
                         borrowedTime.setHours(borrowedTime.getHours() + 3);
