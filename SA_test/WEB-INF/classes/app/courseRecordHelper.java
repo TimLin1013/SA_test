@@ -158,4 +158,69 @@ public class courseRecordHelper {
 
 	        return response;
 	    }
+	 public JSONObject getAllRecord() {
+	        JSONArray jsa = new JSONArray();
+	        String exexcute_sql = "";
+	        long start_time = System.nanoTime();
+	        int row = 0;
+	        ResultSet rs = null;
+	        course c = null;
+	        try {
+	            conn = DBMgr.getConnection();
+	            String sql = "SELECT c.member_id AS teacher_id, cr.course_id, c.course_name, c.course_time,m.member_id,m.member_name " +
+	                    "FROM `sa`.`tbl_course_registration_record` cr " +
+	                    "JOIN `sa`.`tbl_course` c ON cr.course_id = c.course_id " +
+	                    "JOIN `sa`.`tbl_member` m ON cr.member_id = m.member_id";
+
+	            pres = conn.prepareStatement(sql);
+	            rs = pres.executeQuery();
+	            exexcute_sql = pres.toString();
+	            System.out.println(exexcute_sql);
+	            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
+	            while(rs.next()) {
+	                /** 每執行一次迴圈表示有一筆資料 */
+	                JSONObject tmp = new JSONObject();
+	            	row += 1;
+	                String course_name = rs.getString("c.course_name");
+	                tmp.put("course_name", course_name);
+	                String course_time = rs.getString("c.course_time");
+	                tmp.put("course_time", course_time);
+	                String member_name = rs.getString("m.member_name");
+	                tmp.put("member_name", member_name);
+	                int teacher_id = rs.getInt("teacher_id");
+	                tmp.put("teacher_id", teacher_id);
+	                int cid = rs.getInt("cr.course_id");
+	                tmp.put("course_id",cid);
+	                int member_id = rs.getInt("m.member_id");
+	                tmp.put("member_id", member_id);
+	                
+	               
+	                jsa.put(tmp);
+	            }
+
+	        } catch (SQLException e) {
+	            /** 印出JDBC SQL指令錯誤 **/
+	            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+	        } catch (Exception e) {
+	            /** 若錯誤則印出錯誤訊息 */
+	            e.printStackTrace();
+	        } finally {
+	            /** 關閉連線並釋放所有資料庫相關之資源 **/
+	            DBMgr.close(rs, pres, conn);
+	        }
+	        
+	        /** 紀錄程式結束執行時間 */
+	        long end_time = System.nanoTime();
+	        /** 紀錄程式執行時間 */
+	        long duration = (end_time - start_time);
+	        
+	        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+	        JSONObject response = new JSONObject();
+	        response.put("sql", exexcute_sql);
+	        response.put("row", row);
+	        response.put("time", duration);
+	        response.put("data", jsa);
+
+	        return response;
+	    }
 }

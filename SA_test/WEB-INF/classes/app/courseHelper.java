@@ -323,7 +323,7 @@ public class courseHelper {
 	                row += 1;
 
 	                /** 將 ResultSet 之資料取出 */
-	                int content = rs.getInt("content");
+	                String content = rs.getString("content");
 	                tmp.put("content", content);
 	                int student_id = rs.getInt("member_id");
 	                tmp.put("student_id", student_id);

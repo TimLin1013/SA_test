@@ -60,66 +60,70 @@
 
     <script>
         async function displayArticles() {
-    const articlesList = document.getElementById('articles-list');
-    articlesList.textContent = '';
+		    const articlesList = document.getElementById('articles-list');
+		    articlesList.textContent = '';
+		
+		    try {
+		        const response = await $.ajax({
+		            type: "GET",
+		            url: "api/article.do",
+		            contentType: 'application/json',
+		        });
+		
+		        const articles = response.response.data;
+		
+		        for (const article of articles) {
+				    const articleDiv = document.createElement('div');
+				    articleDiv.classList.add('article');
+				    articleDiv.innerHTML = `
+				        <h3>${article.title}</h3>
+				        <p>${article.article_content}</p>
+				        <p>發文者ID: ${article.member_id}</p>
+				        <button class="reply-button" data-article-id="${article.article_id}">回覆</button>
+				        <div class="replies-container" data-article-id="${article.article_id}"></div>`;
+				
+				    articlesList.appendChild(articleDiv);
+				
+				    const repliesContainer = articleDiv.querySelector('.replies-container');
+				    await displayReplies(article.article_id, repliesContainer);
+				
+				    const replyButton = articleDiv.querySelector('.reply-button');
+				    replyButton.addEventListener('click', showReplyDialog);
+				}
 
-    try {
-        const response = await $.ajax({
-            type: "GET",
-            url: "api/article.do",
-            contentType: 'application/json',
-        });
+		    } catch (error) {
+		        console.error("Error fetching articles:", error);
+		        alert("Error fetching articles");
+		    }
+		}
+		
+	async function displayReplies(articleId, container) {
+	    try {
+	        const response = await $.ajax({
+	            type: "GET",
+	            url: "api/message.do?article_id=" + articleId,
+	            contentType: 'application/json',
+	        });
+	
+	        const replies = response.response.replies;
+			console.log(response.response.replies);
+				        if (replies && replies.length > 0) {
+			    replies.forEach(reply => {
+			        const replyDiv = document.createElement('div');
+			        replyDiv.classList.add('reply');
+			
+			        // Concatenate message content and poster's ID in the same line
+			        replyDiv.textContent = `${reply.message_content}- 留言者ID: ${reply.member_id}`;
+			
+			        container.appendChild(replyDiv);
+			    });
+			}
+	    } catch (error) {
+	        console.error("Error fetching replies:", error);
+	        alert("Error fetching replies");
+	    }
+	}
 
-        const articles = response.response.data;
-
-        for (const article of articles) {
-            const articleDiv = document.createElement('div');
-            articleDiv.classList.add('article');
-            articleDiv.innerHTML = `
-                <h3>${article.title}</h3>
-                <p>${article.article_content}</p>
-                <button class="reply-button" data-article-id="${article.article_id}">回覆</button>
-                <div class="replies-container" data-article-id="${article.article_id}"></div>`;
-
-            articlesList.appendChild(articleDiv);
-
-            const repliesContainer = articleDiv.querySelector('.replies-container');
-            await displayReplies(article.article_id, repliesContainer);
-
-            const replyButton = articleDiv.querySelector('.reply-button');
-            replyButton.addEventListener('click', showReplyDialog);
-        }
-    } catch (error) {
-        console.error("Error fetching articles:", error);
-        alert("Error fetching articles");
-    }
-}
-
-async function displayReplies(articleId, container) {
-    try {
-        const response = await $.ajax({
-            type: "GET",
-            url: "api/message.do?article_id=" + articleId,
-            contentType: 'application/json',
-        });
-
-        const replies = response.response.replies;
-
-        if (replies && replies.length > 0) {
-            replies.forEach(reply => {
-                const replyDiv = document.createElement('div');
-                replyDiv.classList.add('reply');
-                replyDiv.textContent = reply.message_content;
-                container.appendChild(replyDiv);
-            });
-        }
-    } catch (error) {
-        console.error("Error fetching replies:", error);
-        alert("Error fetching replies");
-    }
-}
-
-// 其餘的程式碼...
 
 
         function showNewArticleDialog() {
