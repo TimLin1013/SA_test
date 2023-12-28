@@ -9,15 +9,6 @@ public class Announcement {
     private String announcement_content;
     private Timestamp announcement_time;
     private int admin_id; 
-
-    
-    public Announcement(String announcement_content, String title, Timestamp announcement_time, int admin_id) {
-        this.announcement_content = announcement_content;
-        this.title = title;
-        this.announcement_time = announcement_time;
-        this.admin_id = admin_id;
-    }
-
     public Announcement(int announcement_id,int admin_id, String title, String announcement_content, Timestamp announcement_time) {
         this.announcement_content = announcement_content;
         this.title = title;
@@ -35,9 +26,6 @@ public class Announcement {
         this.announcement_content = announcement_content;
         this.title = title;
         this.announcement_id = announcement_id;
-    }
-    public Announcement(int member_id) {
-        this.admin_id = member_id;
     }
 
    
