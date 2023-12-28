@@ -51,4 +51,16 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
+#returnButton {
+   background-color: #d9534f;
+   color: white;
+   padding: 12px 24px; 
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   margin-left: auto;
+   position: absolute;
+   top: 10px;
+   left: 10px;
+ }
 

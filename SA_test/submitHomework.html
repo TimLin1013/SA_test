@@ -12,7 +12,8 @@
         }
 
         h1 {
-            background-color: #F6EDFF;
+            background-color: black;
+            color:white;
             padding: 10px; 
         }
 
@@ -42,8 +43,10 @@
     <button id="submitButton" onclick="submitAssignment()">繳交</button>
 
     <script>
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
 	    const urlParams = new URLSearchParams(window.location.search);
-	    
 	    const courseName = urlParams.get("course_name");
 	    const courseTime = urlParams.get("course_time");
 	    const courseLocation = urlParams.get("course_location");
@@ -64,10 +67,12 @@
 	            timeout: 5000,
 	            success: function (response) {
 				       if(response.response.row===0){
-						    alert("您已繳交過")
+						    alert("您已繳交過");
+						    window.location.href = 'registrationRecord.html?id=' + id;
 					   }
 					   else{
 						  ;alert("成功繳交");
+						  window.location.href = 'registrationRecord.html?id=' + id;
 					   }
 				      
 				    },
