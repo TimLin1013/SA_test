@@ -9,12 +9,6 @@ public class article {
 	private String article_content;
 	private Timestamp article_time;
 	private int member_id;
-	public article (String article_content,String title,Timestamp article_time,int member_id) {
-		this.article_content=article_content;
-		this.title=title;
-		this.article_time=article_time;
-		this.member_id=member_id;
-	}
 	public article (int member_id,String title,String article_content,Timestamp article_time,int article_id) {
 		this.article_content=article_content;
 		this.title=title;
@@ -24,10 +18,6 @@ public class article {
 	}
 	public article (String title,String article_content,int member_id) {
 		this.article_content=article_content;
-		this.title=title;
-		this.member_id=member_id;
-	}
-	public article (String title,int member_id) {
 		this.title=title;
 		this.member_id=member_id;
 	}
