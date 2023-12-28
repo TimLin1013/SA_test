@@ -25,16 +25,33 @@ public class courseController extends HttpServlet{
 	  String isHomework=request.getParameter("homework");
 	  //如果是上面抓的參數就執行helper的getallhomework();
 	  if ("yes".equals(isHomework)) {
-		  String Str_teacher_id=request.getParameter("teacher_id");
-		  int teacher_id=Integer.parseInt(Str_teacher_id);
-		  JSONObject query=ch.getAllhomework(teacher_id);
-		  JSONObject resp = new JSONObject();
-	      resp.put("status", "200");
-	      resp.put("message", "所有資料取得成功");
-	      resp.put("response", query);        
-	      response.setContentType("application/json");
-	      response.setCharacterEncoding("UTF-8");
-	      response.getWriter().write(resp.toString());
+		  String Str_member_id=request.getParameter("member_id");
+		  if(Str_member_id==null) {
+			  String Str_teacher_id=request.getParameter("teacher_id");
+			  int teacher_id=Integer.parseInt(Str_teacher_id);
+			  JSONObject query=ch.getAllhomework(teacher_id);
+			  JSONObject resp = new JSONObject();
+		      resp.put("status", "200");
+		      resp.put("message", "所有資料取得成功");
+		      resp.put("response", query);        
+		      response.setContentType("application/json");
+		      response.setCharacterEncoding("UTF-8");
+		      response.getWriter().write(resp.toString());
+		  }else {
+			  String Str_course_id=request.getParameter("course_id");
+			  int member_id=Integer.parseInt(Str_member_id);
+			  int course_id=Integer.parseInt(Str_course_id);
+			  JSONObject data = ch.getHomeworkById(member_id,course_id);
+			  JSONObject resp = new JSONObject();
+			  resp.put("status", "200");
+		      resp.put("message", "所有資料取得成功");
+		      resp.put("response", data);        
+		      response.setContentType("application/json");
+		      response.setCharacterEncoding("UTF-8");
+		      response.getWriter().write(resp.toString());  
+			  
+		  }
+		  
 	  }else {
 		  //這裡為course_list.html和classinfo.html ajax的get
 		  //如果沒有抓到參數就執行getallcourse();

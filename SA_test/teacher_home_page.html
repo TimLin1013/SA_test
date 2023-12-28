@@ -63,7 +63,12 @@
                         table_html += '<tr><td scope="row">' + value['student_id'] + '</td>';
                         table_html += '<td>' + value['content'] + '</td>';
                         table_html += '<td>' + value['homework_time'] + '</td>';
-                        table_html += '<td>' + value['score'] + '</td>';
+                        if(value['score']===undefined){
+							table_html += '<td>尚未批改</td>';
+						}
+                        else{
+							table_html += '<td>' + value['score'] + '</td>';
+						}
 
                         table_html += '<td>' + '<a href="javascript: changeScore(' + value['student_id'] +','+value['course_id']+ ');">修改分數</a> </td></tr>';
                        
