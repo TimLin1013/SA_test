@@ -54,9 +54,22 @@
             display: none;
             margin-top: 15px; 
         }
+        #returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+    		position: absolute;
+    		top: 10px;
+    		left: 10px;
+		}
     </style>
 </head>
 <body>
+	<button id="returnButton" onclick="returnhome()">回到首頁</button>
     <div class="register-container">
         <h2>修改公告</h2>
         
@@ -78,6 +91,9 @@
     var url = new URL(url_string);
     var announcement_id = url.searchParams.get("announcement_id");
    	var id = url.searchParams.get("id");
+	function returnhome() {
+      	window.location.href = 'admin_home_page.html?id=' + id;
+    }
     $(document).ready(function () {
         var $form = $('#submit');
         $form.click(function () {
