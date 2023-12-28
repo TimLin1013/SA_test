@@ -6,61 +6,78 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>社課資訊</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        #class-info-header {
-            background-color: black;
-            padding: 10px;
-            text-align: center;
-            color: white;
-        }
-
-        .class-info {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 5px 10px;
-            cursor: pointer;
-            background-color:  #5cb85c;
-            border: none;
-            color: #333;
-        }
-
-        .not-graded {
-            color: red; /* or any other color you prefer for "not graded" */
-        }
-
-        .already-signed-up {
-            background-color: #9ED3A9; /* Change the background color for already signed up classes */
-        }
-
-        #add-class-form {
-            display: none;
-            margin-top: 20px;
-        }
-
-        #past-signups-container {
-            margin-top: 20px;
-        }
-        .past-class-text {
-	        color: red; 
+	    body {
+	        font-family: 'Segoe UI', sans-serif;
+	        padding: 20px;
+	        background-color: #f4f4f4; /* 添加背景色 */
+	    }
+	
+	    #class-info-header {
+	        background-color: #28a745; 
+	        padding: 15px;
+	        text-align: center;
+	        color: white;
+	        border-radius: 5px; /* 圓角 */
+	    }
+	
+	    .class-info {
+	        border: 1px solid #ccc;
+	        padding: 15px;
+	        margin-bottom: 20px;
+	        background-color: white; /* 添加背景色 */
+	        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 添加陰影 */
+	        border-radius: 5px; /* 圓角 */
+	    }
+	
+	    button {
+	        padding: 10px 15px;
+	        cursor: pointer;
+	        background-color: #28a745; /* 綠色背景 */
+	        border: none;
+	        color: white;
+	        border-radius: 5px; /* 圓角 */
+	        transition: background-color 0.3s, box-shadow 0.3s; /* 過渡效果 */
+	    }
+	
+	    button:hover {
+	        background-color: #218838; /* 深綠色背景 */
+	        box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* 懸停時陰影 */
+	    }
+	
+	    .not-graded {
+	        color: #dc3545; /* 修改未評分的顏色 */
+	    }
+	
+	    .already-signed-up {
+	        background-color: #ffc107; /* 更亮的黃色背景 */
+	        color: black; /* 黑色文字 */
+	    }
+	
+	    #add-class-form {
+	        display: none;
+	        margin-top: 20px;
+	    }
+	
+	    #past-signups-container {
+	        margin-top: 20px;
+	    }
+	
+	    .past-class-text {
+	        color: #dc3545; /* 更加鮮明的紅色 */
 	        font-weight: bold; 
 	    }
+	
 	    #returnButton {
-    		background-color: #d9534f;
-    		color: white;
-    		padding: 12px 24px; 
-    		border: none;
-    		border-radius: 5px;
-    		cursor: pointer;
-    		margin-left: auto;
-		}
+	        background-color: #d9534f;
+	        color: white;
+	        padding: 12px 24px; 
+	        border: none;
+	        border-radius: 5px;
+	        cursor: pointer;
+	        margin-top: 10px;
+	        margin-left: auto;
+	    }
+
     </style>
 </head>
 <body>
