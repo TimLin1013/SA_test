@@ -64,6 +64,7 @@
                 <th>借用器材</th>
                 <th>借用時間</th>
                 <th>歸還時間</th>
+                <th>數量</th>
                 <th>登記歸還</th>
             </tr>
         </thead>
@@ -141,6 +142,7 @@
 			 			}else{
 				  				table_html += '<td>' + returnTimeString + '</td>';
 						 }
+						 table_html+= '<td>' + value['instrument_quantity'] + '</td>';
         				if (isNaN(returnTime)) {
 							if(borrowTime>currentTime){
 								table_html += '<td>已預約</td>';

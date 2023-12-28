@@ -64,9 +64,11 @@
   </div>
 
   <script>
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	var id = url.searchParams.get("id");
     // 從 URL 中取得參數
     const urlParams = new URLSearchParams(window.location.search);
-    
     // 從參數中取得相應的值
     const courseName = urlParams.get("course_name");
     const courseTime = urlParams.get("course_time");
@@ -100,8 +102,10 @@
 				       console.log(response.response);
 				      if(response.response.row==0){
 						  alert("您已評分過\n"+"上次評論的分數："+response.Rating);
+						   window.location.href = 'registrationRecord.html?id=' + id;
 					  }else{
-						  alert("成功評分")
+						  alert("成功評分");
+						  window.location.href = 'registrationRecord.html?id=' + id;
 					  }
 				    },
 				    error: function () {

@@ -12,8 +12,11 @@
         }
 
         h1 {
-            background-color: #F6EDFF;
-            padding: 10px;
+
+            background-color: black;
+            color:white;
+            padding: 10px; 
+
         }
 
         #inputBox {
@@ -37,6 +40,7 @@
     <h1>作業繳交</h1>
     
     <script>
+
         const urlParams = new URLSearchParams(window.location.search);
 
         const courseName = urlParams.get("course_name");
@@ -99,6 +103,7 @@
                 }
 
             });
+
         }
 
         function displayInputBox() {
