@@ -97,7 +97,6 @@
     	let classes = [];
     	let recordClasses=[];
     	let canSignUpClasses=[];
-    	let signedUpClasses = [];
 		function returnhome() {
       		window.location.href = 'user_home_page.html?id=' + id;
     	}
@@ -230,9 +229,6 @@
         		alert("抱歉，該課程已結束，無法報名。");
         		return;
     		}
-
-    		signedUpClasses.push(signedUpClass);
-
     		var data_string = "id=" + encodeURIComponent(id) + "&course_id=" + encodeURIComponent(canSignUpClasses[index].course_id);
 
    			$.ajax({
@@ -244,72 +240,20 @@
         		timeout: 5000,
         		success: function (response) {
             		console.log(response);
+            		alert("報名成功");
         		},
        			error: function () {
             		alert("無法連線到伺服器！");
         		}	
     		});
-    	displayPastSignUps();
+
     	canSignUpClasses.splice(index, 1);
 
     	displayClassInfo();
 	}
 
 
-    	function displayPastSignUps() {
-   			const pastSignUpsContainer = document.getElementById("past-signups-container");
-
-    		pastSignUpsContainer.innerHTML = ""; 
-
-    		const heading = document.createElement("h2");
-    		heading.textContent = "所選報名社課列表";
-    		pastSignUpsContainer.appendChild(heading);
-
-    		signedUpClasses.forEach((classInfo, index) => {
-       			const classDiv = document.createElement("div");
-        		classDiv.classList.add("class-info");
-
-        		const infoText = document.createTextNode(`課名: ${classInfo.course_name}, 時間: ${classInfo.course_time}, 地點: ${classInfo.course_location}, 老師id: ${classInfo.teacher_id}`);
-        		classDiv.appendChild(infoText);
-
-        		const alreadySignedUpText = document.createTextNode("已報名");
-        		const alreadySignedUpDiv = document.createElement("div");
-        		alreadySignedUpDiv.classList.add("already-signed-up");
-        		alreadySignedUpDiv.appendChild(alreadySignedUpText);
-        		classDiv.appendChild(alreadySignedUpDiv);
-
-        		const cancelRegistrationButton = document.createElement("button");
-        		cancelRegistrationButton.textContent = "取消報名";
-        		cancelRegistrationButton.addEventListener("click", () => handlecancelRegistration(index));
-        		classDiv.appendChild(cancelRegistrationButton);
-
-       		 pastSignUpsContainer.appendChild(classDiv);
-    		});
-    	displayClassInfo();
-		}
-
-    function handlecancelRegistration(index) {
-        var data_string = "id=" + encodeURIComponent(id) + "&course_id=" + encodeURIComponent(signedUpClasses[index].course_id);
-        $.ajax({
-            type: "Delete",
-            url: "api/courserecord.do?" + data_string,
-            crossDomain: true,
-            cache: false,
-            dataType: 'json',
-            timeout: 5000,
-            success: function (response) {
-                console.log(response);
-            },
-            error: function () {
-                alert("無法連線到伺服器！");
-            }
-        });
-        const putBack = signedUpClasses[index];
-        canSignUpClasses.push(putBack);
-        signedUpClasses.splice(index, 1);
-        displayClassInfo();
-        displayPastSignUps();
-    }
+   
 
 	function isPastTime(courseStartTime) {
     	var now = new Date().toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
