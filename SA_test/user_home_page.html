@@ -12,6 +12,7 @@
 <body>
 
     <header>
+		<img src="logo.png" alt="Logo" class="logo">
         <h1>音樂社團</h1>
         <script>
 			
@@ -48,6 +49,22 @@
             </section>
         </main>
     </section>
+    <div class="slider">
+		    <div class="slides">
+		        <div class="slide">
+		            <img src="taipei_music.jpg" alt="台北愛樂">
+		            <p>台北愛樂樂團來到本社團與社員交流，分享音樂心得和經驗。</p>
+		        </div>
+		        <div class="slide">
+		            <img src="berlin_music.jpg" alt="柏林愛樂">
+		            <p>柏林愛樂樂團訪問我們社團，帶來精彩的演出和互動。</p>
+		        </div>
+		        <div class="slide">
+		            <img src="city_concert.jpg" alt="市民交響樂團">
+		            <p>市民交響樂團與我們的社員進行了一場音樂創作工作坊。</p>
+		        </div>
+		    </div>
+		</div>
 
     <footer>
         <p>&copy; 2023 音樂社團. 版權所有。</p>
@@ -97,6 +114,20 @@
         	window.location.href = 'edit_INFO.html?id=' + id + '&edit_id=' + id;
 
         }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+		    let index = 0;
+		    const slides = document.querySelector('.slides');
+		    const slideCount = document.querySelectorAll('.slide').length;
+		
+		    function nextSlide() {
+		        index = (index + 1) % slideCount;
+		        slides.style.transform = 'translateX(-' + index * 100 + '%)';
+		    }
+		
+		    // 每隔5秒自動切換到下一張圖片
+		    setInterval(nextSlide, 5000);
+		});
     </script>
 
 </body>

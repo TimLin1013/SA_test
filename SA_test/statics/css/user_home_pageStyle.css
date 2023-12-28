@@ -10,6 +10,12 @@ header {
     color: white;
     padding: 10px;
     text-align: center;
+    display: flex;
+    align-items: center;
+}
+.logo {
+    height: 50px; /* 或你想要的任何大小 */
+    margin-right: 20px; /* 在logo和標題之間添加一些間距 */
 }
 
 nav {
@@ -56,4 +62,38 @@ footer {
     display: block; /* 讓標題和內容顯示為區塊元素，這樣它們會在不同行 */
     margin-bottom: 5px; /* 調整標題和內容之間的垂直間距 */
 }
+
+.slider {
+    width: 80%; /* 或你想要的任何適合的寬度 */
+    margin: auto; /* 如果你想讓滑動窗格居中 */
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.slide img {
+    width: auto; /* 讓圖片寬度自適應 */
+    max-width: 100%; /* 最大寬度為容器寬度 */
+    max-height: 300px; /* 最大高度，可以根據需要調整 */
+    height: auto; /* 保持圖片比例 */
+    display: block;
+    object-fit: contain; /* 保持圖片原始比例 */
+}
+.slide p {
+    font-size: 16px; /* 文字大小 */
+    color: #333; /* 文字顏色 */
+    text-align: center; /* 文字置中 */
+    margin-top: 10px; /* 在圖片和文字之間添加一些間距 */
+}
+
+
 
