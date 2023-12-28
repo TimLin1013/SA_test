@@ -14,8 +14,10 @@ header {
     align-items: center;
 }
 .logo {
+
     height: 80px; 
     margin-right: 20px; /* 在logo和標題之間添加一些間距 */
+
 }
 
 nav {
@@ -132,6 +134,15 @@ footer {
 .announcement-content {
     font-size: 14px;
     color: #666;
+}
+#logoutButton {
+    background-color: #d9534f;
+    color: white;
+    padding: 12px 24px; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
 }
 
 

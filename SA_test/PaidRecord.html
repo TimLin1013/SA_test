@@ -36,6 +36,15 @@
             text-align: center;
             color: white;
 		}
+		#returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+		}
     </style>
 </head>
 <body>
@@ -43,7 +52,7 @@
         
         <div id="content">
     	<h1>繳費記錄</h1>
-
+		<button id="returnButton" onclick="returnhome()">回到首頁</button>
    	 <table id="table">
         <thead>
             <tr>
@@ -59,6 +68,9 @@
     <script type="text/javascript">
 		 var url = new URL(window.location.href);
 		 var id = url.searchParams.get("id");
+		 function returnhome() {
+      		window.location.href = 'user_home_page.html?id=' + id;
+    	}
 		 $(document).ready(function() {
          	getByid();
           });

@@ -72,11 +72,21 @@
             margin: 5px;
             font-size: 16px;
         }
+        #returnButton {
+    		background-color: #d9534f;
+    		color: white;
+    		padding: 12px 24px; 
+    		border: none;
+    		border-radius: 5px;
+    		cursor: pointer;
+    		margin-left: auto;
+		}
     </style>
 </head>
 
 <body>
     <header>
+		<button id="returnButton" onclick="returnhome()">回到首頁</button>
         <input type="search" placeholder="Search...">
     </header>
 
@@ -247,6 +257,12 @@
 
 
     <script>
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
+		function returnhome() {
+      		window.location.href = 'admin_home_page.html?id=' + id;
+   		}
         document.addEventListener('DOMContentLoaded', function() {
           const searchInput = document.querySelector('input[type="search"]');
 
